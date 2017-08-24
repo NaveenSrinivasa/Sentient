@@ -1,0 +1,12 @@
+{
+    "username": "AccViewOnly",
+    "firstname": "seleniumViewOnly",
+    "middlename": "acceptance",
+    "lastname": "tests",
+    "email": "test@sentient-energy.com",
+    "timezone": "(UTC-08:00) Pacific/Pitcairn",
+    "temperatureunit": "Celsius",
+    "password": "@mpacity",
+    "confirmpassword": "@mpacity",
+    "role": "View Only"
+}

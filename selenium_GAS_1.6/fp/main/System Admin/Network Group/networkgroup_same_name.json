@@ -1,0 +1,4 @@
+{
+	"description": "Add Network Group Test",
+	"input": ["selenium_test_networkgroup", "56054"]
+}

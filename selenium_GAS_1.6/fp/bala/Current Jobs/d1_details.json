@@ -1,0 +1,10 @@
+{
+
+	"d1_name":{
+		"Site Name": "d1_site",
+		"Serial No": "d1_name",
+		"SW Version": "d1_swversion",
+		"Device Type": "d1_type",
+		"IP Addr": "d1_ipaddress"
+	}
+}

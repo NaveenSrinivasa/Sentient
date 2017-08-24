@@ -1,0 +1,329 @@
+{
+    "Tests":
+    [
+        {
+            "test_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "username_valid",
+            "password": "password_valid"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload a MTF with empty Device State Field(GAS 1.6- Sprint 2)",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/device_1.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/d1_reg_sub_names.json",
+            "device_name": ["device_1"]
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF without GPS Co-ordinates ",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/device_1.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/d1_reg_sub_names.json",
+            "device_name": ["device_1"]
+        },
+        {
+            "test_name": "VerifyUploadDetails",
+            "hiptest_name": "Verify Upload Details",
+            "skip": false,
+            "expect_pass": true,
+            "file_path": "seleniumDir/inputfilesDir/device_1.csv",
+            "wait_for_online": false,
+            "importType": "MTF",
+            "Status": "SUCCESS"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Invalid Format",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/d1_invalid_format.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Invalid File Type",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/d1_invalid_file_type.xls",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Mismatched Sensor Gateway and Network Group",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/d1_mismatch_SGW_NetworkGroup.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Invalid Data",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/d1_invalid_data.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Import Device Multiple Times",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/d1_same_device.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Same Sensor DNP address in file",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/d1_same_sensor_dnp_address.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Same ip different Sensor DNP address ",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/d1_same_ip_diff_sensor_dnp_address.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "LoadAmpleBundle",
+            "hiptest_name": "Import Firmware - Positive Test",
+            "skip": false,
+            "expect_pass": true,
+            "path_to_bundle": "seleniumDir/inputfilesDir/System Admin/mm3_corgi_2.3.0_2.4.1.zip"
+        },
+        {
+            "test_name": "LoadAmpleBundle",
+            "hiptest_name": "Import Firmware - Invalid File Name",
+            "skip": false,
+            "expect_pass": false,
+            "path_to_bundle": "seleniumDir/inputfilesDir/System Admin/Invalid Cases/mmmm3_corgi_2.3.0.zip"
+        },
+        {
+            "test_name": "LoadAmpleBundle",
+            "hiptest_name": "Import Firmware - Invalid File Type",
+            "skip": false,
+            "expect_pass": false,
+            "path_to_bundle": "seleniumDir/inputfilesDir/System Admin/Invalid Cases/mm3_corgi_2.3.0_2.4.1.tar"
+            },
+        {
+            "test_name": "LoadAmpleBundle",
+            "hiptest_name": "Import Firmware - Missing Contents",
+            "skip": false,
+            "expect_pass": false,
+            "path_to_bundle": "seleniumDir/inputfilesDir/System Admin/Invalid Cases/mm3_corgi_2.3.0_2.4.1.zip"
+        },
+        {
+            "test_name": "VerifySensorGateWayDetails",
+            "hiptest_name": "Verify Sensor Gateway Details",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "test_name": "EditSGWSetting",
+            "hiptest_name": "Edit Sensor Gateway",
+            "skip": false,
+            "expect_pass": true,
+            "input_json" : "seleniumDir/inputfilesDir/System Admin/editSGW.json",
+            "comm_server_name" : "sensor_gw1_name"
+        },
+        {
+            "test_name": "EditSGWParameterOutsideRange",
+            "hiptest_name": "Edit Sensor Gateway With Invalid Data",
+            "skip": false,
+            "expect_pass": false,
+            "input_json" : "seleniumDir/inputfilesDir/System Admin/editSGW_min_max.json",
+            "comm_server_name" : "sensor_gw1_name"
+        },
+        {
+            "test_name": "NetworkGroupSupportTest",
+            "hiptest_name": "Network Group Support for SGW",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "test_name": "NetworkGroupLayout",
+            "hiptest_name": "Network Group Layout",
+            "skip": false,
+            "expect_pass": true,
+            "comm_server_name" : "sensor_gw1_name"
+        },
+        {
+            "test_name": "AddNetworkGroup",
+            "hiptest_name": "Add Network Group - Positive Test",
+            "skip": false,
+            "expect_pass": true,
+            "input_json" : "seleniumDir/inputfilesDir/System Admin/Network Group/networkgroup.json",
+            "comm_server_name" : "sensor_gw1_name"
+        },
+        {
+            "test_name": "AddNetworkGroup",
+            "hiptest_name": "Add Network Group - Duplicate Name",
+            "skip": false,
+            "expect_pass": false,
+            "input_json" : "seleniumDir/inputfilesDir/System Admin/Network Group/networkgroup_same_name.json",
+            "comm_server_name" : "sensor_gw1_name"
+        },
+        {
+            "test_name": "AddNetworkGroup",
+            "hiptest_name": "Add Network Group - Duplicate Master DNP Address",
+            "skip": false,
+            "expect_pass": false,
+            "input_json" : "seleniumDir/inputfilesDir/System Admin/Network Group/networkgroup_same_DNP.json",
+            "comm_server_name" : "sensor_gw1_name"
+        },
+        {
+            "test_name": "CloneNetworkGroup",
+            "hiptest_name": "Clone Network Group",
+            "skip": false,
+            "expect_pass": true,
+            "comm_server_name": "sensor_gw1_name",
+            "network_group" : "networkgroup1_name",
+            "clone_info" : "seleniumDir/inputfilesDir/System Admin/Network Group/clone_info.json"
+        },
+        {
+            "test_name": "EditNetworkGroup",
+            "hiptest_name": "Edit Network Group",
+            "skip": false,
+            "expect_pass": true,
+            "comm_server_name": "sensor_gw1_name",
+            "network_group" : "cloned_networkgroup1_name",
+            "editjson": "seleniumDir/inputfilesDir/System Admin/Network Group/edit_network_group.json"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/d2_delete_network_group_unregister.csv",
+            "wait_for_online": true
+        },
+        {
+            "test_name": "DeleteNetworkGroup",
+            "hiptest_name": "Delete Network Group with Registered Devices",
+            "skip": false,
+            "expect_pass": true,
+            "comm_server_name" : "sensor_gw1_name",
+            "network_group_deleted" : "cloned_networkgroup1_name",
+            "checkUnregister": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/d2_reg_sub_names_unregister.json",
+            "devices": ["device_2"]
+        },
+        {
+            "test_name": "DeleteNetworkGroup",
+            "hiptest_name": "Delete Network Group",
+            "skip": false,
+            "expect_pass": true,
+            "comm_server_name" : "sensor_gw1_name",
+            "network_group_deleted" : "selenium_test_networkgroup"
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/d1_reg_sub_names.json",
+            "device_name": ["device_1"]
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/d2_reg_sub_names_unregister.json",
+            "device_name": ["device_2"]
+        },
+        {
+            "test_name": "AddDeviceToDeletedNetworkGroup",
+            "hiptest_name": "Add a Device to a Deleted Network Group",
+            "skip": false,
+            "expect_pass": true,
+            "input_json" : "seleniumDir/inputfilesDir/System Admin/Network Group/addDeleteNG.json",
+            "comm_server_name" : "sensor_gw1_name",
+            "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/Network Group/d1_deleteNG.csv"
+        },
+        {
+            "test_name": "CloneThenDelete",
+            "hiptest_name": "Delete a Cloned Network Group",
+            "skip": false,
+            "expect_pass": true,
+            "comm_server_name": "sensor_gw1_name",
+            "network_group" : "networkgroup1_name",
+            "clone_info" : "seleniumDir/inputfilesDir/System Admin/Network Group/Clone_Info_2.json"
+        },
+        {
+            "test_name": "NetworkGroupPages",
+            "hiptest_name": "Network Group Pages",
+            "skip": false,
+            "expect_pass": true,
+            "input_json": "seleniumDir/inputfilesDir/System Admin/Network Group/add_11_NetworkGroups.json",
+            "comm_server_name": "sensor_gw1_name"
+        },
+        {
+            "comment": "This test verifies that all errors should be shown in UI for a failed MTF upload without any restriction number of errors",
+            "test_name": "NumberOfErrorsSupportedForAFailedMTFUpload",
+            "hiptest_name": "Number of errors supported for a failed MTF upload (GAS 1.6)",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/5.13.10/70_devices.csv"
+
+        },
+        {
+            "comment": "This test verifies that MTF errors should display the column heading instead of column number",
+            "test_name": "MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber",
+            "hiptest_name": "MTF error format to indicate column heading instead of column number (GAS 1.6)",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/5.13.11/2_devices.csv"
+
+        },
+        {
+            "comment": "This test verifies that user should be able to Export the error messages retrieved on MTF failure",
+            "test_name": "ExportFunctionalityForTheErrorMessagesRetrievedOnMTFFailure",
+            "hiptest_name": "Export functionality for the error messages retrieved on MTF failure (GAS 1.6)",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/5.13.12/2_devices.csv",
+            "downloadfolder": "defaultdownloadpath",
+            "filetype": "txt"
+
+        },
+        {
+            "comment": "This test verifies that ASCII char set to be validated for all column data in the MTF",
+            "test_name": "ASCIICharSetValidationForAllFieldsInMTF",
+            "hiptest_name": "ASCII char set validation for all fields in MTF (GAS 1.6)",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System Admin/5.13.13/non_ascii.csv"
+
+        },
+        {
+            "test_name": "Logout",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

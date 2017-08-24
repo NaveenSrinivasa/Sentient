@@ -1,0 +1,8 @@
+{
+    "Region": "lm_device_region",
+    "Substation": "lm_device_sub",
+    "Feeder": "lm_device_feeder",
+    "Site1": "lm_device_site",
+    "Site2": "SeleniumTestSite4"
+}
+

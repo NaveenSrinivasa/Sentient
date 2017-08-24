@@ -1,0 +1,27 @@
+{
+    "cfciData":
+    {
+        "cFCI DiDt limit": "300",
+        "cFCI LED latch": "true",
+        "cFCI loss of source enabled latch": "true",
+        "cFCI normal minimum duration": "80"
+    },
+    "logiData":
+    {
+        "Log-I alert enable latch": "true",
+        "Log-I logging enable latch": "true",
+        "High RMS current threshold": "750"
+    },
+    "nonCfciData":
+    {
+        "Invert current direction": "false",
+        "Electric field not present enable latch": "true",
+        "Wan off alert enable latch": "false"
+    },
+   "anomalyData":
+    {
+        "Anomaly current noise floor": "75",
+        "Anomaly enable latch": "true",
+        "Anomaly minimum SNR to stop": "150"
+    }
+}

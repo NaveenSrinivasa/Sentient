@@ -1,0 +1,13 @@
+{
+	"Expected Total": 1,
+	"Testbed": "ampleIP",
+	"d1_region":{
+		"d1_sub":{
+			"d1_feeder":{
+				"d1_site":{
+					"Phase d1_phase": ["FciFaultIndicationAlert", "true"]
+				}
+			}
+		}
+	}
+}

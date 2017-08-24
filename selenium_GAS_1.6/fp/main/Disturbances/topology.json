@@ -1,0 +1,24 @@
+{
+    "region":
+    {
+        "substation1":
+        {
+            "feeder1":
+            {
+                "site1": ["A","B","C"],
+                "site2": ["A","B","C"]
+            },
+            "feeder2":
+            {
+                "site3": ["A","B","C"]
+            }
+        },
+        "substation2":
+        {
+            "feeder3":
+            {
+                "site4": ["A","B","C"]
+            }
+        }
+    }
+}
