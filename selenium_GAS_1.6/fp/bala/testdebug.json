@@ -1,0 +1,27 @@
+{
+    "Tests":
+    [
+        {
+            "test_name": "Login",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "username": "username_valid",
+            "password": "password_valid"
+        },
+        {
+            "test_name": "FaultEventsDebug",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "comment": "Debug",
+            "input_file_path": "seleniumDir/inputfilesDir/region_substation_feeder_site_2_19.json"
+        },
+        {
+            "test_name": "Logout",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

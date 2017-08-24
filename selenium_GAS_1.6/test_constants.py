@@ -1,0 +1,7 @@
+PASSED = 'passed'
+FAILED = 'failed'
+SKIPPED = 'skipped'
+WIP = 'wip'
+BLOCKED = 'blocked'
+RETEST = 'retest'
+UNDEFINED = 'undefined'

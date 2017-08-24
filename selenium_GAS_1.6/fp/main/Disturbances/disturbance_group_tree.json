@@ -1,0 +1,6 @@
+{
+	"Region": "dist_test_region",
+	"Substation": "dist_test_substation1",
+	"Feeder": "dist_test_feeder1",
+	"Site": "dist_test_site1"
+}

@@ -1,0 +1,8 @@
+Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
+r1,r1s1,r1s1f1,r1s1f1s1,B,aaaa,MM3,2.4.3,corgi,37.600823,37.600823,00:0c:29:e1:80:aa,192.168.2.227,30001,note1,20000,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+r1,r1s1,r1s1f1,r1s1f1s1,C,aaab,MM3,2.4.3,corgi,37.600823,37.600823,00:0c:29:e1:80:ab,192.168.2.227,30002,note1,20001,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+r1,r1s1,r1s1f1,r1s1f1s1,A,aaac,MM3,2.4.3,corgi,37.600823,37.600823,00:0c:29:e1:80:ac,192.168.2.227,30003,note1,20002,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+r1,r1s1,r1s1f1,r1s1f1s2,B,aaad,MM3,2.4.3,corgi,46.9807964,46.9807964,00:0c:29:e1:80:ad,192.168.2.227,30004,note1,20003,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+r1,r1s1,r1s1f1,r1s1f1s2,C,aaae,MM3,2.4.3,corgi,46.9807964,46.9807964,00:0c:29:e1:80:ae,192.168.2.227,30005,note1,20004,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+r1,r1s1,r1s1f1,r1s1f1s2,A,aaaf,MM3,2.4.3,corgi,46.9807964,46.9807964,00:0c:29:e1:80:af,192.168.2.227,30006,note1,20005,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+r1,r1s1,r1s1f1,r1s1f1s3,B,aaba,MM3,2.4.3,corgi,47.49973823,47.49973823,00:0c:29:e1:80:ag,192.168.2.227,30007,note1,20006,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
