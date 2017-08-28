@@ -1,0 +1,10 @@
+{
+
+	"Region": "d1_region",
+	"Substation": "d1_sub",
+	"Feeder": "d1_feeder",
+	"Site": "d1_site",
+	"Phase": "d1_phase",
+	"Device State": "Other",
+	"Description": "Automation Testing"
+}

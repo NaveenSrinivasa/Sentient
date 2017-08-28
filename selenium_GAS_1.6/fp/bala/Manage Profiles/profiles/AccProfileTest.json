@@ -1,0 +1,7 @@
+{
+    "cfciData": {
+	    "cFCI DiDt limit": 100,
+	    "cFCI DiDt minimum duration": 100,
+	    "cFCI DiDt rise time": 100
+	}
+}

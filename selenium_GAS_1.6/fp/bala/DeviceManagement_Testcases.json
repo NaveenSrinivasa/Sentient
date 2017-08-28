@@ -1,0 +1,956 @@
+{
+    "Tests":
+    [
+        {
+            "test_name": "Login",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "username": "username_valid",
+            "password": "password_valid"
+        },
+        {
+            "test_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "seleniumtest",
+            "profile_json": "seleniumDir/inputfilesDir/Device Management/seleniumtest.json"
+        },
+        {
+            "test_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "changeeverything",
+            "profile_json": "seleniumDir/inputfilesDir/Device Management/changeeverything.json"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/device_1.csv",
+            "wait_for_online": "True"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/device_2.csv",
+            "wait_for_online": "True"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/Device Management/dvmg_test_mtf.csv",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "DeviceFilters",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_sub_names.json",
+            "page": "Upgrade"
+        },
+        {
+            "test_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": false,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/dvmg_reg_sub_feeder_names.json",
+            "device_name": ["serial_site1A"],
+            "config": "changeeverything"
+        },
+        {
+            "test_name": "ChangeNumberofDevicesPerPage",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/dvmg_reg_sub_feeder_names.json",
+            "rows_per_page": 25
+        },
+        {
+            "test_name": "NavigatePages",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/dvmg_reg_sub_feeder_names.json"
+        },
+        {
+            "test_name": "SearchBarTestConfig",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "searchKeyword": "device_1",
+            "region_name": "d1_region"
+        },
+        {
+            "test_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1"],
+            "config": "changeeverything",
+            "actionButton": true
+        },
+        {
+            "test_name": "UnregisterTest",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": false,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "unregDev": ["device_1"],
+            "checkRegisterButton": false,
+            "actionButton": false
+        },
+        {
+            "test_name": "VerifyDNPChanges",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1"],
+            "polltime" : devicepollinterval
+        },
+        {
+            "test_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1"],
+            "config": "EnableLatches",
+            "actionButton": true
+        },
+        {
+            "test_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": false,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1"],
+            "config": "seleniumtest",
+            "actionButton": true
+        },
+        {
+            "test_name": "VerifyDNPChanges",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1"],
+            "polltime" : devicepollinterval
+        },
+        {
+            "test_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1", "device_2"],
+            "config": "seleniumtest",
+            "actionButton": false
+        },
+        {
+            "test_name": "VerifyDNPChanges",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1", "device_2"],
+            "polltime" : devicepollinterval
+        },
+        {
+            "test_name": "EditProfileName",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_names": ["device_1"],
+            "profileName": "seleniumtest",
+            "newprofileName": "seleniumtest45",
+            "description": "Dvmg Selenium Automation Test"
+        },
+        {
+            "test_name": "EditProfileName",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "device_names": ["device_1"],
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "profileName": "seleniumtest45",
+            "newprofileName": "seleniumtest",
+            "description": ""
+        },
+        {
+            "test_name": "CheckDeviceDetails",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_names": ["device_1"]
+        },
+        {
+            "test_name": "UnregisterTest",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": false,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "unregDev": [],
+            "checkRegisterButton": true
+        },
+        {
+            "test_name": "UnregisterTest",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "unregDev": ["device_1"],
+            "checkRegisterButton": true,
+            "actionButton": false
+        },
+        {
+            "test_name": "RegisterDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "commserver": "sensor_gw1_name",
+            "regDev": "device_1",
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "sgw_group_name": "networkgroup1_name",
+            "wait_for_online": true
+        },
+        {
+            "test_name": "UnregisterTest",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "unregDev": ["device_1", "device_2"],
+            "checkRegisterButton": true,
+            "actionButton" : true
+        },
+        {
+            "test_name": "RegisterDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "commserver": "sensor_gw1_name",
+            "regDev": "device_2",
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "sgw_group_name": "networkgroup2_name",
+            "wait_for_online": true
+        },
+        {
+            "test_name": "RegisterDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "commserver": "sensor_gw1_name",
+            "regDev": "device_1",
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "sgw_group_name": "networkgroup1_name",
+            "wait_for_online": true
+        },
+        {
+            "test_name": "RegisterDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": false,
+            "commserver": "sensor_gw1_name",
+            "regDev": "device_1",
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "sgw_group_name": "networkgroup1_name",
+            "wait_for_online": false
+        },
+        {
+            "test_name": "DeviceConfigExportTest",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "downloadfolder": "defaultdownloadpath",
+            "filetype": "CSV"
+        },
+        {
+            "comment": "Description - Exports information into a CSV file and checks if the information match",
+            "comment": "Paramter - site_name: site to export CSV file from. Required. Default Value: None.",
+            "comment": "Parameter - downloadfolder: download location of csv file. Required. Default Value: None.",
+            "test_name": "DeviceConfigExportTest",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "downloadfolder": "defaultdownloadpath",
+            "filetype": "EXCEL"
+        },
+        {
+            "test_name": "ApplyProfileByTree",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_sub_feeder_site_names.json",
+            "treePortion": "site",
+            "config": "changeeverything"
+        },
+        {
+            "test_name": "VerifyDNPChanges",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_sub_feeder_site_names.json",
+            "device_name": ["device_1"],
+            "polltime" : devicepollinterval
+        },
+        {
+            "test_name": "ApplyProfileByTree",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_sub_feeder_names.json",
+            "treePortion": "feeder",
+            "config": "default"
+        },
+        {
+            "test_name": "VerifyDNPChanges",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_sub_feeder_names.json",
+            "device_name": ["device_1", "device_2"],
+            "polltime" : devicepollinterval
+        },
+        {
+            "test_name": "ApplyProfileByTree",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "treePortion": "substation",
+            "config": "seleniumtest"
+        },
+        {
+            "test_name": "VerifyDNPChanges",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1", "device_2"],
+            "polltime" : devicepollinterval
+        },
+        {
+            "test_name": "EditProfileDNP",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "device_name": ["device_1", "device_2"],
+            "profileName": "seleniumtest",
+            "tabs": ["cfciData"],
+            "fields": {
+                "cfciData": {
+                    "cFCI DiDt limit": 100,
+                    "cFCI DiDt minimum duration": 100,
+                    "cFCI DiDt rise time": 100
+                }
+            },
+            "parameterTable":  {
+                "cfciData":{
+                    "FciDiDtLimit": 100,
+                    "FciDiDtMinDuration": 100,
+                    "FciDiDtRiseTime": 100
+                }
+            }
+        },
+        {
+            "test_name": "EditProfileDNP",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "device_name": ["device_1","device_2"],
+            "profileName": "seleniumtest",
+            "tabs": ["cfciData"],
+            "fields": {
+                "cfciData": {
+                    "cFCI DiDt limit": 55,
+                    "cFCI DiDt minimum duration": 55,
+                    "cFCI DiDt rise time": 55
+                }
+            },
+            "parameterTable":  {
+                "cfciData":{
+                    "FciDiDtLimit": 55,
+                    "FciDiDtMinDuration": 55,
+                    "FciDiDtRiseTime": 55
+                }
+            }
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1","device_2"]
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/device_1.csv",
+            "wait_for_online": "True"
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
+            "device_name": ["device_1"]
+        },
+        {
+            "comment": "Description - Deletes a site",
+            "comment": "Parameter - use_global_test_device: use default information from UploadMTFFile Test. Required. Default Value: True",
+            "comment": "Parameter - site_name: name of site to delete. Required if use_global_test_device is false. Default Value: None",
+            "comment": "Parameter - neg_test: determine if this is a negative test. Optional. Default Value: False",
+            "test_name": "DeleteSite",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_sub_feeder_site_names.json",
+            "site_name": ""
+        },
+        {
+            "comment": "Description - Deletes a feeder",
+            "comment": "Parameter - use_global_test_device: use default information from UploadMTFFile Test. Required. Default Value: True",
+            "comment": "Parameter - feeder_name: name of feeder to delete. Required if use_global_test_device is false. Default Value: None",
+            "comment": "Parameter - neg_test: determine if this is a negative test. Optional. Default Value: False",
+            "test_name": "DeleteFeeder",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_sub_feeder_names.json"
+        },
+        {
+            "comment": "Description - Deletes a substation",
+            "comment": "Parameter - use_global_test_device: use default information from UploadMTFFile Test. Required. Default Value: True",
+            "comment": "Parameter - substation_name: name of substation to delete. Required if use_global_test_device is false. Default Value: None",
+            "comment": "Parameter - neg_test: determine if this is a negative test. Optional. Default Value: False",
+            "test_name": "DeleteSubStation",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_sub_names.json"
+        },
+        {
+            "comment": "Description - Deletes a region",
+            "comment": "Parameter - use_global_test_device: use default information from UploadMTFFile Test. Required. Default Value: True",
+            "comment": "Parameter - region_name: name of region to delete. Required if use_global_test_device is false. Default Value: None",
+            "comment": "Parameter - neg_test: determine if this is a negative test. Optional. Default Value: False",
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": false,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "dvmg_test_region"
+        },
+        {
+            "test_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "changeeverything"
+        },
+        {
+            "test_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "seleniumtest"
+        },
+        {
+
+            "test_name": "SelectANodeToShowAllDevicesUnderTheNode",
+            "comment": "This test verifies that all the devices should be shown based on the node selection from group tree",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.1/7_non_real_devices.csv"
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "r1"
+        },
+        {
+
+            "test_name": "DeviceSummaryData",
+            "comment": "This test verifies that there should be summary of devices on top of this screen",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.2/1_real_2_non_real_devices.csv",
+            "wait_for_online": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "t1"
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesViaActionButtonRegionLevel",
+            "comment": "This test verifies that there should be a new button for Add devices on Manage devices screen at region level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.15/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.15/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesViaActionButtonSubStationLevel",
+            "comment": "This test verifies that there should be a new button for Add devices on Manage devices screen at substation level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.16/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.16/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesViaActionButtonFeederLevel",
+            "comment": "This test verifies that there should be a new button for Add devices on Manage devices screen at feeder level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.17/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.17/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesViaActionButtonSiteLevel",
+            "comment": "This test verifies that there should be a new button for Add devices on Manage devices screen at site level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.18/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.18/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesContextMenuRegionLevel",
+            "comment": "This test verifies that there should be a context menu to add devices at region level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.19/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.19/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesContextMenuSubStationLevel",
+            "comment": "This test verifies that there should be a context menu to add devices at sub station level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.20/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.20/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesContextMenuFeederLevel",
+            "comment": "This test verifies that there should be a context menu to add devices at feeder level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.21/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.21/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesContextMenuSiteLevel",
+            "comment": "This test verifies that there should be a context menu to add devices at site level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.22/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.22/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "FieldNoteColumnToBeAddedToDeviceManagementMenuOptionList",
+            "comment": "This test verifies that a new column with name field note should be added to device management menu list",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.23/d1_details.csv",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "FieldNoteEmptyValue",
+            "comment": "This test verifies that a new column with name field note should be empty",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.24/d1_details.csv",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "FieldNoteLongValue",
+            "comment": "This test verifies that a field notes accepts long value for field note",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.25/d1_details.csv",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "FieldNoteMaxCharacterValidation",
+            "comment": "This test verifies that a new column with name field note should be added to device management menu list",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.28/d1_details.csv",
+            "expect_pass": true
+        },
+        {
+
+            "test_name": "DeviceManagementManageDevicesEditDevice",
+            "comment": "Test verifies that user can edit any device information from the device management-Manage device screen on organization/Region/substation/Feeder/site level.",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.29/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.29/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesViaActionButtonOrganizationNodeLevel",
+            "comment": "This test verifies that there should be a new button for Add devices on Manage devices screen at organization node level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.26/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.26/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "AddDevicesContextMenuOrganizationNodeLevel",
+            "comment": "This test verifies that there should be a new button for Add devices on Manage devices screen at organization node level",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.27/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.27/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "DeviceManagementManageDevicesEditDuplicatePhaseForAnyDeviceWhichAreOnAnyRegionSubstationFeederAndSite",
+            "comment": "Test verifies that user can get the error message Device exist for this Phase in Device Management-Manage device screen on organization/Region/substation/Feeder/site level.",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.39/d1_details.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/Device Management/5.40.39/d2_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.39/add_device_d2.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "TestReg1"
+        },
+        {
+
+            "test_name": "DeviceStatusToolTipShowsTheCorrectDeviceStatus",
+            "comment": "This test verifies that the tool tip on device status shows the right status in Managed devices screen",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.43/d1_details.csv",
+            "wait_for_online": "True",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "DeviceManagementManageDevicesEditAnyDeviceWithMissingMandatoryDetailsOnInDeviceManagementManageDeviceScreenOnOrganizationRegionSubstationFeederSiteLevel",
+            "comment": "Test verifies that user can get the error message Please fill all mandatory fields in Device Management-Manage device screen on organization/Region/substation/Feeder/site level.",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.41/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.41/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "DeviceManagementManageDevicesMoveDeviceOnDifferentSiteWherePhaseABCDeviceAreThereOnInDeviceManagementManageDeviceScreenOnOrganizationRegionSubstationFeederSiteLevel",
+            "comment": "Test verifies that user can get the error message Device exist for this Phase in Device Management Manage device screen on organizationRegionsubstationFeedersite level.",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.40/d1_details.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/Device Management/5.40.40/d2_details.csv",
+            "input_file_path2": "seleniumDir/inputfilesDir/Device Management/5.40.40/cll13.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.40/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "FlashLEDDeviceIsOffline",
+            "comment": "Test verifies the Flash LED does not flash when device is offline",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.38/d1_details.csv",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "DeviceManagementManageDevicesEditDescriptionFieldForAnyDeviceWhichAreOnAnyRegionSubstationFeederAndSite",
+            "comment": "Test verifies that user can edit any device description field on any region, substation, feeder and site in Device Management-Manage device screen on organization/Region/substation/Feeder/site level.",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.36/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.36/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "DeviceManagementManageDevicesEditDeviceStateOnSameRegionSubstationFeederAndSite",
+            "comment": "Test verifies that user can edit any device state from current device state to different device state on same region, substation, feeder and site in Device Management-Manage device screen on organization/Region/substation/Feeder/site level.",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.35/d1_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.35/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+
+            "test_name": "DeviceManagementManageDevicesMovingDeviceOnDifferentRegion",
+            "comment": "Test verifies that user can move any device from current region to different region in Device Management-Manage device screen on organization/Region/substation/Feeder/site level.",
+            "hiptest_name": "",
+            "skip": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Management/5.40.30/d1_details.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/Device Management/5.40.30/d2_details.csv",
+            "device_detail_path": "seleniumDir/inputfilesDir/Device Management/5.40.30/add_device_d1.json",
+            "expect_pass": true
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "test_name": "Logout",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true
+        }
+    ]
+}

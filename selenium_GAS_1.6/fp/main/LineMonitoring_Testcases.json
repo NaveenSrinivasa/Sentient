@@ -1,0 +1,666 @@
+{
+    "Tests":
+    [
+        {
+            "test_name": "Login",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "username": "username_valid",
+            "password": "password_valid"
+        },
+        {
+            "test_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "createfault",
+            "profile_json": "seleniumDir/inputfilesDir/Line Monitoring/createfault.json"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/device_1.csv",
+            "wait_for_online": "True"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/device_2.csv",
+            "wait_for_online": "True"
+        },
+        {
+            "test_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_names.json",
+            "device_name": ["device_1", "device_2"],
+            "config": "createfault",
+            "actionButton": false
+        },
+        {
+            "test_name": "VerifyDNPChanges",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "device_name": ["device_1","device_2"],
+            "polltime" : devicepollinterval
+        },
+        {
+            "test_name": "AddRegion",
+            "hiptest_name": "Create Region - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "regionName": "EmptyRegion",
+            "node": "SentientEnergy"
+        },
+        {
+            "test_name": "AddSubstation",
+            "hiptest_name": "Create Substation - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "substationName": "EmptySubstation",
+            "region": "EmptyRegion"
+        },
+        {
+            "test_name": "AddSubstation",
+            "hiptest_name": "Create Substation - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "substationName": "EmptySubstation2",
+            "region": "EmptyRegion"
+        },
+        {
+            "test_name": "AddSubstation",
+            "hiptest_name": "Create Substation - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "substationName": "SeleniumTestSub4",
+            "region": "lm_device_region"
+        },
+        {
+            "test_name": "AddFeeder",
+            "hiptest_name": "Create Feeder - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "feederName": "EmptyFeeder",
+            "substation": "EmptySubstation",
+            "region": "EmptyRegion"
+        },
+        {
+            "test_name": "AddSite",
+            "hiptest_name": "Create Site - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "feeder": "EmptyFeeder",
+            "substation": "EmptySubstation",
+            "region": "EmptyRegion",
+            "siteName": "EmptySite",
+            "latitude": "1.55",
+            "longitude": "2.22"
+        },
+         {
+            "test_name": "AddSite",
+            "hiptest_name": "Create Site - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "feeder": "lm_device_feeder",
+            "substation": "lm_device_sub",
+            "region": "lm_device_region",
+            "siteName": "SeleniumTestSite4",
+            "latitude": "17.55",
+            "longitude": "25.22"
+        },
+        {
+            "test_name": "WaitForXTime",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "min" : 4
+        },
+        {
+            "test_name": "FaultEventsTableEmptyData",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "comment": "Select Region/Substation/Feeder/Site in the Group tree with no Faults to see the 'No Data Available' message",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/empty_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsExportButton",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Export Button",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "level" : "region"
+        },
+        {
+            "test_name": "FaultEventsExportButton",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Export Button",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "level" : "substation"
+        },
+        {
+            "test_name": "FaultEventsExportButton",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Export Button",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "level" : "feeder"
+        },
+        {
+            "test_name": "FaultEventsExportButton",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Export Button",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "level" : "site"
+        },
+        {
+            "test_name": "FaultEventsCheckSubEventTypesCountInRegionTable",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Find which substation has fault events and check the count in region table",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsCheckSubstationsWithoutEventsInRegionTable",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Find which substation has no fault events and Check in region table",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsCheckSubstationsWithEventsInRegionTable",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Find which substation has fault events and Check in region table",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsCheckFeederEventsCountInSubstationTable",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Find which feeder has fault events and Check in substation table",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsCheckFeederEventTypesCountInSubstationTable",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Find which feeder has fault events and Check each type count in substation table",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSubCheckEventType",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select all Event Type and validate",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSubCheckEventState",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select all Event State and validate",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSubUnCheckAll",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select Event Type/Event State UncheckAll and validate",
+            "comment": "Please point a substation which has all types and states of fault events",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSubGroupTableEventCountValidation",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Validating substation group table Total Event Count",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSubGroupTableDurationValidation",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Validating substation group table Total Duration",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsFeederCheckEventType",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select all Event Type and validate",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsFeederCheckEventState",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select all Event State and validate",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsFeederUnCheckAll",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select Event Type/Event State UncheckAll and validate",
+            "comment": "Please point a Feeder which has all types and states of fault events",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsFeederGroupTableEventCountValidation",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Validating Feeder group table Total Event Count",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsFeederGroupTableDurationValidation",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Validating Feeder group table Total Duration",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSiteCheckEventType",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select all Event Type and validate",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSiteCheckEventState",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select all Event State and validate",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSiteCheckTriggeredDetector",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select all Triggered Detectors and validate",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "FaultEventsSiteUnCheckAll",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select Event Type/Event State/Triggered Detectors UncheckAll and validate",
+            "comment": "Please point a Site which has all types, states and detectors of fault events",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3PointsEmptyData",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select a Feeder or Site with no DNP3Points",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/empty_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "CheckDnp3PointsDisplays",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select a Feeder or Site which has DNP3Points",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "Phase": "lm_device_phase"
+        },
+        {
+            "test_name": "Dnp3PointsExportButton",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Export Button",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3PointsPhaseFilters",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Phase Filters",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3TableColumnFilters",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Check all Dnp3 data table column Filter Options",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3PointsPastDateWithEmptyData",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Dnp3 Points data when select past date",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "date" : "26",
+            "month" : "8",
+            "year": "1980"
+        },
+        {
+            "test_name": "Dnp3PointsClickTodayInDatepicker",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Dnp3 Points data when select today date again after selected past date",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "date" : "26",
+            "month" : "8",
+            "year": "1980"
+        },
+        {
+            "test_name": "Dnp3PointsClickClearInDatepicker",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify date reset to default date and DNP3 Points refreshed when select Clear in date picker",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "date" : "26",
+            "month" : "8",
+            "year": "1980"
+        },
+        {
+            "test_name": "Dnp3PointsPreviousAndNextDayButtons",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Previous and Next Day Button Navigation",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "tdate" : "lm_dnp_date",
+            "month" : "lm_dnp_month",
+            "year": "lm_dnp_year"
+        },
+        {
+            "test_name": "Dnp3PointsNextDayButtonForFutureDate",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Next Day Button State for Futre and Past date selection",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3PointsFeederTimeRangeSelection",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Dnp3 Points feeder level time range selection",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3PointsCheckButtonsWithNoData",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Export, Refresh, and View Chart Buttons are Disabled When No Data for Feeder and Site",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/empty_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3PointsViewChart",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Dnp3 Points View Chart graph",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3PointsViewChartPhaseFilters",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Dnp3 Points View Chart Phase filters",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "Dnp3PointsViewChartTimeRangeSelection",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Dnp3 Points View Chart Time Range Selection",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "WaveformDownloadButton",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify whether waveform is downloaded successfuly when click on Download button",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "interval": 120,
+            "timeout": 1200
+        },
+        {
+            "test_name": "WaveformPastDateWithEmptyData",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Waveform data when select past date",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "date" : "26",
+            "month" : "August",
+            "year": "1981"
+        },
+        {
+            "test_name": "WaveformExportButton",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Waveform Export Button",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "CheckWaveformTableContent",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Waveform table properties and its value",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "tab_name": "lm_wv_tab_name",
+            "field_name": "lm_wv_field_name",
+            "field_value" : "lm_wv_field_value"
+        },
+        {
+            "test_name": "ValidateMultipleWaveforms",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify multiple Waveform's table properties by comparing",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "tab_name": "Properties",
+            "field_name": "FCI Thresh Limit"
+        },
+        {
+            "test_name": "SingleAndMultipleEventsCheck",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify whether waveform displays when select multiple events from time line",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "WaveformChartLegendUnitfilters",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Waveform Chart Legend unit filters - Current and E-field",
+            "input_file_path": "/home/sqa/emsw-qa/seleniumnew/fp/sqa_fp/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "LogIEmptyData",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Select a Feeder or Site which doesn't have logi data in the Group tree to see the 'No Data Available' message",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/empty_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "LogIExportButton",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify Export Button",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "LogIUnitfilters",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify LogI filters - Current and Temperature",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "LogIChartLegendUnitfilters",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify LogI Chart Legend unit filters - Current and Temperature",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "LogIPhaseDetailsCheck",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify LogI Phase Details",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
+            "phase": "lm_device_phase",
+            "propertyname": "Type",
+            "propertyvalue": "lm_device_type"
+        },
+        {
+            "test_name": "LogIPhaseFilters",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify LogI Phase Filters",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "LogITimeRangeSelection",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify LogI Time Range Selection - 1D,1W,1M,3M,6M and 1Y",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
+        },
+        {
+            "test_name": "LogISiteSelection",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Verify LogI multiple site selection. Please mention minimum 2 site names of a feeder in input file",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_multiple_site_names.json"
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "EmptyRegion"
+        },
+        {
+            "comment": "Description - Delete a substation",
+            "test_name": "DeleteSubStation",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "region_name": "lm_device_region",
+            "substation_name": "SeleniumTestSub4"
+        },
+        {
+            "comment": "Description - Delete a site",
+            "test_name": "DeleteSite",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_names.json",
+            "site_name": "SeleniumTestSite4"
+        },
+        {
+            "test_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "createfault"
+        },
+        {
+
+            "test_name": "AddRMSToCurrentLabelsLineMonitoringLogI",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "Test verifies the current labels are RMS in the Line Monitoring LogI view",
+            "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/5.20.30/d1_reg_sub_feeder_site_names.json"
+        },
+        {
+
+            "test_name": "CustomGroupsMultipleEventTypeSelectionSupport",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "This test verifies that multiple fault type selection option should be present in custom groups screen"
+        },
+        {
+
+            "test_name": "CustomGroupsOrderingOfTableColumns",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "This test verifies the order of table columns for the custom groups table"
+        },
+        {
+
+            "test_name": "ExportCustomGroupsTablesWithMultipleEventTypeSelection",
+            "hiptest_name": "Logout",
+            "skip": true,
+            "expect_pass": true,
+            "comment": "This test verifies the table data and the exported table should match after we support multi-event type selection"
+        },
+
+        {
+            "test_name": "Logout",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

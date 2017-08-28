@@ -1,0 +1,17 @@
+{
+	"Serial Number": "d1_name",
+	"Description": "GT_Add_Real_Device",
+	"Product Name": "d1_type",
+	"Platform": "d1_platform",
+	"Phase": "d1_phase",
+	"MAC Address": "d1_macaddress",
+	"Sensor IP Address": "d1_ipaddress",
+	"Sensor DNP Address": "d1_dnpaddr",
+	"DNP General Port": "d1_daport",
+	"Software Version": "d1_swversion",
+	"SEI Part Number": "0-00001-05",
+	"Network Type": "d1_networktype",
+	"Sensor Gateway Name": "sensor_gw1_name",
+	"Network Group Name": "networkgroup1_name",
+	"Secondary IP Address": ""
+}
