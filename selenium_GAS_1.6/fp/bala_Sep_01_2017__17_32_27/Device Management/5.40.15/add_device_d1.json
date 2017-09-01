@@ -1,0 +1,20 @@
+{
+
+	"Region": "SelTestReg1",
+	"Substation": "SelTestSub1",
+	"Feeder": "SelTestFeeder1",
+	"Site": "SelTestSite1",
+	"Serial Number": "Test1",
+	"Product Name": "MM3",
+	"Platform": "corgi",
+	"Phase": "B",
+	"MAC Address": "00:13:50:03:00:4D:9F:D5",
+	"Sensor IP Address": "fd02:dead:beef:2:213:5003:4d:9fc2",
+	"Sensor DNP Address": "1100",
+	"DNP General Port": "2000",
+	"Software Version": "2.3.0",
+	"SEI Part Number": "0-00001-05",
+	"Network Type": "SSN",
+	"Sensor Gateway Name": "host41_sgw_comm1",
+	"Network Group Name": "seleniumtest_group"
+}

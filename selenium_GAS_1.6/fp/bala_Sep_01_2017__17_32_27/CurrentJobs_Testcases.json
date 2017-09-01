@@ -1,0 +1,125 @@
+{
+	"Tests":
+	[
+        {
+            "test_name": "Login",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "test_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "seleniumtest",
+            "profile_json": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Current Jobs/seleniumtest.json"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/at-ssn17.csv",
+            "wait_for_online": "True"
+        },
+        {
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/at-ssn18.csv",
+            "wait_for_online": "True"
+        },
+        {
+            "test_name": "ValidateCurrentJobsConfigDetails",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Current Jobs/d1_reg_sub_feeder_site_names.json",
+            "device_names": ["at-ssn17"],
+            "config" : "seleniumtest",
+            "device_detail_json": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Current Jobs/d1_details.json"
+        },
+        {
+            "test_name": "VerifyDNPChanges",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Current Jobs/d1_reg_sub_feeder_site_names.json",
+            "device_name": ["at-ssn17"],
+            "polltime" : 600
+        },
+        {
+            "test_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Current Jobs/d1_reg_sub_names.json",
+            "device_name": ["at-ssn18"],
+            "config": "default"
+        },
+        {
+            "test_name": "JobStatusToolTip",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "page": "Config",
+            "expect_pass": true
+        },
+        {
+            "test_name": "SearchForDeviceCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "page": "Config",
+            "device": "at-ssn17"
+        },
+        {
+            "test_name": "SearchForDeviceCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "page": "Config",
+            "device": "at-ssn18"
+        },
+        {
+            "test_name": "SearchForDeviceCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "page": "Config",
+            "device": "at-ssn17"
+        },
+        {
+            "test_name": "SearchForDeviceCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "page": "Config",
+            "device": "at-ssn18@@"
+        },
+        {
+            "test_name": "DeleteRegion",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "test_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "seleniumtest"
+        },
+        {
+            "test_name": "Logout",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        }
+	]
+}

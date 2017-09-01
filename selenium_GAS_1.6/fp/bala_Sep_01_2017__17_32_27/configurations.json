@@ -1,0 +1,30 @@
+{
+    "Config":
+    {
+        "#": "Put your configurations here",
+        "ample_build": "ample_1.6.0.259",
+        "sgw_build": "sgw_1.6.0.230",
+        "log_level": "info",
+        "test_report_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/report",
+        "log_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/log/",
+        "mtf_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/at-ssn17.csv",
+        "xpath_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/xpaths",
+        "tmp_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/tmp",
+        "screenshots_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/screenshots",
+        "hiptest":
+                {
+                  "email": "bbaskar@sentient-energy.com",
+                  "password": "chander@123",
+                  "project_id": "46692",
+                  "test_run_id": "91268",
+                  "publish": false
+                }
+    },
+    "Email":
+    {
+        "subject_line": "1.6.0.259 Selenium Automation Test",
+        "recipients": ["balachander.baskar@synchronoss.com", "naveen.s@synchronoss.com"],
+        "attachments": ["/home/balachander/git/qa-selenium/selenium_GAS_1.6/report/test_report.csv"],
+        "enabled": false
+    }
+}

@@ -1,0 +1,382 @@
+{
+    "Tests":
+    [
+        {
+            "test_name": "Login",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "test_name": "FlashDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
+            "target_version": "1.4.3-release",
+            "ipaddr": "127.0.0.1",
+            "portNumber": "at-ssn17_vto_port",
+            "networktype": "SSN"
+        },
+        {
+            "test_name": "FlashDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
+            "target_version": "1.4.3-release",
+            "ipaddr": "127.0.0.1",
+            "portNumber": "at-ssn18_vto_port",
+            "networktype": "SSN"
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/at-ssn17.csv",
+            "wait_for_online": true
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/at-ssn18.csv",
+            "wait_for_online": true
+        },
+        {
+            "test_name": "CheckDefaultUpgradePage",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_list": ["at-ssn17"]
+        },
+        {
+            "test_name": "DeviceFilters",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "page": "Upgrade"
+        },
+        {
+            "comment": "Description - Performs a search on the Upgrade Page for a name(string)",
+            "comment": "Parameter - negtest: determine if it is a negative test or not. True if negative test, or False else. Default Value is False.",
+            "comment": "Parameter - searchUpgrade: string to search for in Upgrade Page. Required. Default Value: None.",
+            "test_name": "SearchBarTestUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "searchKeyword": "at-ssn17",
+            "region_name": "SelTestReg1"
+        },
+        {
+            "test_name": "UpgradeSettingsTest",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "upgrade_settings": {
+                "day": "Thursday",
+                "from_time": "11:00PM",
+                "to_time": "7:59PM",
+                "num_retries": 3
+            }
+        },
+        {
+            "test_name": "OTAPWrongUpdateSetting",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn17"],
+            "target_version" : "2.3.0",
+            "actionButton" : false,
+            "time_or_day": "Day"
+        },
+        {
+            "test_name": "OTAPWrongUpdateSetting",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn17"],
+            "target_version" : "2.3.0",
+            "actionButton" : false,
+            "time_or_day": "Time"
+        },
+        {
+            "test_name": "UpgradeSettingsTest",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "upgrade_settings": {
+                "day": "Thursday",
+                "from_time": "12:00AM",
+                "to_time": "11:59PM",
+                "num_retries": 5
+            }
+        },
+        {
+            "test_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn17", "at-ssn18"],
+            "target_version" : "2.3.0",
+            "actionButton" : false
+        },
+        {
+            "test_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn18"],
+            "target_version" : "2.4.1",
+            "actionButton" : false
+        },
+        {
+            "test_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn18"],
+            "target_version": "2.4.1",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "test_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn17"],
+            "target_version" : "2.4.1",
+            "actionButton" : false
+        },
+        {
+            "test_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name": ["at-ssn17"],
+            "config": "default"
+        },
+        {
+            "test_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn17"],
+            "target_version": "2.4.1",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "test_name": "OTAPPostCheckVersion",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_names": ["at-ssn17"],
+            "target_version": "2.4.1"
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name": ["at-ssn17"]
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name": ["at-ssn18"]
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/at-ssn17.csv",
+            "wait_for_online": true
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "test_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/at-ssn18.csv",
+            "wait_for_online": true
+        },
+        {
+            "test_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn17","at-ssn18"],
+            "target_version" : "2.4.3",
+            "actionButton" : false
+        },
+        {
+            "test_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn17","at-ssn18"],
+            "target_version": "2.4.3",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "test_name": "FlashDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
+            "target_version": "1.4.3-release",
+            "ipaddr": "127.0.0.1",
+            "portNumber": "at-ssn17_vto_port",
+            "networktype": "SSN"
+        },
+        {
+            "test_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn17"],
+            "target_version" : "2.3.0",
+            "actionButton" : false
+        },
+        {
+            "test_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn17"],
+            "target_version": "2.3.0",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "test_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn17"],
+            "target_version" : "2.4.3",
+            "actionButton" : false
+        },
+        {
+            "test_name": "OTAPAbort",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name": "at-ssn17"
+        },
+        {
+            "test_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn17"],
+            "target_version": "2.3.0",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "ABORTED",
+            "polltime": 50
+        },
+        {
+            "test_name": "OTAPRetryUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name": "at-ssn17"
+        },
+        {
+            "test_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn17"],
+            "target_version": "2.4.3",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 30
+        },
+        {
+            "test_name": "OTAPCheckOfflineDeviceUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name": "at-ssn17",
+            "waitOnline": false,
+            "commserver": "host41_sgw_comm1",
+            "networkgroup": "seleniumtest_group2"
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name": ["at-ssn17"]
+        },
+        {
+            "test_name": "OTAPEmptyData",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json"
+        },
+        {
+            "test_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json",
+            "device_name": ["at-ssn18"]
+        },
+        {
+            "test_name": "OTAPEmptyData",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_01_2017__17_32_27/Device Upgrade/d1_reg_name.json"
+        },
+        {
+            "test_name": "Logout",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

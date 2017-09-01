@@ -23,7 +23,7 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         print('session_id : %s' %session_id)
-        # driver.session_id = '27effb70-1cf7-4215-8f20-4929a66531c5' # To connect with your desirable session
+        #driver.session_id = 'f85cf507-740b-4d6f-8eb9-dbfc7dc2c750' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
@@ -171,8 +171,12 @@ def CreateDeviceDictionary(info):
     devDataDic['product'] = info[6]
     devDataDic['swversion'] = info[7]
     devDataDic['platform'] = info[8]
-    devDataDic['lat'] = float(info[9])
-    devDataDic['lon'] = float(info[10])
+    if not info[9] or info[9] is None or not info[10] or info[10] is None:
+        devDataDic['lon'] = info[9]
+        devDataDic['lat'] = info[10]
+    else:
+        devDataDic['lon'] = float(info[9])
+        devDataDic['lat'] = float(info[10])
     devDataDic['mac'] = info[11]
     devDataDic['ipaddr'] = info[12]
     devDataDic['dnpaddr'] = int(info[13])
@@ -182,6 +186,7 @@ def CreateDeviceDictionary(info):
     devDataDic['sei'] = info[17]
     devDataDic['networktype'] = info[19]
     devDataDic['networkgroupname'] = info[20]
+    devDataDic['devicestate'] = info[21]
 
     return devDataDic
 
@@ -289,7 +294,6 @@ def BackupScreenshotsAndTestReport(src):
 
         for logfile in os.listdir(src_level_down + '/log'):
             logfilepath = os.path.join(src_level_down + '/log/', logfile)
-            print logfilepath
             os.remove(logfilepath)
 
         for filename in os.listdir(src):   # Cleaning up old screenshots from screenshots folder

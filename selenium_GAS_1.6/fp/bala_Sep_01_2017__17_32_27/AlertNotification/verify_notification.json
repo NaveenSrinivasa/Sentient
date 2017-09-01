@@ -1,0 +1,13 @@
+{
+	"Expected Total": 1,
+	"Testbed": "172.20.3.39",
+	"SelTestReg1":{
+		"SelTestSub1":{
+			"SelTestFeeder1":{
+				"SelTestSite1":{
+					"Phase B": ["FciFaultIndicationAlert", "true"]
+				}
+			}
+		}
+	}
+}

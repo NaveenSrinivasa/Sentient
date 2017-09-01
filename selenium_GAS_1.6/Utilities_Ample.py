@@ -1466,6 +1466,59 @@ def FilteredDataFromTable(columnname, pagename):
     return columnnamevalueslist
 
 
+def FilteredDataFromTableMapping(columnname1, columnname2, pagename):
+
+    if pagename == "line-monitoring":
+        keyword = 'line-monitoring'
+    elif pagename == "device-management" or pagename == "device-management-upgrade":
+        keyword = 'device-management'
+    else:
+        printFP('NoDataAvailable: Unable to find the requested Page')
+        return None
+
+    columnorder = GetTableColumnOrder(keyword)
+
+    column_1_position = columnorder[columnname1]
+
+    column_2_position = columnorder[columnname2]
+
+    # Create a dict
+    valuesmappinglist = {}
+    columnname1value = ''
+    columnname2value = ''
+
+    html = Global.driver.page_source
+
+    FilterElements = soup(html, "lxml")
+
+    # find Page view
+    page = FilterElements.find('div', class_=re.compile(keyword))
+
+    if page.find('table'):
+        tabledata = page.find('table')
+        # Get all rows
+        rows = tabledata.find_all('tr', class_=re.compile('row'))
+        for row in rows:
+            if pagename == 'device-management':
+                n=0
+            else:
+                n=1
+            for td_tag in row:
+                if hasattr(td_tag, 'class'):
+                    if n == column_1_position:
+                        value = td_tag.find('span').text.strip()
+                        columnname1value = value
+                    elif n == column_2_position:
+                        value = td_tag.find('span').text.strip()
+                        columnname2value = value
+                    n = n+1
+                if columnname1value and columnname2value:
+                    valuesmappinglist[columnname1value] = columnname2value
+
+    printFP(valuesmappinglist)
+    return valuesmappinglist
+
+
 def SelectYearMonthAndDateFromCalendar(year, month, date):
     datepicker = Global.driver.find_element_by_css_selector('.input-group.datepicker.pull-left')
     ultag = GetElement(datepicker, By.TAG_NAME, 'ul')
@@ -4156,3 +4209,40 @@ def SearchJobLink(device_names):
         return False
     else:
         return True
+
+
+def GetOverrideGPSStatus(region, substation, feeder, site):
+    GoToDevMan()
+    time.sleep(5)
+    GetSiteFromTop(region, substation, feeder, site)
+    siteelement = GetSite(site)
+    RightClickElement(siteelement)
+    time.sleep(1)
+    SelectFromMenu(Global.driver, By.CLASS_NAME, 'pull-left', 'Edit')
+    time.sleep(2)
+    overridegpsswitch = GetElement(Global.driver, By.CLASS_NAME, 'toggle-switch-animate')
+    classname = overridegpsswitch.get_attribute('class')
+    time.sleep(1)
+    if "switch-on" in classname:
+        return True
+    elif "switch-off" in classname:
+        return False
+
+def GetLatAndLonValuesOfSite(region, substation, feeder, site):
+    GoToDevMan()
+    time.sleep(5)
+    GetSiteFromTop(region, substation, feeder, site)
+    siteelement = GetSite(site)
+    RightClickElement(siteelement)
+    time.sleep(1)
+    SelectFromMenu(Global.driver, By.CLASS_NAME, 'pull-left', 'Edit')
+    time.sleep(2)
+    overridegpsswitch = GetElement(Global.driver, By.CLASS_NAME, 'toggle-switch-animate')
+    classname = overridegpsswitch.get_attribute('class')
+    time.sleep(1)
+    if not 'switch-off' in classname:
+        sitelatitude = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Latitude']").get_attribute('value')
+        sitelongitude = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Longitude']").get_attribute('value')
+        return sitelatitude, sitelongitude
+    else:
+        return None, None

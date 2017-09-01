@@ -1,0 +1,17 @@
+Browser: internet explorer 11
+Platform: WINDOWS
+
+Test Case, Test Case ID, Parameters, Test Case Type, Time in seconds, Result, Test Comment if any
+
+Module: Login Tests
+
+1 Login, username=ampleadmin;  password=yourpass;  , expect_pass = True, 19, PASS, TEST PASS - Successfully Logged In
+
+
+Total Test Time: 19 seconds
+Total Test Count: 1
+Total PASS: 1
+Total FAIL: 0
+
+--------------------------------------
+

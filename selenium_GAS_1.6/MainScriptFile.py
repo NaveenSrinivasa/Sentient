@@ -25,7 +25,8 @@ from Ample_AlertNotifications import *
 from Ample_Disturbances import *
 from Ample_NegativeTests import *
 from Ample_ConfigureProperties import *
-from Ample_SysAdmin_MTF import *
+from Ample_SysAdmin_MTF_0 import *
+from Ample_SysAdmin_MTF_1 import *
 from testdebug import *
 from Ample_DevMan_ManageDevices import *
 from Ample_LinMon_LogI import *
@@ -78,7 +79,7 @@ def RunTest(testCount, test, report, test_runner):
 
     # call each test
     testStartTime = time.time()
-    printFP('\n%s - Test #%d: %s' % (time.strftime('%H:%M:%s'), testCount, test_name))
+    printFP('\n%s - Test #%d: %s - hiptest scenario name: %s' % (time.strftime('%H:%M:%s'), testCount, test_name, hiptest_name))
     if expect_pass:
         printFP('Positive test case')
     else:
@@ -216,8 +217,8 @@ def RunTests(tests, platform, browser, config, url, count, test_runner):
         report.write('Total PASS: %d\n' % totalPass)
         report.write('Total FAIL: %d\n\n' % totalFail)
         report.write('--------------------------------------\n\n')
-    Global.driver.close()
-    Global.driver.quit()
+    #Global.driver.close()
+    #Global.driver.quit()
 
 
 def TestConfig(config, connections, tests):
@@ -234,9 +235,9 @@ def TestConfig(config, connections, tests):
 
     threads = []
     for platform in connections['platforms']:
-        print platform
+        print('Platform: %s' %platform)
         for browser in connections['browsers']:
-            print browser
+            print('Browser: %s' %browser)
             if browser == 'internet explorer' and platform == 'linux':
                 pass
             else:
