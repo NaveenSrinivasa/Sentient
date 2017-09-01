@@ -1,0 +1,20 @@
+{
+
+	"Region": "d1_region",
+	"Substation": "d1_sub",
+	"Feeder": "d1_feeder",
+	"Site": "d1_site",
+	"Serial Number": "Test1",
+	"Product Name": "d1_type",
+	"Platform": "d1_platform",
+	"Phase": "B",
+	"MAC Address": "00:13:50:03:00:4D:9F:D5",
+	"Sensor IP Address": "fd02:dead:beef:2:213:5003:4d:9fc2",
+	"Sensor DNP Address": "1100",
+	"DNP General Port": "2000",
+	"Software Version": "d1_swversion",
+	"SEI Part Number": "d1_sei",
+	"Network Type": "d1_networktype",
+	"Sensor Gateway Name": "sensor_gw1_name",
+	"Network Group Name": "networkgroup1_name"
+}

@@ -1,0 +1,2 @@
+Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name
+d1_region,d1_sub,d1_feeder,d1_site,A,device_1,MM3,1.4.3,corgi,-117.149004,32.735846,135000000000000000000000,fcba::213:5003:4d:a18a,900,note1,20000,sensor_gw1_name,0-00001-05,,SSN,networkgroup1_name

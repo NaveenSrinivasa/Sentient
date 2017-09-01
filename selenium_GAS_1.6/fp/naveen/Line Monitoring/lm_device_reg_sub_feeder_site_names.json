@@ -1,0 +1,7 @@
+{
+    "Region": "lm_device_region",
+    "Substation": "lm_device_sub",
+    "Feeder": "lm_device_feeder",
+    "Site": "lm_device_site"
+}
+

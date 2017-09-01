@@ -1,0 +1,13 @@
+{
+	"general":{
+		"masterDnpAddress": "56058",
+		"name": "editnetworktest",
+		"sgwName": "editnetworktest"
+	},
+	"otapData":{
+		"default.mm2.otap.poll.interval.seconds": "30"
+	},
+	"dnp3Data":{
+		"allow.time.sync": "off"
+	}
+}

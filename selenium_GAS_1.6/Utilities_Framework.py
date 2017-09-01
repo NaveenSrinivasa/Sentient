@@ -23,7 +23,7 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         print('session_id : %s' %session_id)
-        # driver.session_id = '27effb70-1cf7-4215-8f20-4929a66531c5' # To connect with your desirable session
+        #driver.session_id = '63e9c0de-f62a-46c3-81aa-26e2db7c99a3' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
@@ -171,7 +171,9 @@ def CreateDeviceDictionary(info):
     devDataDic['product'] = info[6]
     devDataDic['swversion'] = info[7]
     devDataDic['platform'] = info[8]
+    print info[9]
     devDataDic['lat'] = float(info[9])
+    print devDataDic['lat']
     devDataDic['lon'] = float(info[10])
     devDataDic['mac'] = info[11]
     devDataDic['ipaddr'] = info[12]
@@ -219,6 +221,7 @@ def DeviceDictionaryForPreSetUp(info, device):
     return devDataDic
 
 def CreateAllDevicesDictionary(devData):
+    #print devData
     for line in devData:
         info = line.strip('\n').split(',')
         serial = info[5]
@@ -299,7 +302,7 @@ def BackupScreenshotsAndTestReport(src):
             except OSError:
                 os.remove(filepath)
     else:
-        printFP('Not found given screenshot path directory to back up screenshots : %s' % src)
+        print 'Not found given screenshot path directory to back up screenshots : %s' % src
 
 def FindAndReplace(directory, find, replace, filePattern):
     if 'connections.json' in filePattern:

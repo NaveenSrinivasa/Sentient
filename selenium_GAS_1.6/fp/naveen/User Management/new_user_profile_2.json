@@ -1,0 +1,12 @@
+{
+    "username": "AccUser2",
+    "firstname": "selenium",
+    "middlename": "acceptance",
+    "lastname": "tests",
+    "email": "user2@acceptance.test",
+    "timezone": "(UTC-09:00) US/Alaska",
+    "temperatureunit": "Fahrenheit",
+    "password": "@mpacity",
+    "confirmpassword": "@mpacity",
+    "role": "User"
+}

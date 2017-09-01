@@ -1623,11 +1623,11 @@ def FieldNoteLongValue(input_file_path=None):
 		#Validating the field notes value both from UI and from the MTF File
 
 		if all(str(x) in field_note_from_table for x in field_notes_from_csv):
-			testComment = 'TEST Pass -Field Note  can accept long values '
+			testComment = 'TEST Pass -Import MTF:Field Note can accept long values '
 			printFP(testComment)
 			return Global.PASS, testComment
 		else:
-			testComment = 'TEST Fail - Field Note CANNOT accept long values'
+			testComment = 'TEST Fail -Import MTF:Field Note CANNOT accept long values'
 			printFP(testComment)
 			return Global.FAIL, testComment
 	else:
