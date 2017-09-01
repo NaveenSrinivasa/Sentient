@@ -1,8 +1,0 @@
-{
-    "Connections":
-    {
-        "url": "172.20.3.39",
-        "browsers": ["chrome"],
-        "platforms": ["linux"]
-    }
-}

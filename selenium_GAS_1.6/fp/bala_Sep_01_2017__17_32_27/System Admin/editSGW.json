@@ -1,8 +1,0 @@
-{
-	"Tabs": ["comPropertyGeneralData"],
-	"Range": {
-			"comPropertyGeneralData": {
-				"commserver.wakeup.seconds": 121
-			}
-	}
-}
