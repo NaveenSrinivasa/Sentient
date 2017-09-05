@@ -217,8 +217,8 @@ def RunTests(tests, platform, browser, config, url, count, test_runner):
         report.write('Total PASS: %d\n' % totalPass)
         report.write('Total FAIL: %d\n\n' % totalFail)
         report.write('--------------------------------------\n\n')
-    #Global.driver.close()
-    #Global.driver.quit()
+    Global.driver.close()
+    Global.driver.quit()
 
 
 def TestConfig(config, connections, tests):

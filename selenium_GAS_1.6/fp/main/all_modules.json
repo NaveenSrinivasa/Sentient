@@ -23,8 +23,13 @@
         },
         {
             "Module": "System Admin Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Testcases.json"
+        },
+        {
+            "Module": "System Admin - Import MTF Tests",
+            "skip": false,
+            "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Import_MTF_Testcases.json"
         },
         {
             "Module": "Device Upgrade Tests",

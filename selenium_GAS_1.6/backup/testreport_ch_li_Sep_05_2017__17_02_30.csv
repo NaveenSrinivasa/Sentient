@@ -1,0 +1,17 @@
+Browser: chrome
+Platform: linux
+
+Test Case, Test Case ID, Parameters, Test Case Type, Time in seconds, Result, Test Comment if any
+
+Module: System Admin Tests
+
+1 ExportErrorLogForFailedMTF, downloadfolder=/home/balachander/Downloads/;  filetype=txt;  input_file_path=/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_05_2017__16_52_05/System Admin/Import_MTF/export_error_lines.csv;  , expect_pass = True, 8, PASS, TEST PASS Test Pass - Successfully deleted file from download folder and content matched in the downloaded file
+
+
+Total Test Time: 8 seconds
+Total Test Count: 1
+Total PASS: 1
+Total FAIL: 0
+
+--------------------------------------
+

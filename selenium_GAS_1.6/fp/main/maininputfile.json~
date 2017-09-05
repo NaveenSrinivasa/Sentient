@@ -1,9 +1,9 @@
 {
     "user_defined":
     {
-        "email_subject_line": "1.6.0.263 Selenium Automation Test",
+        "email_subject_line": "1.6.0.259 Selenium Automation Test",
         "email_send_testreport": "false",
-        "ample_build_version": "ample_1.6.0.263",
+        "ample_build_version": "ample_1.6.0.259",
         "sgw_build_version": "sgw_1.6.0.230",
         "loglevel": "info",
         "ampleIP": "172.20.3.39",

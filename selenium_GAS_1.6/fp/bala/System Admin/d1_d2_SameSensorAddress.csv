@@ -1,4 +1,0 @@
-Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Latitude,Longitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
-d1_region,d1_sub,d1_feeder,d1_site,d1_phase,d1_name,d1_type,d1_swversion,d1_platform,d1_long,d1_lat,d1_macaddress,d1_ipaddress,d1_dnpaddr,d1_description,d1_daport,sensor_gw1_name,d1_sei,,d1_networktype,networkgroup1_name,
-d2_region,d2_sub,d2_feeder,d2_site,d2_phase,d2_name,d2_type,d2_swversion,d2_platform,d2_long,d2_lat,d2_macaddress,d2_ipaddress,1000,d2_description,d2_daport,sensor_gw1_name,d2_sei,,d2_networktype,networkgroup1_name,
-

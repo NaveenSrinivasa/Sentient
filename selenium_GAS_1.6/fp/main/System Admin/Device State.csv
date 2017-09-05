@@ -1,6 +1,0 @@
-Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
-b191,b19s1,b19s2f1,b19s2f6s1,B,11000,MM3,2.4.3,corgi,,,0:13:50,fd02:dead:beef:2:213:50,1007,note1,20000,host46_sgw1,0-00001-05,,4G,seleniumtest_group,Production
-b192,b19s2,b19s2f2,b19s2f6s2,C,11001,MM3,2.4.3,corgi,,,00:13:50:03:00:4D,fd02:dead:beef:2:213:5003:4d,1001,note1,20000,host46_sgw1,0-00001-05,,4G,seleniumtest_group,Non-Production
-b193,b19s3,b19s2f3,b19s2f6s3,A,11002,MM3,2.4.3,corgi,,,12:13:00,fd02:dead,1002,note1,20000,host46_sgw1,0-00001-05,,4G,seleniumtest_group,Maintenance
-b194,b19s4,b19s2f4,b19s2f6s4,B,11003,MM3,2.4.3,corgi,,,0.511724537,fd02:de,1003,note1,20000,host46_sgw1,0-00001-05,,4G,seleniumtest_group,RMA
-b195,b19s5,b19s2f5,b19s2f6s5,C,11004,MM3,2.4.3,corgi,,,12:0134533,fd02:dead:b,1004,note1,20000,host46_sgw1,0-00001-05,,4G,seleniumtest_group,other

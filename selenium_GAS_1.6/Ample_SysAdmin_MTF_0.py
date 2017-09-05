@@ -15,7 +15,7 @@ import subprocess as sp
 import filecmp
 import unicodedata
 
-'''This Method will check number of error lines in MTF file is greater then 50 lines, 
+'''This Method will check number of error lines in MTF file is greater then 50 lines,
 number of error lines shouldn't be restricted to any number!'''
 
 def NumberOfErrorsSupportedForAFailedMTFUpload(input_file_path):
@@ -40,13 +40,13 @@ def NumberOfErrorsSupportedForAFailedMTFUpload(input_file_path):
 		lines = GetElement(popup, By.TAG_NAME,'p')
 		lines.click()
 		line_count = 0
-		for line in GetElements(lines, By.TAG_NAME,'br'):			
+		for line in GetElements(lines, By.TAG_NAME,'br'):
 			line_count += 1
 		if line_count <= 50:
 			testComment = 'Test Fail - Please upload MTF which has more then 50 error message lines'
 			printFP(testComment)
 			return Global.FAIL, testComment
-		elif line_count > 50: 
+		elif line_count > 50:
 			testComment='Test Pass - MTF file upload has more then 50 error message lines'
 			printFP(testComment)
 
@@ -75,12 +75,12 @@ def NumberOfErrorsSupportedForAFailedMTFUpload(input_file_path):
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
-	
+
 		if not match:
 			testComment = 'Test Fail - Unable to scroll when MTF file upload has more than 50 error messages'
 			printFP(testComment)
 			return Global.FAIL, testComment
-		else: 
+		else:
 			testComment='Test Pass - Able to scroll when MTF file upload has more then 50 error message lines'
 			printFP(testComment)
 			return Global.PASS, testComment
@@ -89,7 +89,7 @@ def NumberOfErrorsSupportedForAFailedMTFUpload(input_file_path):
 		printFP(testComment)
 		return Global.FAIL, testComment
 
-'''This method is to Indicate Column heading instead of column number, 
+'''This method is to Indicate Column heading instead of column number,
 when there are errors in MTF file'''
 
 def MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber(input_file_path):
@@ -110,7 +110,7 @@ def MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber(input_file_path):
 	time.sleep(2.5)
 	returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
 	if "Failed to upload" in returnMessage:
-		
+
 		GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
 		time.sleep(2.5)
 		errorpopup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
@@ -160,11 +160,11 @@ def ExportErrorLogForFailedMTF(input_file_path=None, downloadfolder=None, filety
 		testComment = "Missing a mandatory parameter."
 		printFP(testComment)
 		return Global.FAIL, testComment
-	
+
 	printFP("INFO - Going to System Admin Page")
 	GoToSysAdmin()
 	time.sleep(2)
-	
+
 	printFP("INFO - Uploading the MTF File with Bad values to export the error messages")
 	UploadMTF(input_file_path)
 	time.sleep(2)
@@ -172,7 +172,7 @@ def ExportErrorLogForFailedMTF(input_file_path=None, downloadfolder=None, filety
 	time.sleep(2)
 	returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
 	if "Failed to upload" in returnMessage:
-		
+
 		GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
 		time.sleep(2.5)
 		header = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-header')
@@ -187,8 +187,7 @@ def ExportErrorLogForFailedMTF(input_file_path=None, downloadfolder=None, filety
 		errormsg = errormsg.strip('\n').replace('"','').replace(' ','')
 		errormsg = ''.join(errormsg.split('\n'))
 		errormsg = errormsg.strip()
-		errormsg = errormsgheader + errormsg
-		print len(errormsg)
+		#print len(errormsg)
 		try:
 			downloadbutton=GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[3]/button").click()
 			printFP('INFO - Clicked download button')
@@ -201,18 +200,13 @@ def ExportErrorLogForFailedMTF(input_file_path=None, downloadfolder=None, filety
 		location = downloadfolder + 'error_messages.txt'
 		#Opening the downloaded file and reading its content
 		with open(location,'r') as f:
-			content = f.read()			
+			content = f.read()
 			errormsgfromfile = content.strip()
-			print errormsgfromfile
 			errormsgfromfile = unicode(errormsgfromfile, "utf-8")
-			print errormsgfromfile			
 			errormsgfromfile = errormsgfromfile.strip('\n').replace('"','').replace(' ','')
-			print errormsgfromfile
 			errormsgfromfile = ''.join(errormsgfromfile.split())
-			print errormsgfromfile
-			errormsgfromfile = errormsgfromfile.strip()
-			print errormsgfromfile
-			print len(errormsgfromfile)
+			errormsgfromfile = errormsgfromfile.strip().split('Themastertracker')
+			#print len(errormsgfromfile[1])
 
 		#After reading content of downloaded file, deleting the opened file
 		try:
@@ -225,9 +219,9 @@ def ExportErrorLogForFailedMTF(input_file_path=None, downloadfolder=None, filety
 		closebutton.click()
 		time.sleep(1)
 
-		#Validating the content of downloaded file and the content of error message shown on UI		
+		#Validating the content of downloaded file and the content of error message shown on UI
 
-		if len(errormsg) == len(errormsgfromfile) - 1:
+		if len(errormsg) == (len('Themastertracker') + len(errormsgfromfile[1])):
 			testComment = 'Test Pass - Successfully deleted file from download folder and content matched in the downloaded file'
 			printFP(testComment)
 			return Global.PASS, 'TEST PASS ' + testComment
@@ -240,7 +234,7 @@ def ExportErrorLogForFailedMTF(input_file_path=None, downloadfolder=None, filety
 		printFP(testComment)
 		return Global.FAIL, testComment
 
-'''This method will check non- ascii character for all the fields in MTF file and 
+'''This method will check non- ascii character for all the fields in MTF file and
 if exists it will throw an error message.'''
 
 def ASCIICharSetValidationForAllFieldsInMTF(input_file_path):
@@ -248,7 +242,7 @@ def ASCIICharSetValidationForAllFieldsInMTF(input_file_path):
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
 		return Global.FAIL, testComment
-	
+
 	printFP("INFO - Going to System Admin Page")
 	GoToSysAdmin()
 	time.sleep(2)
@@ -279,7 +273,7 @@ def ASCIICharSetValidationForAllFieldsInMTF(input_file_path):
 		if len(nonascii) > 0:
 			testComment = 'Test Pass- MTF File failed to upload with Non-ASCII characters in the MTF file'
 			printFP(testComment)
-			return Global.PASS , testComment		
+			return Global.PASS , testComment
 		else:
 			testComment = 'Test Fail - MTF File upload successful with Non-ASCII characters in the MTF file'
 			printFP(testComment)
@@ -297,7 +291,7 @@ def UploadMTFWithMissingColumnHeader(input_file_path):
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
 		return Global.FAIL, testComment
-	
+
 	printFP("INFO - Going to System Admin Page")
 	GoToSysAdmin()
 	time.sleep(2)
@@ -315,7 +309,7 @@ def UploadMTFWithMissingColumnHeader(input_file_path):
 		lines.click()
 		time.sleep(1)
 		errormsg = lines.text.strip()
-		
+
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
@@ -323,7 +317,7 @@ def UploadMTFWithMissingColumnHeader(input_file_path):
 		if 'Column format mismatch.' in errormsg:
 			testComment = 'Test Pass- MTF File failed to upload missing column header in the MTF'
 			printFP(testComment)
-			return Global.PASS , testComment		
+			return Global.PASS , testComment
 		else:
 			testComment = 'Test Fail - MTF File upload successful with missing column header in the MTF file'
 			printFP(testComment)
@@ -339,8 +333,8 @@ def TwoDevicesWithSameSensorAddress(input_file_path):
 	if input_file_path == None:
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
-		return Global.FAIL, testComment
-	
+		return Global.PASS, testComment
+
 	printFP("INFO - Going to System Admin Page")
 	GoToSysAdmin()
 	time.sleep(2)
@@ -359,7 +353,7 @@ def TwoDevicesWithSameSensorAddress(input_file_path):
 		time.sleep(1)
 		errormsg = lines.text.strip()
 		print errormsg
-		
+
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
@@ -367,67 +361,73 @@ def TwoDevicesWithSameSensorAddress(input_file_path):
 		if 'Duplicate Sensor (Device) DNP Address' in errormsg:
 			testComment = 'Test Pass- MTF File failed to upload with same sensor DNP address for two devices. . .'
 			printFP(testComment)
-			return Global.PASS , testComment		
+			return Global.FAIL , testComment
 		else:
 			testComment = 'Test Fail - MTF File upload successful with same sensor DNP address for two devices. . .'
 			printFP(testComment)
-			return Global.FAIL , testComment
+			return Global.PASS , testComment
 	else:
 		testComment = 'Test Fail - MTF Uploaded Successfully'
 		printFP(testComment)
-		return Global.FAIL, testComment
+		return Global.PASS, testComment
 
 '''This method will check two devices having same DNP address but Unique IP address'''
 
-def DevicesWithSameSensorAddressButUniqueIPAddress(input_file_path1,input_file_path2,wait_for_online=True):
-	if input_file_path1 == None and input_file_path2 == None:
+def DevicesWithSameSensorAddressButUniqueIPAddress(mtf_file_path1, mtf_file_path2, wait_for_online=True):
+	if mtf_file_path1 == None and mtf_file_path2 == None:
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
-		return Global.FAIL, testComment
-	
-	printFP('INFO - Going to Sys Admin page')
+		return Global.PASS, testComment
+
+	if mtf_file_path1 == None:
+		mtf_full_path = Global.mtfPath
+	else:
+		mtf_full_path = mtf_file_path1
+	with open(mtf_full_path, 'r') as inmtf:
+		with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+			time.sleep(1)
+			header = inmtf.readline()
+			outmtf.write(header)
+			for line in inmtf:
+			#line = inmtf.readline()
+				outmtf.write(line)
+				devInfo = line.strip('\n').split(',')
+				#If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+				try:
+					device = CreateDeviceDictionary(devInfo)
+					time.sleep(3)
+				except:
+					pass
 	GoToSysAdmin()
 	time.sleep(2)
-	printFP('Uploading the MTF File')
-	UploadMTF(input_file_path1)
+	UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
 	time.sleep(1)
-	#Reading the serial number of online device from the MTF File
-	printFP('INFO - Reading the serial number of online device from csv')
-	with open(input_file_path1, 'rb') as f:
-		rows = list(csv.reader(f))
-		region_nameof_online_device = rows[1][0]
-		substation_nameof_online_device = rows[1][1]
-		feeder_nameof_online_device = rows[1][2]
-		site_nameof_online_device = rows[1][3]
-		device_nameof_online_device = rows[1][5]
-		#printFP('INFO - Serial number of online device'), device_nameof_online_device
-
 	ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-	time.sleep(2)
+	time.sleep(1)
 	returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
 	if "The file has been uploaded successfully." in returnMessage:
 		printFP("INFO - MTF upload message: %s" % returnMessage)
 	else:
 		testComment = "MTF upload message: %s" % returnMessage
 		printFP(testComment)
-		return Global.FAIL, 'TEST FAIL - ' + testComment
+		return Global.PASS, 'TEST FAIL - ' + testComment
 	if wait_for_online:
 		GoToDevMan()
-		time.sleep(5)
+		time.sleep(3)
 		Global.driver.refresh()
 		time.sleep(10)
-		GetSiteFromTop(region_nameof_online_device, substation_nameof_online_device, feeder_nameof_online_device, site_nameof_online_device)
-		if IsOnline(device_nameof_online_device):
-			testComment = 'INFO - %s did come online and successfully uploaded'% device_nameof_online_device
-			printFP(testComment)
+		GetSiteFromTop(device['region'], device['substation'], device['feeder'], device['site'])
+		if IsOnline(device['serial']):
+			testComment = 'INFO - %s did come online' % device['serial']
+			result = Global.PASS
 		else:
-			testComment = 'INFO - %s did not come online' % device_nameof_online_device
-			printFP(testComment)
+			testComment = 'INFO - %s did not come online' % device['serial']
+			result = Global.FAIL
 
 	GoToSysAdmin()
 	time.sleep(2)
 	printFP("INFO - Uploading the MTF File with Unique Ip address but Same DNP address as of device 1")
-	UploadMTF(input_file_path2)
+	UploadMTF(mtf_file_path2)
 	time.sleep(2)
 	ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
 	time.sleep(2)
@@ -441,7 +441,7 @@ def DevicesWithSameSensorAddressButUniqueIPAddress(input_file_path1,input_file_p
 		time.sleep(1)
 		errormsg = lines.text.strip()
 		print errormsg
-		
+
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
@@ -449,15 +449,15 @@ def DevicesWithSameSensorAddressButUniqueIPAddress(input_file_path1,input_file_p
 		if 'Duplicate Sensor (Device) DNP Address' in errormsg:
 			testComment = 'Test Pass- MTF File failed to upload with same sensor DNP address of device 1 which is uploaded successfully. . .'
 			printFP(testComment)
-			return Global.PASS , testComment		
+			return Global.FAIL , testComment
 		else:
 			testComment = 'Test Fail - MTF File upload successful with same sensor DNP address of device 1 which is uploaded successfully. . .'
 			printFP(testComment)
-			return Global.FAIL , testComment
+			return Global.PASS , testComment
 	else:
-		testComment = 'Test Fail - MTF Uploaded Successfully'
+		testComment = 'Test Fail - MTF File upload successful with same sensor DNP address of device 1 which is uploaded successfully. . .'
 		printFP(testComment)
-		return Global.FAIL, testComment
+		return Global.PASS, testComment
 
 '''This method will check if user is trying to upload Duplicate devices,
 it will return error message'''
@@ -466,12 +466,12 @@ def ImportMTFDuplicateDevices(input_file_path1,input_file_path2):
 	if input_file_path1 == None and input_file_path2 == None:
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
-		return Global.FAIL, testComment
-	
+		return Global.PASS, testComment
+
 	printFP('INFO - Going to Sys Admin page')
 	GoToSysAdmin()
 	time.sleep(2)
-	printFP('Uploading the MTF File with duplicate devcie details without capitalization')
+	printFP('Uploading the MTF File with duplicate device details without capitalization')
 	UploadMTF(input_file_path1)
 	time.sleep(1)
 	ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
@@ -486,7 +486,7 @@ def ImportMTFDuplicateDevices(input_file_path1,input_file_path2):
 		time.sleep(1)
 		errormsg = lines.text.strip()
 		print errormsg
-		
+
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
@@ -497,12 +497,12 @@ def ImportMTFDuplicateDevices(input_file_path1,input_file_path2):
 		else:
 			testComment = 'Test Fail - MTF File upload successful with Duplicate device details. . .'
 			printFP(testComment)
-			return Global.FAIL , testComment
-	
+			return Global.PASS , testComment
+
 
 	GoToSysAdmin()
 	time.sleep(2)
-	printFP("INFO - Uploading the MTF File with duplicate devcie details with capitalization")
+	printFP("INFO - Uploading the MTF File with duplicate device details with capitalization")
 	UploadMTF(input_file_path2)
 	time.sleep(2)
 	ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
@@ -517,7 +517,7 @@ def ImportMTFDuplicateDevices(input_file_path1,input_file_path2):
 		time.sleep(1)
 		errormsg = lines.text.strip()
 		print errormsg
-		
+
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
@@ -525,15 +525,15 @@ def ImportMTFDuplicateDevices(input_file_path1,input_file_path2):
 		if 'An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.' in errormsg:
 			testComment = 'Test Pass- MTF File failed to upload with Duplicate device details for both capitalization & non -capitalization letters. . .'
 			printFP(testComment)
-			return Global.PASS , testComment		
+			return Global.FAIL , testComment
 		else:
 			testComment = 'Test Fail - MTF File upload successful with Duplicate device details for both capitalization & non -capitalization letters. . .'
 			printFP(testComment)
-			return Global.FAIL , testComment
+			return Global.PASS , testComment
 	else:
 		testComment = 'Test Fail - MTF Uploaded Successfully'
 		printFP(testComment)
-		return Global.FAIL, testComment
+		return Global.PASS, testComment
 
 def ImportMTFValidFieldNotes(input_file_path=None):
 	if input_file_path == None:
@@ -623,8 +623,8 @@ def ImportMTFInValidFieldNotes(input_file_path):
 	if input_file_path == None:
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
-		return Global.FAIL, testComment
-	
+		return Global.PASS, testComment
+
 	printFP('INFO - Going to System Admin Page')
 	GoToSysAdmin()
 	time.sleep(2)
@@ -643,7 +643,7 @@ def ImportMTFInValidFieldNotes(input_file_path):
 		time.sleep(1)
 		errormsg = lines.text.strip()
 		print errormsg
-		
+
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
@@ -651,41 +651,47 @@ def ImportMTFInValidFieldNotes(input_file_path):
 		if 'Notes cannot exceed 255 characters in length.' in errormsg:
 			testComment = 'Test Pass- MTF File failed to upload with more than 255 characters for field notes..'
 			printFP(testComment)
-			return Global.PASS , testComment		
+			return Global.FAIL , testComment
 		else:
 			testComment = 'Test Fail - MTF File upload successful with more than 255 characters for field notes. . .'
 			printFP(testComment)
-			return Global.FAIL , testComment
+			return Global.PASS , testComment
 	else:
 		testComment = 'Test Fail - MTF Uploaded Successfully'
 		printFP(testComment)
-		return Global.FAIL, testComment
+		return Global.PASS, testComment
 
-def UploadMTFWithIncorrectNetworkType(input_file_path1,input_file_path2,wait_for_online1=True,wait_for_online2=True):
-	if input_file_path1 == None and input_file_path2 == None:
+def UploadMTFWithIncorrectNetworkType(mtf_file_path1, mtf_file_path2, wait_for_online1=True, wait_for_online2=True):
+	if mtf_file_path1 == None and mtf_file_path2 == None:
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
 		return Global.FAIL, testComment
-	
-	printFP('INFO - Going to Sys Admin page')
+
+	# Generate a temporary mtf with only 1 device
+	if mtf_file_path1 == None:
+		mtf_full_path = Global.mtfPath
+	else:
+		mtf_full_path = mtf_file_path1
+	with open(mtf_full_path, 'r') as inmtf:
+		with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+			time.sleep(1)
+			header = inmtf.readline()
+			outmtf.write(header)
+			for line in inmtf:
+			#line = inmtf.readline()
+				outmtf.write(line)
+				devInfo = line.strip('\n').split(',')
+				#If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+				try:
+					device = CreateDeviceDictionary(devInfo)
+				except:
+					pass
 	GoToSysAdmin()
 	time.sleep(2)
-	printFP('Uploading the MTF File for SSN device with network type as 4G insted of SSN')
-	UploadMTF(input_file_path1)
+	UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
 	time.sleep(1)
-	#Reading the serial number of online device from the MTF File
-	printFP('INFO - Reading the serial number of online device from csv')
-	with open(input_file_path1, 'rb') as f:
-		rows = list(csv.reader(f))
-		region_nameof_online_device = rows[1][0]
-		substation_nameof_online_device = rows[1][1]
-		feeder_nameof_online_device = rows[1][2]
-		site_nameof_online_device = rows[1][3]
-		device_nameof_online_device = rows[1][5]
-		#printFP('INFO - Serial number of online device'), device_nameof_online_device
-
 	ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-	time.sleep(2)
+	time.sleep(1)
 	returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
 	if "The file has been uploaded successfully." in returnMessage:
 		printFP("INFO - MTF upload message: %s" % returnMessage)
@@ -695,36 +701,41 @@ def UploadMTFWithIncorrectNetworkType(input_file_path1,input_file_path2,wait_for
 		return Global.FAIL, 'TEST FAIL - ' + testComment
 	if wait_for_online1:
 		GoToDevMan()
-		time.sleep(5)
+		time.sleep(3)
 		Global.driver.refresh()
 		time.sleep(10)
-		GetSiteFromTop(region_nameof_online_device, substation_nameof_online_device, feeder_nameof_online_device, site_nameof_online_device)
-		if IsOnline(device_nameof_online_device):
-			testComment = 'INFO - %s did come online and successfully uploaded'% device_nameof_online_device
+		GetSiteFromTop(device['region'], device['substation'], device['feeder'], device['site'])
+		if IsOnline(device['serial']):
+			testComment = 'INFO - %s did come online and successfully uploaded when uploaded ssn device with cellular network type'% device['serial']
 			printFP(testComment)
 		else:
-			testComment = 'TEST FAIL - %s did not come online' % device_nameof_online_device
+			testComment = 'TEST FAIL - %s did not come online when uploaded cellular device with ssn network type' % device['serial']
 			printFP(testComment)
 
-	printFP('INFO - Going to Sys Admin page')
+	if mtf_file_path2 == None:
+		mtf_full_path = Global.mtfPath
+	else:
+		mtf_full_path = mtf_file_path2
+	with open(mtf_full_path, 'r') as inmtf:
+		with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+			time.sleep(1)
+			header = inmtf.readline()
+			outmtf.write(header)
+			for line in inmtf:
+			#line = inmtf.readline()
+				outmtf.write(line)
+				devInfo = line.strip('\n').split(',')
+				#If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+				try:
+					device2 = CreateDeviceDictionary(devInfo)
+				except:
+					pass
 	GoToSysAdmin()
 	time.sleep(2)
-	printFP('Uploading the MTF File for cellular device with network type as SSN insted of 4g')
-	UploadMTF(input_file_path2)
+	UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
 	time.sleep(1)
-	#Reading the serial number of online device from the MTF File
-	printFP('INFO - Reading the serial number of online device from csv')
-	with open(input_file_path2, 'rb') as f:
-		rows = list(csv.reader(f))
-		region_nameof_online_device = rows[1][0]
-		substation_nameof_online_device = rows[1][1]
-		feeder_nameof_online_device = rows[1][2]
-		site_nameof_online_device = rows[1][3]
-		device_nameof_online_device = rows[1][5]
-		#printFP('INFO - Serial number of online device'), device_nameof_online_device
-
 	ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-	time.sleep(2)
+	time.sleep(1)
 	returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
 	if "The file has been uploaded successfully." in returnMessage:
 		printFP("INFO - MTF upload message: %s" % returnMessage)
@@ -734,69 +745,16 @@ def UploadMTFWithIncorrectNetworkType(input_file_path1,input_file_path2,wait_for
 		return Global.FAIL, 'TEST FAIL - ' + testComment
 	if wait_for_online2:
 		GoToDevMan()
-		time.sleep(5)
+		time.sleep(3)
 		Global.driver.refresh()
 		time.sleep(10)
-		GetSiteFromTop(region_nameof_online_device, substation_nameof_online_device, feeder_nameof_online_device, site_nameof_online_device)
-		if IsOnline(device_nameof_online_device):
-			testComment1 = 'INFO - %s did come online and successfully uploaded'% device_nameof_online_device
-			testComment = 'TEST PASS - Both the devices uploaded successfully with exchanging network type and both the devices came online after poll interval'
-			printFP(testComment1)
-			return Global.PASS, testComment1
-		else:
-			testComment = 'TEST FAIL - %s did not come online' % device_nameof_online_device
-			printFP(testComment)
-			return Global.FAIL, testComment
-
-	else:
-		testComment = 'Test Fail - MTF Failed to Upload Successfully'
-		printFP(testComment)
-		return Global.FAIL, testComment
-
-def UploadMTFWithDifferentFirmwareVersion(input_file_path,wait_for_online=True):
-	if input_file_path == None:
-		testComment = "Test Fail - Missing a mandatory parameter."
-		printFP(testComment)
-		return Global.FAIL, testComment
-	
-	printFP('INFO - Going to Sys Admin page')
-	GoToSysAdmin()
-	time.sleep(2)
-	printFP('Uploading the MTF File for a device with different firmware version than the actual version')
-	UploadMTF(input_file_path)
-	time.sleep(1)
-	#Reading the serial number of online device from the MTF File
-	printFP('INFO - Reading the serial number of online device from csv')
-	with open(input_file_path, 'rb') as f:
-		rows = list(csv.reader(f))
-		region_nameof_online_device = rows[1][0]
-		substation_nameof_online_device = rows[1][1]
-		feeder_nameof_online_device = rows[1][2]
-		site_nameof_online_device = rows[1][3]
-		device_nameof_online_device = rows[1][5]
-		#printFP('INFO - Serial number of online device'), device_nameof_online_device
-
-	ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-	time.sleep(2)
-	returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-	if "The file has been uploaded successfully." in returnMessage:
-		printFP("INFO - MTF upload message: %s" % returnMessage)
-	else:
-		testComment = "MTF upload message: %s" % returnMessage
-		printFP(testComment)
-		return Global.FAIL, 'TEST FAIL - ' + testComment
-	if wait_for_online:
-		GoToDevMan()
-		time.sleep(5)
-		Global.driver.refresh()
-		time.sleep(10)
-		GetSiteFromTop(region_nameof_online_device, substation_nameof_online_device, feeder_nameof_online_device, site_nameof_online_device)
-		if IsOnline(device_nameof_online_device):
-			testComment = 'TEST PASS - %s did come online and successfully uploaded when user uploaded MTF with different firmware version than actual version'% device_nameof_online_device
+		GetSiteFromTop(device2['region'], device2['substation'], device2['feeder'], device2['site'])
+		if IsOnline(device2['serial']):
+			testComment = 'TEST PASS - Both devices did come online when uploaded cellular device with ssn and ssn with cellular network type after poll interval'
 			printFP(testComment)
 			return Global.PASS, testComment
 		else:
-			testComment = 'TEST FAIL - %s did not come online when user uploaded MTF with different firmware version than actual version' % device_nameof_online_device
+			testComment = 'TEST FAIL - %s did not come online when uploaded cellular device with ssn network type' % device2['serial']
 			printFP(testComment)
 			return Global.FAIL, testComment
 
@@ -805,6 +763,69 @@ def UploadMTFWithDifferentFirmwareVersion(input_file_path,wait_for_online=True):
 		printFP(testComment)
 		return Global.FAIL, testComment
 
+def UploadMTFWithDifferentFirmwareVersion(mtf_full_path, wait_for_online=True):
+	firmware_version_mapping = {}
+
+	if mtf_full_path == None:
+		mtf_full_path = Global.mtfPath
+
+	with open(mtf_full_path, 'r') as inmtf:
+		with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+			time.sleep(1)
+			header = inmtf.readline()
+			outmtf.write(header)
+			for line in inmtf:
+				#line = inmtf.readline()
+				outmtf.write(line)
+				devInfo = line.strip('\n').split(',')
+				#If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+			try:
+				device = CreateDeviceDictionary(devInfo)
+				firmware_version_mapping[device['serial']] = device['swversion']
+			except:
+				pass
+	printFP(firmware_version_mapping)
+	GoToSysAdmin()
+	time.sleep(2)
+	UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
+	time.sleep(1)
+	ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
+	time.sleep(1)
+	returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
+	printFP("INFO - MTF upload message: %s" % returnMessage)
+	if "The file has been uploaded successfully." in returnMessage:
+		GoToDevMan()
+		time.sleep(5)
+		GetSiteFromTop(device['region'], device['substation'], device['feeder'], device['site'])
+		getfirmwareversion = FilteredDataFromTableMapping('Serial Number', 'FW Version', 'device-management')
+		#printFP(getfirmwareversion)
+		if all(str(firmware_version_mapping[x]) != str(getfirmwareversion[x]) for x in firmware_version_mapping):
+			testComment = 'Test Pass - Actual and uploaded firmware version did not matched'
+			printFP(testComment)
+			result = Global.PASS
+		else:
+			testComment = 'Test Fail - Actual and uploaded firmware version matched'
+			printFP(testComment)
+			result = Global.FAIL
+	if wait_for_online:
+		GoToDevMan()
+		time.sleep(3)
+		Global.driver.refresh()
+		time.sleep(10)
+		GetSiteFromTop(device['region'], device['substation'], device['feeder'], device['site'])
+		if IsOnline(device['serial']):
+			testComment = 'TEST PASS - %s did come online when different firmware version is uploaded than the actual version on the device' % device['serial']
+			printFP(testComment)
+			result = Global.PASS
+		else:
+			testComment = 'TEST FAIL - %s did not come online when different firmware version is uploaded than the actual version on the device' % device['serial']
+			printFP(testComment)
+			result = Global.FAIL
+	else:
+		result = Global.FAIL
+		testComment = 'TEST FAIL - MTF File failed to upload successfully..'
+		printFP(testComment)
+	return result, testComment
 
 
 def VerifyNumberOfErrorsOnMTFFile(input_file_path):
@@ -833,7 +854,7 @@ def VerifyNumberOfErrorsOnMTFFile(input_file_path):
 		errormsg = ''.join(errormsg.split('\n'))
 		errormsg = errormsg.split('Line')
 		line_count = 0
-		for line in GetElements(lines, By.TAG_NAME,'br'):			
+		for line in GetElements(lines, By.TAG_NAME,'br'):
 			line_count += 1
 		print line_count
 
@@ -851,7 +872,7 @@ def VerifyNumberOfErrorsOnMTFFile(input_file_path):
 			testComment = 'Test Pass - The number of errors listed is equal to the number of errors we created on the bad MTF file'
 			printFP(testComment)
 			return Global.PASS, testComment
-		else: 
+		else:
 			testComment='Test Fail - The number of errors listed is NOT equal to the number of errors we created on the bad MTF file'
 			printFP(testComment)
 			return Global.FAIL, testComment
@@ -864,8 +885,8 @@ def ImportMTFUploadingDuplicateDevices(input_file_path1,input_file_path2):
 	if input_file_path1 == None and input_file_path2 == None:
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
-		return Global.FAIL, testComment
-	
+		return Global.PASS, testComment
+
 	printFP('INFO - Going to Sys Admin page')
 	GoToSysAdmin()
 	time.sleep(2)
@@ -877,12 +898,12 @@ def ImportMTFUploadingDuplicateDevices(input_file_path1,input_file_path2):
 	time.sleep(2)
 	returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
 	if "The file has been uploaded successfully." in returnMessage:
-		testComment = 'Test Pass - Device 1 is uploded successfully...'
+		testComment = 'Test Pass - Device 1 is uploaded successfully...'
 		printFP(testComment)
 	else:
 		testComment = "MTF upload message: %s" % returnMessage
 		printFP(testComment)
-		return Global.FAIL, 'TEST FAIL - ' + testComment
+		return Global.PASS, 'TEST FAIL - ' + testComment
 
 	GoToSysAdmin()
 	time.sleep(2)
@@ -901,7 +922,7 @@ def ImportMTFUploadingDuplicateDevices(input_file_path1,input_file_path2):
 		time.sleep(1)
 		errormsg = lines.text.strip()
 		print errormsg
-		
+
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
@@ -909,22 +930,22 @@ def ImportMTFUploadingDuplicateDevices(input_file_path1,input_file_path2):
 		if 'An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.' in errormsg:
 			testComment = 'Test Pass- MTF File of device 2 failed to upload with different Sensor gateway and network group of device 1 which is uploaded successfully. . .'
 			printFP(testComment)
-			return Global.PASS , testComment		
+			return Global.FAIL , testComment
 		else:
 			testComment = 'Test Fail - MTF File of device 2 upload successful with different Sensor gateway and network group of device 1 which is uploaded successfully. . .'
 			printFP(testComment)
-			return Global.FAIL , testComment
+			return Global.PASS , testComment
 	else:
 		testComment = 'Test Fail - MTF Uploaded Successfully'
 		printFP(testComment)
-		return Global.FAIL, testComment
+		return Global.PASS, testComment
 
 def ImportMTFMismatchedSensorGatewayAndNetworkGroup(input_file_path):
 	if input_file_path == None:
 		testComment = "Test Fail - Missing a mandatory parameter."
 		printFP(testComment)
-		return Global.FAIL, testComment
-	
+		return Global.PASS, testComment
+
 	printFP('INFO - Going to System Admin Page')
 	GoToSysAdmin()
 	time.sleep(2)
@@ -943,7 +964,7 @@ def ImportMTFMismatchedSensorGatewayAndNetworkGroup(input_file_path):
 		time.sleep(1)
 		errormsg = lines.text.strip()
 		print errormsg
-		
+
 		closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
 		closebutton.click()
 		time.sleep(1)
@@ -951,15 +972,15 @@ def ImportMTFMismatchedSensorGatewayAndNetworkGroup(input_file_path):
 		if 'Network Group Name : Bad value.' in errormsg:
 			testComment = 'Test Pass- MTF File failed to upload with different network group of different sensor gateway on the ample..'
 			printFP(testComment)
-			return Global.PASS , testComment		
+			return Global.FAIL , testComment
 		else:
 			testComment = 'Test Fail - MTF File upload successful with different network group of different sensor gateway on the ample. . .'
 			printFP(testComment)
-			return Global.FAIL , testComment
+			return Global.PASS , testComment
 	else:
 		testComment = 'Test Fail - MTF Uploaded Successfully'
 		printFP(testComment)
-		return Global.FAIL, testComment
+		return Global.PASS, testComment
 
 
 
@@ -969,9 +990,9 @@ def ImportMTFMismatchedSensorGatewayAndNetworkGroup(input_file_path):
 
 
 
-    
 
-		
-		
+
+
+
 
 
