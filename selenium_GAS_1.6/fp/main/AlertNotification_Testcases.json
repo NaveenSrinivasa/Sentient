@@ -2,7 +2,7 @@
     "Tests":
     [
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -10,7 +10,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": true,
@@ -18,21 +18,21 @@
             "profile_json": "seleniumDir/inputfilesDir/AlertNotification/createfault.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": false,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/AlertNotification/user_profile.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": false,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/AlertNotification/admin_profile.json"
         },
         {
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -40,7 +40,7 @@
             "wait_for_online": true
         },
         {
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -48,13 +48,13 @@
             "wait_for_online": true
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -62,7 +62,7 @@
             "password": "@mpacity"
         },
         {
-            "test_name": "SubscribeForEmailNotifications",
+            "method_name": "SubscribeForEmailNotifications",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -70,13 +70,13 @@
             "substations": ["d1_sub"]
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -84,7 +84,7 @@
             "password": "@mpacity"
         },
         {
-            "test_name": "SubscribeForEmailNotifications",
+            "method_name": "SubscribeForEmailNotifications",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -92,13 +92,13 @@
             "substations": ["d1_sub"]
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -106,7 +106,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "configureDevice",
+            "method_name": "configureDevice",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -116,7 +116,7 @@
             "actionButton": true
         },
         {
-            "test_name": "VerifyDNPChanges",
+            "method_name": "VerifyDNPChanges",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -125,7 +125,7 @@
             "polltime" : devicepollinterval
         },
         {
-            "test_name": "CheckEmailforNotification",
+            "method_name": "CheckEmailforNotification",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -134,7 +134,7 @@
             "subscribed_regions_json": "seleniumDir/inputfilesDir/EmailNotification/verify_notification.json"
         },
         {
-            "test_name": "DeleteEmailNotification",
+            "method_name": "DeleteEmailNotification",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -142,7 +142,7 @@
             "password": "testaccount@123"
         },
         {
-            "test_name": "CheckEmailforNotification",
+            "method_name": "CheckEmailforNotification",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -151,7 +151,7 @@
             "subscribed_regions_json": "seleniumDir/inputfilesDir/EmailNotification/verify_notification.json"
         },
         {
-            "test_name": "DeleteEmailNotification",
+            "method_name": "DeleteEmailNotification",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -159,21 +159,21 @@
             "password": "chander@123"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/AlertNotification/user_profile.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/AlertNotification/admin_profile.json"
         },
         {
-            "test_name": "DeleteRegion",
+            "method_name": "DeleteRegion",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -181,14 +181,14 @@
             "region_name": "d1_region"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "createfault"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true

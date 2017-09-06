@@ -4156,3 +4156,62 @@ def SearchJobLink(device_names):
         return False
     else:
         return True
+
+
+def GetOverrideGPSStatus(region, substation, feeder, site):
+    GoToDevMan()
+    time.sleep(5)
+    GetSiteFromTop(region, substation, feeder, site)
+    siteelement = GetSite(site)
+    RightClickElement(siteelement)
+    time.sleep(1)
+    SelectFromMenu(Global.driver, By.CLASS_NAME, 'pull-left', 'Edit')
+    time.sleep(2)
+    overridegpsswitch = GetElement(Global.driver, By.CLASS_NAME, 'toggle-switch-animate')
+    classname = overridegpsswitch.get_attribute('class')
+    time.sleep(1)
+    if "switch-on" in classname:
+        return True
+    elif "switch-off" in classname:
+        return False
+
+def GetLatAndLonValuesOfSite(region, substation, feeder, site):
+    GoToDevMan()
+    time.sleep(5)
+    GetSiteFromTop(region, substation, feeder, site)
+    siteelement = GetSite(site)
+    RightClickElement(siteelement)
+    time.sleep(1)
+    SelectFromMenu(Global.driver, By.CLASS_NAME, 'pull-left', 'Edit')
+    time.sleep(2)
+    overridegpsswitch = GetElement(Global.driver, By.CLASS_NAME, 'toggle-switch-animate')
+    classname = overridegpsswitch.get_attribute('class')
+    time.sleep(1)
+    if not 'switch-off' in classname:
+        sitelatitude = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Latitude']").get_attribute('value')
+        sitelongitude = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Longitude']").get_attribute('value')
+        return sitelatitude, sitelongitude
+    else:
+        return None, None
+
+
+def GetCurrentTableColumnNamesNotShown():
+
+    # Create a list
+    tablecolumnnameslist = []
+
+    html = Global.driver.page_source
+
+    Elements = soup(html, "lxml")
+
+    # Get all dnp3 points table hidden column names
+    table = Elements.find('table')
+    tablehead = table.find('thead')
+    tablecolumnnames = tablehead.find_all('th', class_=re.compile('ng-hide'))
+
+    for div_tag in tablecolumnnames:
+        # Add each hidden column names to the list
+        tablecolumnname = div_tag.text.strip().strip('\n')
+        tablecolumnnameslist.append(tablecolumnname)
+
+    return tablecolumnnameslist

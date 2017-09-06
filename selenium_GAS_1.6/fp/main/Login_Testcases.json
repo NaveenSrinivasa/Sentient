@@ -2,7 +2,7 @@
     "Tests":
     [
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Login - Valid Credentials",
             "skip": false,
             "expect_pass": true,
@@ -10,13 +10,13 @@
             "password": "password_valid"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Login - Empty Username",
             "skip": true,
             "expect_pass": false,
@@ -24,7 +24,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Login - Empty Password",
             "skip": true,
             "expect_pass": false,
@@ -32,7 +32,7 @@
             "password": ""
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Login - Invalid Username",
             "skip": true,
             "expect_pass": false,
@@ -40,7 +40,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Login - Invalid Password",
             "skip": true,
             "expect_pass": false,
@@ -48,7 +48,7 @@
             "password": "password_valid@t5"
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Login - Invalid Credentials",
             "skip": true,
             "expect_pass": false,
@@ -56,7 +56,7 @@
             "password": "@mpacity"
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -64,7 +64,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true

@@ -62,11 +62,11 @@ def ConfigureLogging(parsed_config, browser, platform):
     logging.basicConfig(filename=log_location, level=log_level, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 
-def RunTest(testCount, test, report, test_runner):
-    test_name = test['test_name']
+def RunTest(test, report, test_runner):
+    method_name = test['method_name']
     expect_pass = test['expect_pass']
     hiptest_name = test['hiptest_name']
-    del test['test_name']
+    del test['method_name']
     del test['skip']
     del test['expect_pass']
     del test['hiptest_name']
@@ -78,14 +78,14 @@ def RunTest(testCount, test, report, test_runner):
 
     # call each test
     testStartTime = time.time()
-    printFP('\n%s - Test #%d: %s' % (time.strftime('%H:%M:%s'), testCount, test_name))
+    printFP('\n%s - Test #%d: %s - hiptest scenario name: %s' % (time.strftime('%H:%M:%s'), Global.testCount, method_name, hiptest_name))
     if expect_pass:
         printFP('Positive test case')
     else:
         printFP('Negative test case')
-    Global.currenttest_name = test_name
+    Global.currentmethod_name = method_name
     try:
-        result, testComment = globals()[test_name](**args)
+        result, testComment = globals()[method_name](**args)
     except:
         printFP(str(traceback.print_exc()))
         testComment = 'Exception in test. May cause other tests to fail. Continuing . . .'
@@ -99,30 +99,34 @@ def RunTest(testCount, test, report, test_runner):
     # test report handling is at the Main level
     # individual tests do not need to touch the test report
     # write the test result
-    if result == Global.PASS and expect_pass:
-        finaltestresult = Global.PASS
-        report.write('%d %s, %s, expect_pass = %s, %d, PASS, %s\n' % (testCount, test_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
-    elif result == Global.FAIL and not expect_pass:
-        finaltestresult = Global.PASS
-        report.write('%d %s, %s, expect_pass = %s, %d, PASS, %s\n' % (testCount, test_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
-    elif result == Global.PASS and not expect_pass:
-        finaltestresult = Global.FAIL
-        TakeScreenshot()
-        report.write('%d %s, %s, expect_pass = %s, %d, FAIL, %s\n' % (testCount, test_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
-    elif result == Global.FAIL and expect_pass:
-        finaltestresult = Global.FAIL
-        TakeScreenshot()
-        report.write('%d %s, %s, expect_pass = %s, %d, FAIL, %s\n' % (testCount, test_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
+    if hiptest_name:
+        if result == Global.PASS and expect_pass:
+            finaltestresult = Global.PASS
+            Global.totalPass += 1
+            report.write('%d %s, %s, expect_pass = %s, %d, PASS, %s\n' % (Global.testCount, method_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
+        elif result == Global.FAIL and not expect_pass:
+            finaltestresult = Global.PASS
+            Global.totalPass += 1
+            report.write('%d %s, %s, expect_pass = %s, %d, PASS, %s\n' % (Global.testCount, method_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
+        elif result == Global.PASS and not expect_pass:
+            finaltestresult = Global.FAIL
+            Global.totalFail += 1
+            TakeScreenshot()
+            report.write('%d %s, %s, expect_pass = %s, %d, FAIL, %s\n' % (Global.testCount, method_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
+        elif result == Global.FAIL and expect_pass:
+            finaltestresult = Global.FAIL
+            Global.totalFail += 1
+            TakeScreenshot()
+            report.write('%d %s, %s, expect_pass = %s, %d, FAIL, %s\n' % (Global.testCount, method_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
 
-    if finaltestresult == Global.PASS:
-            hipresult = tc.PASSED
-    elif finaltestresult == Global.FAIL:
-            hipresult = tc.FAILED
-    hiptestresults = Result(hipresult, testComment)
-    name = hiptest_name.lower()
-    hiptest_name = '_'.join(name.split()).replace('-','')
-    test_runner.run_publishresult(hiptestresults, hiptest_name)
-
+        if finaltestresult == Global.PASS:
+                hipresult = tc.PASSED
+        elif finaltestresult == Global.FAIL:
+                hipresult = tc.FAILED
+        hiptestresults = Result(hipresult, testComment)
+        name = hiptest_name.lower()
+        hiptest_name = '_'.join(name.split()).replace('-','')
+        test_runner.run_publishresult(hiptestresults, hiptest_name)
     return result
 
 
@@ -149,15 +153,11 @@ def RunTests(tests, platform, browser, config, url, count, test_runner):
     CreateAllDevicesDictionary(devData)
 
     # Run tests
-    # initialize test reporting params:
-    testCount = 0
-    totalPass = 0
-    totalFail = 0
     startTime = time.time()
     with open('%s/test_report_%s_%s.csv' % (config['test_report_path'], browser[:2], platform[:2]), 'w') as report:
         # Write subheader for each test
         report.write('Browser: %s\nPlatform: %s\n\n' % (browser, platform))
-        report.write('Test Case, Test Case ID, Parameters, Test Case Type, Time in seconds, Result, Test Comment if any\n')
+        report.write('Test Case, Parameters, Test Case Type, Time in seconds, Result, Test Comment if any\n')
 
         # run the tests
         for test in tests:
@@ -186,35 +186,22 @@ def RunTests(tests, platform, browser, config, url, count, test_runner):
                 for submodule_test in parsed_submodule['Tests']:
                     if submodule_test['skip']:
                         continue
-                    testCount += 1
+                    if submodule_test['hiptest_name']:
+                        Global.testCount += 1
                     expect_pass = submodule_test['expect_pass']
-                    result = RunTest(testCount, submodule_test, report, test_runner)
-
-                    if result == Global.PASS and expect_pass:
-                        totalPass += 1
-                    elif result == Global.FAIL and not expect_pass:
-                        totalPass += 1
-                    elif result == Global.PASS and not expect_pass:
-                        totalFail += 1
-                    elif result == Global.FAIL and expect_pass:
-                        totalFail += 1
+                    result = RunTest(submodule_test, report, test_runner)
             else:
-                testCount += 1
+                if test['hiptest_name']:
+                    Global.testCount += 1
                 expect_pass = test['expect_pass']
-                result = RunTest(testCount, test, report, test_runner)
-                if result == Global.PASS and expect_pass:
-                    totalPass += 1
-                elif result == Global.FAIL and not expect_pass:
-                    totalPass += 1
-                else:
-                    totalFail += 1
+                result = RunTest(test, report, test_runner)
 
         # finalize the test report
         totalTime = time.time() - startTime
         report.write('\n\nTotal Test Time: %d seconds\n' % totalTime)
-        report.write('Total Test Count: %d\n' % testCount)
-        report.write('Total PASS: %d\n' % totalPass)
-        report.write('Total FAIL: %d\n\n' % totalFail)
+        report.write('Total Test Count: %d\n' % Global.testCount)
+        report.write('Total PASS: %d\n' % Global.totalPass)
+        report.write('Total FAIL: %d\n\n' % Global.totalFail)
         report.write('--------------------------------------\n\n')
     Global.driver.close()
     Global.driver.quit()
@@ -306,6 +293,7 @@ if __name__ == '__main__':
             # kick off the test
 
         TestConfig(parsed_config['Config'], parsed_connections['Connections'], parsed_json['Tests'])
+        FindAndReplace(usrdef['seleniumDir'], usrdef['internet_explorer_machine_ip'], 'internet_explorer_machine_ip', "Utilities_Framework.py")
         if parsed_config['Email']['enabled']:
             EmailAttachment(parsed_config['Email']['attachments'], parsed_config['Email']['recipients'], parsed_config['Email']['subject_line'])
     else:

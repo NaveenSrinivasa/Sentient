@@ -2,7 +2,7 @@
     "Tests":
     [
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true,
@@ -12,7 +12,7 @@
         {
             "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
             "comment": "Allows the use of use_global_test_device",
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Import MTF - Positive Test",
             "skip": true,
             "expect_pass": true,
@@ -20,139 +20,139 @@
             "wait_for_online": false
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": false,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_admin_profile.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create users with all user roles (GAS 1.6)",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_viewonly_profile.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_2.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_3.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_4.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_5.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_6.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_7.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_8.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_9.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_10.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": false,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_bad_email.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create User - Duplicate Email",
             "skip": true,
             "expect_pass": false,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_same_email.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Username Length",
             "skip": true,
             "expect_pass": false,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_long_username.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": false,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_no_values.json"
         },
         {
-            "test_name":"AddUserTest",
+            "method_name":"AddUserTest",
             "hiptest_name": "Create New User",
             "skip": true,
             "expect_pass": false,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_same_email.json"
         },
         {
-            "test_name": "TableSortTest",
+            "method_name": "TableSortTest",
             "hiptest_name": "Table Sorting Should Not Change After Editing User Role",
             "skip": true,
             "expect_pass": true,
             "username": "AccUser9"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Login - Valid Credentials",
             "skip": true,
             "expect_pass": true,
@@ -160,14 +160,14 @@
             "password": "@mpacity"
         },
         {
-            "test_name": "UpdateOwnProfile",
+            "method_name": "UpdateOwnProfile",
             "hiptest_name": "Update User Profile",
             "skip": true,
             "expect_pass": true,
             "updated_values": "seleniumDir/inputfilesDir/User Management/Edit_Current_User_Details.json"
         },
         {
-            "test_name": "ChangePassword",
+            "method_name": "ChangePassword",
             "hiptest_name": "Change Password",
             "skip": true,
             "expect_pass": true,
@@ -175,7 +175,7 @@
             "new_password": "ampacity!"
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Change Password - Login with Old Password",
             "skip": true,
             "expect_pass": false,
@@ -183,7 +183,7 @@
             "password": "@mpacity"
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Change Password",
             "skip": true,
             "expect_pass": true,
@@ -191,7 +191,7 @@
             "password": "ampacity!"
         },
         {
-            "test_name": "VerifyUserCapabilities",
+            "method_name": "VerifyUserCapabilities",
             "hiptest_name": "User Role definitions- Admin - A role with access to all the capabilities including all the device management capability",
             "skip": true,
             "expect_pass": true,
@@ -199,13 +199,13 @@
             "testDev": "device_1"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Login - Valid Credentials",
             "skip": true,
             "expect_pass": true,
@@ -213,42 +213,42 @@
             "password": "@mpacity"
         },
         {
-            "test_name": "EditUserTest",
+            "method_name": "EditUserTest",
             "hiptest_name": "Edit User",
             "skip": true,
             "expect_pass": true,
             "edit_user_path": "seleniumDir/inputfilesDir/User Management/edit_user_profile2.json"
         },
         {
-            "test_name": "EditUserTest",
+            "method_name": "EditUserTest",
             "hiptest_name": "Edit User",
             "skip": true,
             "expect_pass": true,
             "edit_user_path": "seleniumDir/inputfilesDir/User Management/edit_user_profile.json"
         },
         {
-            "test_name": "EditUserTest",
+            "method_name": "EditUserTest",
             "hiptest_name": "Edit User",
             "skip": true,
             "expect_pass": false,
             "edit_user_path": "seleniumDir/inputfilesDir/User Management/edit_user_profile_same_email.json"
         },
         {
-            "test_name": "EditUserTest",
+            "method_name": "EditUserTest",
             "hiptest_name": "Edit User",
             "skip": true,
             "expect_pass": false,
             "edit_user_path": "seleniumDir/inputfilesDir/User Management/edit_user_profile_bad_email.json"
         },
         {
-            "test_name": "EditOwnDetailsInUserMan",
+            "method_name": "EditOwnDetailsInUserMan",
             "hiptest_name": "Edit Self User",
             "skip": true,
             "expect_pass": true,
             "user_name": "AccAdmin"
         },
         {
-            "test_name": "ChangePassword",
+            "method_name": "ChangePassword",
             "hiptest_name": "Change Password",
             "skip": true,
             "expect_pass": false,
@@ -256,7 +256,7 @@
             "new_password": "ampacity!"
         },
         {
-            "test_name": "ChangePassword",
+            "method_name": "ChangePassword",
             "hiptest_name": "Change Password",
             "skip": true,
             "expect_pass": true,
@@ -264,7 +264,7 @@
             "new_password": "ampacity!"
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Change Password - Login with Old Password",
             "skip": true,
             "expect_pass": false,
@@ -272,7 +272,7 @@
             "password": "@mpacity"
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Change Password",
             "skip": true,
             "expect_pass": true,
@@ -280,13 +280,13 @@
             "password": "ampacity!"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true
         },
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true,
@@ -294,91 +294,91 @@
             "password": "password_valid"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_2.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_3.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_4.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_5.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_6.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_7.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_8.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_9.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_user_profile_10.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_admin_profile.json"
         },
         {
-            "test_name": "DeleteUserTest",
+            "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User Management/new_viewonly_profile.json"
         },
         {
-            "test_name": "DeleteRegion",
+            "method_name": "DeleteRegion",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true,
@@ -386,7 +386,7 @@
             "region_name": "d1_region"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true
