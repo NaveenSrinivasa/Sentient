@@ -2,7 +2,7 @@
     "Tests":
     [
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "",
             "skip": false,
             "expect_pass": true,
@@ -10,41 +10,41 @@
             "password": "password_valid"
         },
         {
-            "test_name": "LoadAmpleBundle",
+            "method_name": "LoadAmpleBundle",
             "hiptest_name": "Import Firmware - Positive Test",
             "skip": true,
             "expect_pass": true,
             "path_to_bundle": "seleniumDir/inputfilesDir/System Admin/mm3_corgi_2.3.0_2.4.1.zip"
         },
         {
-            "test_name": "LoadAmpleBundle",
+            "method_name": "LoadAmpleBundle",
             "hiptest_name": "Import Firmware - Invalid File Name",
             "skip": true,
             "expect_pass": false,
             "path_to_bundle": "seleniumDir/inputfilesDir/System Admin/Invalid Cases/mmmm3_corgi_2.3.0.zip"
         },
         {
-            "test_name": "LoadAmpleBundle",
+            "method_name": "LoadAmpleBundle",
             "hiptest_name": "Import Firmware - Invalid File Type",
             "skip": true,
             "expect_pass": false,
             "path_to_bundle": "seleniumDir/inputfilesDir/System Admin/Invalid Cases/mm3_corgi_2.3.0_2.4.1.tar"
             },
         {
-            "test_name": "LoadAmpleBundle",
+            "method_name": "LoadAmpleBundle",
             "hiptest_name": "Import Firmware - Missing Contents",
             "skip": true,
             "expect_pass": false,
             "path_to_bundle": "seleniumDir/inputfilesDir/System Admin/Invalid Cases/mm3_corgi_2.3.0_2.4.1.zip"
         },
         {
-            "test_name": "VerifySensorGateWayDetails",
+            "method_name": "VerifySensorGateWayDetails",
             "hiptest_name": "Verify Sensor Gateway Details",
             "skip": true,
             "expect_pass": true
         },
         {
-            "test_name": "EditSGWSetting",
+            "method_name": "EditSGWSetting",
             "hiptest_name": "Edit Sensor Gateway",
             "skip": true,
             "expect_pass": true,
@@ -52,7 +52,7 @@
             "comm_server_name" : "sensor_gw1_name"
         },
         {
-            "test_name": "EditSGWParameterOutsideRange",
+            "method_name": "EditSGWParameterOutsideRange",
             "hiptest_name": "Edit Sensor Gateway With Invalid Data",
             "skip": true,
             "expect_pass": false,
@@ -60,20 +60,20 @@
             "comm_server_name" : "sensor_gw1_name"
         },
         {
-            "test_name": "NetworkGroupSupportTest",
+            "method_name": "NetworkGroupSupportTest",
             "hiptest_name": "Network Group Support for SGW",
             "skip": true,
             "expect_pass": true
         },
         {
-            "test_name": "NetworkGroupLayout",
+            "method_name": "NetworkGroupLayout",
             "hiptest_name": "Network Group Layout",
             "skip": true,
             "expect_pass": true,
             "comm_server_name" : "sensor_gw1_name"
         },
         {
-            "test_name": "AddNetworkGroup",
+            "method_name": "AddNetworkGroup",
             "hiptest_name": "Add Network Group - Positive Test",
             "skip": true,
             "expect_pass": true,
@@ -81,7 +81,7 @@
             "comm_server_name" : "sensor_gw1_name"
         },
         {
-            "test_name": "AddNetworkGroup",
+            "method_name": "AddNetworkGroup",
             "hiptest_name": "Add Network Group - Duplicate Name",
             "skip": true,
             "expect_pass": false,
@@ -89,7 +89,7 @@
             "comm_server_name" : "sensor_gw1_name"
         },
         {
-            "test_name": "AddNetworkGroup",
+            "method_name": "AddNetworkGroup",
             "hiptest_name": "Add Network Group - Duplicate Master DNP Address",
             "skip": true,
             "expect_pass": false,
@@ -97,7 +97,7 @@
             "comm_server_name" : "sensor_gw1_name"
         },
         {
-            "test_name": "CloneNetworkGroup",
+            "method_name": "CloneNetworkGroup",
             "hiptest_name": "Clone Network Group",
             "skip": true,
             "expect_pass": true,
@@ -106,7 +106,7 @@
             "clone_info" : "seleniumDir/inputfilesDir/System Admin/Network Group/clone_info.json"
         },
         {
-            "test_name": "EditNetworkGroup",
+            "method_name": "EditNetworkGroup",
             "hiptest_name": "Edit Network Group",
             "skip": true,
             "expect_pass": true,
@@ -115,7 +115,7 @@
             "editjson": "seleniumDir/inputfilesDir/System Admin/Network Group/edit_network_group.json"
         },
         {
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true,
@@ -123,7 +123,7 @@
             "wait_for_online": true
         },
         {
-            "test_name": "DeleteNetworkGroup",
+            "method_name": "DeleteNetworkGroup",
             "hiptest_name": "Delete Network Group with Registered Devices",
             "skip": true,
             "expect_pass": true,
@@ -134,7 +134,7 @@
             "devices": ["device_2"]
         },
         {
-            "test_name": "DeleteNetworkGroup",
+            "method_name": "DeleteNetworkGroup",
             "hiptest_name": "Delete Network Group",
             "skip": true,
             "expect_pass": true,
@@ -142,7 +142,7 @@
             "network_group_deleted" : "selenium_test_networkgroup"
         },
         {
-            "test_name": "deleteDevice",
+            "method_name": "deleteDevice",
             "hiptest_name": "Delete Device- managed devices",
             "skip": true,
             "expect_pass": true,
@@ -150,7 +150,7 @@
             "device_name": ["device_1"]
         },
         {
-            "test_name": "deleteDevice",
+            "method_name": "deleteDevice",
             "hiptest_name": "Delete Device- managed devices",
             "skip": true,
             "expect_pass": true,
@@ -158,7 +158,7 @@
             "device_name": ["device_2"]
         },
         {
-            "test_name": "AddDeviceToDeletedNetworkGroup",
+            "method_name": "AddDeviceToDeletedNetworkGroup",
             "hiptest_name": "Add a Device to a Deleted Network Group",
             "skip": true,
             "expect_pass": true,
@@ -167,7 +167,7 @@
             "mtf_full_path": "seleniumDir/inputfilesDir/System Admin/Network Group/d1_deleteNG.csv"
         },
         {
-            "test_name": "CloneThenDelete",
+            "method_name": "CloneThenDelete",
             "hiptest_name": "Delete a Cloned Network Group",
             "skip": true,
             "expect_pass": true,
@@ -176,7 +176,7 @@
             "clone_info" : "seleniumDir/inputfilesDir/System Admin/Network Group/Clone_Info_2.json"
         },
         {
-            "test_name": "NetworkGroupPages",
+            "method_name": "NetworkGroupPages",
             "hiptest_name": "Network Group Pages",
             "skip": true,
             "expect_pass": true,
@@ -184,7 +184,7 @@
             "comm_server_name": "sensor_gw1_name"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "",
             "skip": true,
             "expect_pass": true

@@ -23,7 +23,7 @@
     "Email":
     {
         "subject_line": "email_subject_line",
-        "recipients": ["balachander.baskar@synchronoss.com", "naveen.s@synchronoss.com"],
+        "recipients": [email_recipients],
         "attachments": ["seleniumDir/report/test_report.csv"],
         "enabled": email_send_testreport
     }

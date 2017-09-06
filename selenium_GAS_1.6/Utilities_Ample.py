@@ -4246,3 +4246,25 @@ def GetLatAndLonValuesOfSite(region, substation, feeder, site):
         return sitelatitude, sitelongitude
     else:
         return None, None
+
+
+def GetCurrentTableColumnNamesNotShown():
+
+    # Create a list
+    tablecolumnnameslist = []
+
+    html = Global.driver.page_source
+
+    Elements = soup(html, "lxml")
+
+    # Get all dnp3 points table hidden column names
+    table = Elements.find('table')
+    tablehead = table.find('thead')
+    tablecolumnnames = tablehead.find_all('th', class_=re.compile('ng-hide'))
+
+    for div_tag in tablecolumnnames:
+        # Add each hidden column names to the list
+        tablecolumnname = div_tag.text.strip().strip('\n')
+        tablecolumnnameslist.append(tablecolumnname)
+
+    return tablecolumnnameslist

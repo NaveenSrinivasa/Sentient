@@ -17,9 +17,9 @@ from Utilities_Ample import printFP
 #import zm1_tests
 
 class PublishTest:
-    def __init__(self, result, test_name, hip_publisher, amplebuild, sgwbuild, browser):
+    def __init__(self, result, method_name, hip_publisher, amplebuild, sgwbuild, browser):
         self.result = result
-        self.test_name = test_name
+        self.method_name = method_name
         self.hip_publisher = hip_publisher
         self.amplebuild = amplebuild
         self.sgwbuild = sgwbuild
@@ -34,33 +34,33 @@ class PublishTest:
                 break
 
     def run_test(self, test):
-        if test['test_name'] == 'End':
+        if test['method_name'] == 'End':
             return False
         if test['skip']:
-            printFP('Skipping {}'.format(test['test_name']))
+            printFP('Skipping {}'.format(test['method_name']))
             return True
 
-        running_msg = 'Running {}'.format(test['test_name'])
+        running_msg = 'Running {}'.format(test['method_name'])
         left_border = '~ '*6
         right_border = ' ~'*6
         printFP(left_border+running_msg+right_border)
         if self.module.lower() == 'zm1':
-            test_to_run = getattr(zm1_tests, test['test_name'])
+            test_to_run = getattr(zm1_tests, test['method_name'])
         elif self.module.lower() == 'mm3':
-            test_to_run = getattr(mm3_tests, test['test_name'])
+            test_to_run = getattr(mm3_tests, test['method_name'])
         result = test_to_run(**test['args'])
-        self.publish_result(result, test['test_name'])
-        self.write_result(result, test['test_name'])
+        self.publish_result(result, test['method_name'])
+        self.write_result(result, test['method_name'])
         return True
 
-    def write_result(self, result, test_name):
+    def write_result(self, result, method_name):
         with open(self.test_report_path, 'w') as report:
             if result.comment == None:
                 comment = ''
             else:
                 comment = result.comment
             report.write('{},{},{}\n'.format(
-                test_name, result.result.upper(), comment)
+                method_name, result.result.upper(), comment)
             )
 
     def publish_result(self):
@@ -73,11 +73,11 @@ class PublishTest:
             comment = 'Ample_build: {}\nSGW_build: {}\nBrowser: {}\nSelenium Comment: {}'.format(
                 self.amplebuild, self.sgwbuild, self.browser, self.result.comment
             )
-        if not self.test_name in self.hip_publisher.id_pairs:
+        if not self.method_name in self.hip_publisher.id_pairs:
             printFP('Test name not found on HipTest. Not publishing.')
             return
-        test_id = self.hip_publisher.id_pairs[self.test_name]
-        printFP('Succefully found Test name: {} and Test Id: {} on HipTest. So publishing the result.'.format(self.test_name, test_id))
+        test_id = self.hip_publisher.id_pairs[self.method_name]
+        printFP('Succefully found Test name: {} and Test Id: {} on HipTest. So publishing the result.'.format(self.method_name, test_id))
         self.hip_publisher.add_test_result(
             test_id=test_id,
             result=self.result.result,
@@ -166,10 +166,10 @@ class TestRunner:
         printFP('Generating id pairs')
         self.hip_publisher.generate_test_id_pairs()
 
-    def run_publishresult(self, result, test_name):
+    def run_publishresult(self, result, method_name):
         PublishTest(
             result,
-            test_name,
+            method_name,
             self.hip_publisher,
             self.amplebuild,
             self.sgwbuild,
