@@ -2,7 +2,7 @@
     "Tests":
     [
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -10,7 +10,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": true,
@@ -18,7 +18,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/seleniumtest.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": true,
@@ -26,7 +26,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/changeeverything.json"
         },
         {
-            "test_name": "ValidateProfileFieldValues",
+            "method_name": "ValidateProfileFieldValues",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -36,7 +36,7 @@
         {
             "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
             "comment": "Allows the use of use_global_test_device",
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -44,7 +44,7 @@
             "wait_for_online": true
         },
         {
-            "test_name": "configureDevice",
+            "method_name": "configureDevice",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -54,26 +54,26 @@
             "actionButton": true
         },
         {
-            "test_name": "VerifyDefaultManagePage",
+            "method_name": "VerifyDefaultManagePage",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "VerifyDefaultSelectedProfile",
+            "method_name": "VerifyDefaultSelectedProfile",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "VerifyProfileTabs",
+            "method_name": "VerifyProfileTabs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
             "existing_profile_name": "seleniumtest"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": true,
@@ -81,14 +81,14 @@
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
         },
         {
-            "test_name": "VerifyProfileTabs",
+            "method_name": "VerifyProfileTabs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
             "existing_profile_name": "AccDefault"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass" : false,
@@ -96,7 +96,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": true,
@@ -104,7 +104,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": false,
@@ -112,7 +112,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": true,
@@ -120,7 +120,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": false,
@@ -128,7 +128,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
         },
         {
-            "test_name": "CloneProfile",
+            "method_name": "CloneProfile",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -136,7 +136,7 @@
             "clone_profile_name" : "hello2"
         },
         {
-            "test_name": "CloneProfile",
+            "method_name": "CloneProfile",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": false,
@@ -144,56 +144,56 @@
             "clone_profile_name" : "AccDefault"
         },
         {
-            "test_name": "SaveProfileWithoutChanges",
+            "method_name": "SaveProfileWithoutChanges",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
             "existing_profile_name": "AccDefault"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "Acc Default Test"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "hello2"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "AccDefault"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "changeeverything"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "seleniumtest"
         },
         {
-            "test_name": "deleteDevice",
+            "method_name": "deleteDevice",
             "hiptest_name": "Delete Device- managed devices",
             "skip": false,
             "expect_pass": true,
@@ -201,7 +201,7 @@
             "device_name": ["device_1"]
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true

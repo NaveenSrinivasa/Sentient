@@ -2,7 +2,7 @@
     "Tests":
     [
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -10,7 +10,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "FlashDevice",
+            "method_name": "FlashDevice",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -21,7 +21,7 @@
             "networktype": "d1_networktype"
         },
         {
-            "test_name": "FlashDevice",
+            "method_name": "FlashDevice",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -34,7 +34,7 @@
         {
             "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
             "comment": "Allows the use of use_global_test_device",
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -44,7 +44,7 @@
         {
             "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
             "comment": "Allows the use of use_global_test_device",
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -52,7 +52,7 @@
             "wait_for_online": true
         },
         {
-            "test_name": "CheckDefaultUpgradePage",
+            "method_name": "CheckDefaultUpgradePage",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -60,7 +60,7 @@
             "device_list": ["device_1"]
         },
         {
-            "test_name": "DeviceFilters",
+            "method_name": "DeviceFilters",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -71,7 +71,7 @@
             "comment": "Description - Performs a search on the Upgrade Page for a name(string)",
             "comment": "Parameter - negtest: determine if it is a negative test or not. True if negative test, or False else. Default Value is False.",
             "comment": "Parameter - searchUpgrade: string to search for in Upgrade Page. Required. Default Value: None.",
-            "test_name": "SearchBarTestUpgrade",
+            "method_name": "SearchBarTestUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -79,7 +79,7 @@
             "region_name": "d1_region"
         },
         {
-            "test_name": "UpgradeSettingsTest",
+            "method_name": "UpgradeSettingsTest",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": false,
@@ -91,7 +91,7 @@
             }
         },
         {
-            "test_name": "OTAPWrongUpdateSetting",
+            "method_name": "OTAPWrongUpdateSetting",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -102,7 +102,7 @@
             "time_or_day": "Day"
         },
         {
-            "test_name": "OTAPWrongUpdateSetting",
+            "method_name": "OTAPWrongUpdateSetting",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -113,7 +113,7 @@
             "time_or_day": "Time"
         },
         {
-            "test_name": "UpgradeSettingsTest",
+            "method_name": "UpgradeSettingsTest",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -125,7 +125,7 @@
             }
         },
         {
-            "test_name": "OTAPUpgrade",
+            "method_name": "OTAPUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": false,
@@ -135,7 +135,7 @@
             "actionButton" : false
         },
         {
-            "test_name": "OTAPUpgrade",
+            "method_name": "OTAPUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -145,7 +145,7 @@
             "actionButton" : false
         },
         {
-            "test_name": "OTAPPollCurrentJobs",
+            "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -156,7 +156,7 @@
             "polltime": 50
         },
         {
-            "test_name": "OTAPUpgrade",
+            "method_name": "OTAPUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -166,7 +166,7 @@
             "actionButton" : false
         },
         {
-            "test_name": "configureDevice",
+            "method_name": "configureDevice",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": false,
@@ -175,7 +175,7 @@
             "config": "default"
         },
         {
-            "test_name": "OTAPPollCurrentJobs",
+            "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -186,7 +186,7 @@
             "polltime": 50
         },
         {
-            "test_name": "OTAPPostCheckVersion",
+            "method_name": "OTAPPostCheckVersion",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -195,7 +195,7 @@
             "target_version": "2.4.1"
         },
         {
-            "test_name": "deleteDevice",
+            "method_name": "deleteDevice",
             "hiptest_name": "Delete Device- managed devices",
             "skip": false,
             "expect_pass": true,
@@ -203,7 +203,7 @@
             "device_name": ["device_1"]
         },
         {
-            "test_name": "deleteDevice",
+            "method_name": "deleteDevice",
             "hiptest_name": "Delete Device- managed devices",
             "skip": false,
             "expect_pass": true,
@@ -213,7 +213,7 @@
         {
             "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
             "comment": "Allows the use of use_global_test_device",
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -223,7 +223,7 @@
         {
             "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
             "comment": "Allows the use of use_global_test_device",
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -231,7 +231,7 @@
             "wait_for_online": true
         },
         {
-            "test_name": "OTAPUpgrade",
+            "method_name": "OTAPUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -241,7 +241,7 @@
             "actionButton" : false
         },
         {
-            "test_name": "OTAPPollCurrentJobs",
+            "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -252,7 +252,7 @@
             "polltime": 50
         },
         {
-            "test_name": "FlashDevice",
+            "method_name": "FlashDevice",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -263,7 +263,7 @@
             "networktype": "d1_networktype"
         },
         {
-            "test_name": "OTAPUpgrade",
+            "method_name": "OTAPUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -273,7 +273,7 @@
             "actionButton" : false
         },
         {
-            "test_name": "OTAPPollCurrentJobs",
+            "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -284,7 +284,7 @@
             "polltime": 50
         },
         {
-            "test_name": "OTAPUpgrade",
+            "method_name": "OTAPUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -294,7 +294,7 @@
             "actionButton" : false
         },
         {
-            "test_name": "OTAPAbort",
+            "method_name": "OTAPAbort",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -302,7 +302,7 @@
             "device_name": "device_1"
         },
         {
-            "test_name": "OTAPPollCurrentJobs",
+            "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -313,7 +313,7 @@
             "polltime": 50
         },
         {
-            "test_name": "OTAPRetryUpgrade",
+            "method_name": "OTAPRetryUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -321,7 +321,7 @@
             "device_name": "device_1"
         },
         {
-            "test_name": "OTAPPollCurrentJobs",
+            "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -332,7 +332,7 @@
             "polltime": 30
         },
         {
-            "test_name": "OTAPCheckOfflineDeviceUpgrade",
+            "method_name": "OTAPCheckOfflineDeviceUpgrade",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -343,7 +343,7 @@
             "networkgroup": "networkgroup1_name2"
         },
         {
-            "test_name": "deleteDevice",
+            "method_name": "deleteDevice",
             "hiptest_name": "Delete Device- managed devices",
             "skip": false,
             "expect_pass": true,
@@ -351,14 +351,14 @@
             "device_name": ["device_1"]
         },
         {
-            "test_name": "OTAPEmptyData",
+            "method_name": "OTAPEmptyData",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": false,
             "input_file_path": "seleniumDir/inputfilesDir/Device Upgrade/d1_reg_name.json"
         },
         {
-            "test_name": "deleteDevice",
+            "method_name": "deleteDevice",
             "hiptest_name": "Delete Device- managed devices",
             "skip": false,
             "expect_pass": true,
@@ -366,14 +366,14 @@
             "device_name": ["device_2"]
         },
         {
-            "test_name": "OTAPEmptyData",
+            "method_name": "OTAPEmptyData",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device Upgrade/d1_reg_name.json"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true

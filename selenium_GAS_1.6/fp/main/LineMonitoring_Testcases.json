@@ -2,7 +2,7 @@
     "Tests":
     [
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -10,7 +10,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": true,
             "expect_pass": true,
@@ -18,7 +18,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Line Monitoring/createfault.json"
         },
         {
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": true,
             "expect_pass": true,
@@ -26,7 +26,7 @@
             "wait_for_online": "True"
         },
         {
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": true,
             "expect_pass": true,
@@ -34,7 +34,7 @@
             "wait_for_online": "True"
         },
         {
-            "test_name": "configureDevice",
+            "method_name": "configureDevice",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -44,7 +44,7 @@
             "actionButton": false
         },
         {
-            "test_name": "VerifyDNPChanges",
+            "method_name": "VerifyDNPChanges",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -53,7 +53,7 @@
             "polltime" : devicepollinterval
         },
         {
-            "test_name": "AddRegion",
+            "method_name": "AddRegion",
             "hiptest_name": "Create Region - Positive",
             "skip": true,
             "expect_pass": true,
@@ -61,7 +61,7 @@
             "node": "SentientEnergy"
         },
         {
-            "test_name": "AddSubstation",
+            "method_name": "AddSubstation",
             "hiptest_name": "Create Substation - Positive",
             "skip": true,
             "expect_pass": true,
@@ -69,7 +69,7 @@
             "region": "EmptyRegion"
         },
         {
-            "test_name": "AddSubstation",
+            "method_name": "AddSubstation",
             "hiptest_name": "Create Substation - Positive",
             "skip": true,
             "expect_pass": true,
@@ -77,7 +77,7 @@
             "region": "EmptyRegion"
         },
         {
-            "test_name": "AddSubstation",
+            "method_name": "AddSubstation",
             "hiptest_name": "Create Substation - Positive",
             "skip": true,
             "expect_pass": true,
@@ -85,7 +85,7 @@
             "region": "lm_device_region"
         },
         {
-            "test_name": "AddFeeder",
+            "method_name": "AddFeeder",
             "hiptest_name": "Create Feeder - Positive",
             "skip": true,
             "expect_pass": true,
@@ -94,7 +94,7 @@
             "region": "EmptyRegion"
         },
         {
-            "test_name": "AddSite",
+            "method_name": "AddSite",
             "hiptest_name": "Create Site - Positive",
             "skip": true,
             "expect_pass": true,
@@ -106,7 +106,7 @@
             "longitude": "2.22"
         },
          {
-            "test_name": "AddSite",
+            "method_name": "AddSite",
             "hiptest_name": "Create Site - Positive",
             "skip": true,
             "expect_pass": true,
@@ -118,14 +118,14 @@
             "longitude": "25.22"
         },
         {
-            "test_name": "WaitForXTime",
+            "method_name": "WaitForXTime",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
             "min" : 4
         },
         {
-            "test_name": "FaultEventsTableEmptyData",
+            "method_name": "FaultEventsTableEmptyData",
             "hiptest_name": "",
             "skip": false,
             "expect_pass": true,
@@ -133,7 +133,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/empty_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsExportButton",
+            "method_name": "FaultEventsExportButton",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -142,7 +142,7 @@
             "level" : "region"
         },
         {
-            "test_name": "FaultEventsExportButton",
+            "method_name": "FaultEventsExportButton",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -151,7 +151,7 @@
             "level" : "substation"
         },
         {
-            "test_name": "FaultEventsExportButton",
+            "method_name": "FaultEventsExportButton",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -160,7 +160,7 @@
             "level" : "feeder"
         },
         {
-            "test_name": "FaultEventsExportButton",
+            "method_name": "FaultEventsExportButton",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -169,7 +169,7 @@
             "level" : "site"
         },
         {
-            "test_name": "FaultEventsCheckSubEventTypesCountInRegionTable",
+            "method_name": "FaultEventsCheckSubEventTypesCountInRegionTable",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -177,7 +177,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsCheckSubstationsWithoutEventsInRegionTable",
+            "method_name": "FaultEventsCheckSubstationsWithoutEventsInRegionTable",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -185,7 +185,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsCheckSubstationsWithEventsInRegionTable",
+            "method_name": "FaultEventsCheckSubstationsWithEventsInRegionTable",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -193,7 +193,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsCheckFeederEventsCountInSubstationTable",
+            "method_name": "FaultEventsCheckFeederEventsCountInSubstationTable",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -201,7 +201,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsCheckFeederEventTypesCountInSubstationTable",
+            "method_name": "FaultEventsCheckFeederEventTypesCountInSubstationTable",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -209,7 +209,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSubCheckEventType",
+            "method_name": "FaultEventsSubCheckEventType",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -217,7 +217,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSubCheckEventState",
+            "method_name": "FaultEventsSubCheckEventState",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -225,7 +225,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSubUnCheckAll",
+            "method_name": "FaultEventsSubUnCheckAll",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -234,7 +234,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSubGroupTableEventCountValidation",
+            "method_name": "FaultEventsSubGroupTableEventCountValidation",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -242,7 +242,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSubGroupTableDurationValidation",
+            "method_name": "FaultEventsSubGroupTableDurationValidation",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -250,7 +250,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsFeederCheckEventType",
+            "method_name": "FaultEventsFeederCheckEventType",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -258,7 +258,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsFeederCheckEventState",
+            "method_name": "FaultEventsFeederCheckEventState",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -266,7 +266,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsFeederUnCheckAll",
+            "method_name": "FaultEventsFeederUnCheckAll",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -275,7 +275,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsFeederGroupTableEventCountValidation",
+            "method_name": "FaultEventsFeederGroupTableEventCountValidation",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -283,7 +283,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsFeederGroupTableDurationValidation",
+            "method_name": "FaultEventsFeederGroupTableDurationValidation",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -291,7 +291,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSiteCheckEventType",
+            "method_name": "FaultEventsSiteCheckEventType",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -299,7 +299,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSiteCheckEventState",
+            "method_name": "FaultEventsSiteCheckEventState",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -307,7 +307,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSiteCheckTriggeredDetector",
+            "method_name": "FaultEventsSiteCheckTriggeredDetector",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -315,7 +315,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "FaultEventsSiteUnCheckAll",
+            "method_name": "FaultEventsSiteUnCheckAll",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -324,7 +324,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3PointsEmptyData",
+            "method_name": "Dnp3PointsEmptyData",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -332,7 +332,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/empty_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "CheckDnp3PointsDisplays",
+            "method_name": "CheckDnp3PointsDisplays",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -341,7 +341,7 @@
             "Phase": "lm_device_phase"
         },
         {
-            "test_name": "Dnp3PointsExportButton",
+            "method_name": "Dnp3PointsExportButton",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -349,7 +349,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3PointsPhaseFilters",
+            "method_name": "Dnp3PointsPhaseFilters",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -357,7 +357,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3TableColumnFilters",
+            "method_name": "Dnp3TableColumnFilters",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -365,7 +365,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3PointsPastDateWithEmptyData",
+            "method_name": "Dnp3PointsPastDateWithEmptyData",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -376,7 +376,7 @@
             "year": "1980"
         },
         {
-            "test_name": "Dnp3PointsClickTodayInDatepicker",
+            "method_name": "Dnp3PointsClickTodayInDatepicker",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -387,7 +387,7 @@
             "year": "1980"
         },
         {
-            "test_name": "Dnp3PointsClickClearInDatepicker",
+            "method_name": "Dnp3PointsClickClearInDatepicker",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -398,7 +398,7 @@
             "year": "1980"
         },
         {
-            "test_name": "Dnp3PointsPreviousAndNextDayButtons",
+            "method_name": "Dnp3PointsPreviousAndNextDayButtons",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -409,7 +409,7 @@
             "year": "lm_dnp_year"
         },
         {
-            "test_name": "Dnp3PointsNextDayButtonForFutureDate",
+            "method_name": "Dnp3PointsNextDayButtonForFutureDate",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -417,7 +417,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3PointsFeederTimeRangeSelection",
+            "method_name": "Dnp3PointsFeederTimeRangeSelection",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -425,7 +425,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3PointsCheckButtonsWithNoData",
+            "method_name": "Dnp3PointsCheckButtonsWithNoData",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -433,7 +433,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/empty_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3PointsViewChart",
+            "method_name": "Dnp3PointsViewChart",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -441,7 +441,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3PointsViewChartPhaseFilters",
+            "method_name": "Dnp3PointsViewChartPhaseFilters",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -449,7 +449,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "Dnp3PointsViewChartTimeRangeSelection",
+            "method_name": "Dnp3PointsViewChartTimeRangeSelection",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -457,7 +457,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "WaveformDownloadButton",
+            "method_name": "WaveformDownloadButton",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -467,7 +467,7 @@
             "timeout": 1200
         },
         {
-            "test_name": "WaveformPastDateWithEmptyData",
+            "method_name": "WaveformPastDateWithEmptyData",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -478,7 +478,7 @@
             "year": "1981"
         },
         {
-            "test_name": "WaveformExportButton",
+            "method_name": "WaveformExportButton",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -486,7 +486,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "CheckWaveformTableContent",
+            "method_name": "CheckWaveformTableContent",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -497,7 +497,7 @@
             "field_value" : "lm_wv_field_value"
         },
         {
-            "test_name": "ValidateMultipleWaveforms",
+            "method_name": "ValidateMultipleWaveforms",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -507,7 +507,7 @@
             "field_name": "FCI Thresh Limit"
         },
         {
-            "test_name": "SingleAndMultipleEventsCheck",
+            "method_name": "SingleAndMultipleEventsCheck",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -515,7 +515,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "WaveformChartLegendUnitfilters",
+            "method_name": "WaveformChartLegendUnitfilters",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -523,7 +523,7 @@
             "input_file_path": "/home/sqa/emsw-qa/seleniumnew/fp/sqa_fp/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "LogIEmptyData",
+            "method_name": "LogIEmptyData",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -531,7 +531,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/empty_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "LogIExportButton",
+            "method_name": "LogIExportButton",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -539,7 +539,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "LogIUnitfilters",
+            "method_name": "LogIUnitfilters",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -547,7 +547,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "LogIChartLegendUnitfilters",
+            "method_name": "LogIChartLegendUnitfilters",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -555,7 +555,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "LogIPhaseDetailsCheck",
+            "method_name": "LogIPhaseDetailsCheck",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -566,7 +566,7 @@
             "propertyvalue": "lm_device_type"
         },
         {
-            "test_name": "LogIPhaseFilters",
+            "method_name": "LogIPhaseFilters",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -574,7 +574,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "LogITimeRangeSelection",
+            "method_name": "LogITimeRangeSelection",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -582,7 +582,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json"
         },
         {
-            "test_name": "LogISiteSelection",
+            "method_name": "LogISiteSelection",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -590,7 +590,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_multiple_site_names.json"
         },
         {
-            "test_name": "DeleteRegion",
+            "method_name": "DeleteRegion",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -599,7 +599,7 @@
         },
         {
             "comment": "Description - Delete a substation",
-            "test_name": "DeleteSubStation",
+            "method_name": "DeleteSubStation",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -608,7 +608,7 @@
         },
         {
             "comment": "Description - Delete a site",
-            "test_name": "DeleteSite",
+            "method_name": "DeleteSite",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -616,7 +616,7 @@
             "site_name": "SeleniumTestSite4"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": true,
             "expect_pass": true,
@@ -624,7 +624,7 @@
         },
         {
 
-            "test_name": "AddRMSToCurrentLabelsLineMonitoringLogI",
+            "method_name": "AddRMSToCurrentLabelsLineMonitoringLogI",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -633,7 +633,7 @@
         },
         {
 
-            "test_name": "CustomGroupsMultipleEventTypeSelectionSupport",
+            "method_name": "CustomGroupsMultipleEventTypeSelectionSupport",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -641,7 +641,7 @@
         },
         {
 
-            "test_name": "CustomGroupsOrderingOfTableColumns",
+            "method_name": "CustomGroupsOrderingOfTableColumns",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -649,7 +649,7 @@
         },
         {
 
-            "test_name": "ExportCustomGroupsTablesWithMultipleEventTypeSelection",
+            "method_name": "ExportCustomGroupsTablesWithMultipleEventTypeSelection",
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
@@ -657,7 +657,7 @@
         },
 
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true

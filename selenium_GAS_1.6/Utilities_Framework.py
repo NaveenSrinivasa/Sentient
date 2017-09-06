@@ -23,7 +23,7 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         print('session_id : %s' %session_id)
-        # driver.session_id = '27effb70-1cf7-4215-8f20-4929a66531c5' # To connect with your desirable session
+        # driver.session_id = '55d7689f-58b2-490e-8110-51bd95c31321' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
@@ -41,7 +41,7 @@ def SpawnBrowser(browser, platform):
         print('desired: %s' % desired)
         if '11' in browser:
             # driver = webdriver.Remote(command_executor='http://10.16.56.154:5555/wd/hub', desired_capabilities=desired)
-            driver = webdriver.Remote(command_executor='http://172.20.3.50:5555/wd/hub', desired_capabilities=desired)
+            driver = webdriver.Remote(command_executor='http://internet_explorer_machine_ip:5555/wd/hub', desired_capabilities=desired)
             # driver = webdriver.Remote(command_executor='http://10.16.16.217:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
             driver = webdriver.Remote(command_executor='http://172.20.3.49:5555/wd/hub', desired_capabilities=desired)
@@ -232,7 +232,7 @@ def CreateAllDevicesDictionary(devData):
 
 def TakeScreenshot():
     currenttime = time.strftime("%b_%d_%Y__%H_%M_%S")
-    Global.driver.save_screenshot('%s/%s_%s.png' %(Global.screenshotsPath, Global.currenttest_name, currenttime))
+    Global.driver.save_screenshot('%s/%s_%s.png' %(Global.screenshotsPath, Global.currentmethod_name, currenttime))
     time.sleep(2)
 
 def BackupScreenshotsAndTestReport(src):
@@ -302,14 +302,16 @@ def BackupScreenshotsAndTestReport(src):
         printFP('Not found given screenshot path directory to back up screenshots : %s' % src)
 
 def FindAndReplace(directory, find, replace, filePattern):
-    if 'connections.json' in filePattern:
-        filename = 'connections.json'
-        filepath = os.path.join(directory, filename)
+    if 'Utilities_Framework.py' in filePattern or 'connections.json' in filePattern or 'configurations.json' in filePattern:
+        filepath = os.path.join(directory, filePattern)
         #print(filepath)
+        time.sleep(2)
         with open(filepath) as f:
             s = f.read()
         #print('find: %s' %find)
+        time.sleep(3)
         #print('replace: %s' %replace)
+        time.sleep(3)
         s = s.replace(find, replace)
         with open(filepath, "w") as f:
             f.write(s)
@@ -363,11 +365,11 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
         directory = userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'
     #print('directory:%s' %directory)
     for key, value in userdefinedvariables.items():
-        if not key == 'devices' and not key == 'browser_name' and not key == 'platform_name':
+        if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not key == 'internet_explorer_machine_ip':
             FindAndReplace(directory, key, value, "*")
         elif key == 'browser_name':
             for i in range(len(userdefinedvariables['browser_name'])):
-                device = userdefinedvariables['browser_name'][i]
+                #tmp = userdefinedvariables['browser_name'][i]
                 if i==0:
                     tmpvalue = '"' + userdefinedvariables['browser_name'][i] + '",'
                 else:
@@ -377,7 +379,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
             FindAndReplace(directory, key, newvalue, "connections.json")
         elif key == 'platform_name':
             for i in range(len(userdefinedvariables['platform_name'])):
-                device = userdefinedvariables['platform_name'][i]
+                #tmp = userdefinedvariables['platform_name'][i]
                 if i==0:
                     tmpvalue = '"' + userdefinedvariables['platform_name'][i] + '",'
                 else:
@@ -385,5 +387,16 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                 value = tmpvalue
             newvalue = value[:-1]
             FindAndReplace(directory, key, newvalue, "connections.json")
-
-
+        elif key == 'email_recipients':
+            for i in range(len(userdefinedvariables['email_recipients'])):
+                # tmp = userdefinedvariables['email_recipients'][i]
+                if i==0:
+                    tmpvalue = '"' + userdefinedvariables['email_recipients'][i] + '",'
+                else:
+                    tmpvalue = value + '"' + userdefinedvariables['email_recipients'][i] + '",'
+                value = tmpvalue
+            newvalue = value[:-1]
+            FindAndReplace(directory, key, newvalue, "configurations.json")
+        elif key == 'internet_explorer_machine_ip':
+            directory = userdefinedvariables['seleniumDir']
+            FindAndReplace(directory, key, value, "Utilities_Framework.py")

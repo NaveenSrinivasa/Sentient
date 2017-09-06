@@ -2,7 +2,7 @@
 	"Tests":
 	[
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -10,7 +10,7 @@
             "password": "password_valid"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile",
             "skip": false,
             "expect_pass": true,
@@ -18,7 +18,7 @@
             "profile_json": "seleniumDir/inputfilesDir/Current Jobs/seleniumtest.json"
         },
         {
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -26,7 +26,7 @@
             "wait_for_online": "True"
         },
         {
-            "test_name": "UploadMTFTest",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Upload MTF with GPS Co-ordinates",
             "skip": false,
             "expect_pass": true,
@@ -34,7 +34,7 @@
             "wait_for_online": "True"
         },
         {
-            "test_name": "ValidateCurrentJobsConfigDetails",
+            "method_name": "ValidateCurrentJobsConfigDetails",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -44,7 +44,7 @@
             "device_detail_json": "seleniumDir/inputfilesDir/Current Jobs/d1_details.json"
         },
         {
-            "test_name": "VerifyDNPChanges",
+            "method_name": "VerifyDNPChanges",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -53,7 +53,7 @@
             "polltime" : devicepollinterval
         },
         {
-            "test_name": "configureDevice",
+            "method_name": "configureDevice",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -62,14 +62,14 @@
             "config": "default"
         },
         {
-            "test_name": "JobStatusToolTip",
+            "method_name": "JobStatusToolTip",
             "hiptest_name": "Logout",
             "skip": false,
             "page": "Config",
             "expect_pass": true
         },
         {
-            "test_name": "SearchForDeviceCurrentJobs",
+            "method_name": "SearchForDeviceCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -77,7 +77,7 @@
             "device": "device_1"
         },
         {
-            "test_name": "SearchForDeviceCurrentJobs",
+            "method_name": "SearchForDeviceCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -85,7 +85,7 @@
             "device": "device_2"
         },
         {
-            "test_name": "SearchForDeviceCurrentJobs",
+            "method_name": "SearchForDeviceCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -93,7 +93,7 @@
             "device": "device_1"
         },
         {
-            "test_name": "SearchForDeviceCurrentJobs",
+            "method_name": "SearchForDeviceCurrentJobs",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": false,
@@ -101,7 +101,7 @@
             "device": "device_2@@"
         },
         {
-            "test_name": "DeleteRegion",
+            "method_name": "DeleteRegion",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
@@ -109,14 +109,14 @@
             "region_name": "d1_region"
         },
         {
-            "test_name": "DeleteProfile",
+            "method_name": "DeleteProfile",
             "hiptest_name": "Delete Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "seleniumtest"
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true
