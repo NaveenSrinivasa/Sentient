@@ -7209,7 +7209,7 @@ def LogITimeRangeSelection(input_file_path):
             printFP(testComment)
             return Global.PASS, testComment
         else:
-            printFP("Test Fail - Given site doesn't have logi data. Please point to a site which has logi data")
+            testComment = "Test Fail - Given site doesn't have logi data. Please point to a site which has logi data"
             printFP(testComment)
             return Global.FAIL, testComment
     else:
@@ -7545,9 +7545,9 @@ def ExportCustomGroupsTablesWithMultipleEventTypeSelection():
     location = downloadfolder + 'export.xls'
     #Opening the downloaded file and reading its content
     with open(location,'r') as f:
-        content = f.read()          
+        content = f.read()
         downloaded_file = content.strip()
-        downloaded_file = unicode(downloaded_file, "utf-8")           
+        downloaded_file = unicode(downloaded_file, "utf-8")
         downloaded_file = downloaded_file.strip('\n').replace('"','').replace(' ','')
         downloaded_file = ''.join(downloaded_file.split())
         downloaded_file = downloaded_file.strip()

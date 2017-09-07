@@ -823,7 +823,7 @@ def UploadMTFTest(mtf_full_path=None, wait_for_online=True):
     returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
     if "The file has been uploaded successfully." in returnMessage:
         printFP("INFO - MTF upload message: %s" % returnMessage)
-        MoveDeviceToOnline(device['serial'])
+        #MoveDeviceToOnline(device['serial'])
     else:
         try:
             GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
@@ -855,24 +855,6 @@ def UploadMTFTest(mtf_full_path=None, wait_for_online=True):
 
     return result, testComment
 
-
-    if wait_for_online:
-        GoToDevMan()
-        time.sleep(3)
-        Global.driver.refresh()
-        time.sleep(10)
-        GetSiteFromTop(device['region'], device['substation'], device['feeder'], device['site'])
-        if IsOnline(device['serial']):
-            testComment = 'TEST PASS - %s did come online and successfully uploaded'% device['serial']
-            result = Global.PASS
-        else:
-            testComment = 'TEST FAIL - %s did not come online' % device['serial']
-            result = Global.FAIL
-    else:
-        result = Global.PASS
-        testComment = 'TEST PASS - Successfully uploaded MTF file to Ample.'
-
-    return result, testComment
 
 def VerifyUploadDetails(file_path=None, wait_for_online=False, Status=None, importType=None):
     if not(file_path and Status and importType):

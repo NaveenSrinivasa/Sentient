@@ -3,7 +3,7 @@
     [
         {
             "Module": "Login Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/Login_Testcases.json"
         },
         {
@@ -13,12 +13,12 @@
         },
         {
             "Module": "Add User Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/UserManagement_Testcases.json"
         },
         {
             "Module": "Group Tree Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/GroupTree_Testcases.json"
         },
         {
@@ -27,13 +27,18 @@
             "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Testcases.json"
         },
         {
+            "Module": "System Admin - Import MTF Tests",
+            "skip": false,
+            "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Import_MTF_Testcases.json"
+        },
+        {
             "Module": "Device Upgrade Tests",
             "skip": true,
             "test_json": "seleniumDir/inputfilesDir/DeviceUpgrade_Testcases.json"
         },
         {
             "Module": "Device Management Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/DeviceManagement_Testcases.json"
         },
         {
@@ -53,7 +58,7 @@
         },
         {
             "Module": "Line Monitoring Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/LineMonitoring_Testcases.json"
         },
         "End_Test"

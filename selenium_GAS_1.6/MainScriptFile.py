@@ -25,7 +25,8 @@ from Ample_AlertNotifications import *
 from Ample_Disturbances import *
 from Ample_NegativeTests import *
 from Ample_ConfigureProperties import *
-from Ample_SysAdmin_MTF import *
+from Ample_SysAdmin_MTF_0 import *
+from Ample_SysAdmin_MTF_1 import *
 from testdebug import *
 from Ample_DevMan_ManageDevices import *
 from Ample_LinMon_LogI import *
@@ -221,9 +222,9 @@ def TestConfig(config, connections, tests):
 
     threads = []
     for platform in connections['platforms']:
-        print platform
+        print('Platform: %s' %platform)
         for browser in connections['browsers']:
-            print browser
+            print('Browser: %s' %browser)
             if browser == 'internet explorer' and platform == 'linux':
                 pass
             else:

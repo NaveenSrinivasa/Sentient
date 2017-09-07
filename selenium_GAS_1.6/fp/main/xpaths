@@ -46,7 +46,7 @@ dev_man_configure_close /html/body/div[4]/div/div/div[1]/span[3]/a
 dev_man_configure_dropdown /html/body/div[4]/div/div/div[2]/div[3]/single-select/div/button
 dev_man_configure_error /html/body/div[4]/div/div/div[2]/div[1]/div/div/span
 dev_man_configure_list /html/body/div[4]/div/div/div[2]/div[3]/single-select/div/ul
-dev_man_delete /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div[2]/div[1]/div[2]/div/span[1]/div[2]/button[3]
+dev_man_delete /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div[3]/div/div[2]/div/span[1]/div[2]/button[3]
 dev_man_delete_action /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[4]/table/tbody/tr/td[22]/div/span[5]
 dev_man_delete_close /html/body/div[4]/div/div/div[1]/span[2]/a
 dev_man_delete_ok /html/body/div[4]/div/div/div[3]/button[1]
