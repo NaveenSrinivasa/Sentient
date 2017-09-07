@@ -1,0 +1,3 @@
+Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
+b19,b19s2,b19s2f6,b19s2f6s4,B,11000,MM3,2.0.0,corgi,-10.648437,-64.573828,02:23:f9:5b:11:00,10.68.2.245,30000,note1,5E+33,sensor_gw1_name,0-00001-05,,4G,networkgroup1_name,
+b19,b19s22,b19s2f62,b19s2f6s44,C,1.10017E+25,MM3,2.0.0,corgi,-10.648437,-64.573828,02:23:f9:5b:11:01,10.68.2.245,30001,note1,50001,sensor_gw1_name,0-00001-05,,4G,networkgroup1_name,

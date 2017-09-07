@@ -8,14 +8,11 @@ Test Case, Parameters, Test Case Type, Time in seconds, Result, Test Comment if 
 
 Module: System Admin - Import MTF Tests
 
-1 UploadMTFTest, mtf_full_path=/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_07_2017__01_13_54/at-ssn17.csv;  wait_for_online=False;  , expect_pass = True, 20, PASS, TEST PASS - Successfully uploaded MTF file to Ample.
-2 VerifyUploadDetails, Status=SUCCESS;  wait_for_online=False;  importType=MTF;  file_path=/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_07_2017__01_13_54/at-ssn17.csv;  , expect_pass = True, 55, PASS, TEST PASS - Everything matched.
-3 ImportMTFNoGPSCoordinates, mtf_full_path=/home/balachander/git/qa-selenium/selenium_GAS_1.6/fp/bala_Sep_07_2017__01_13_54/System Admin/Import_MTF/d1_no_gps.csv;  wait_for_online=False;  , expect_pass = True, 64, PASS, Test Pass - Override GPS switch is OFF when uploaded mtf without GPS coordinates
 
 
-Total Test Time: 317 seconds
-Total Test Count: 3
-Total PASS: 3
+Total Test Time: 28 seconds
+Total Test Count: 0
+Total PASS: 0
 Total FAIL: 0
 
 --------------------------------------
