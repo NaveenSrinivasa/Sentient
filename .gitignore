@@ -1,3 +1,15 @@
+*.pyc
+**/*.pyc
+.cache
+*.log
+backup
+screenshots
+report/*.csv
+report/*.csv#
+*.json~
+*.csv~
+*.py~
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
