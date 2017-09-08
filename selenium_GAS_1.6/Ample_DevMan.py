@@ -8,8 +8,7 @@ from Utilities_Device import *
 from Ample_SysAdmin import *
 from Ample_ManageProfile import *
 from Ample_LineMon import *
-
-
+from Ample_Login import *
 
 
 def GoToDevman():
@@ -270,7 +269,7 @@ def DeviceFilters(input_file_path=None, page=None):
     return result, 'TEST PASS - ' + testComment if result == Global.PASS else 'TEST FAIL - ' + testComment
 
 
-def NavigatePages(input_file_path=None, UpgradePage=False):
+def NavigatePages(input_file_path=None, UpgradePage=True):
     if not (input_file_path):
         testComment = 'Missing an input parameter value for this test'
         printFP(testComment)
@@ -1135,7 +1134,7 @@ def OTAPCheckOfflineDeviceUpgrade(input_file_path=None, device_name=None, waitOn
     status = GetElement(row, By.XPATH, 'td[4]/span')
     if status.get_attribute('class') == 'icon ion-checkmark-circled':
         printFP("Device is currently in Online State..Changing it to Offline")
-        UnregisterTest(input_file_path, [device_name], False, False)
+        UnregisterTest(input_file_path, device_name, False, False)
         RegisterDevice(input_file_path, commserver, networkgroup, device_name, False)
     elif status.get_attribute('class') == 'icon glyphicon glyphicon-transfer':
         printFP("Device is currently in Unregistered State.. Changing it to Offline")
@@ -1320,6 +1319,7 @@ def UnregisterTest(input_file_path=None, unregDev=None, checkRegisterButton=True
             ActionChains(Global.driver).click(action).perform()
             confirmUnregister = GetElement(Global.driver, By.XPATH, "//button[text()='Ok']")
             confirmUnregister.click()
+            time.sleep(2)
             if not CheckIfStaleElement(confirmUnregister):
                 printFP("INFO - Unregister pop up did not disappear.")
     else:
@@ -1366,7 +1366,7 @@ def UnregisterTest(input_file_path=None, unregDev=None, checkRegisterButton=True
     #check if Unregistered
     result = Global.PASS
     Global.driver.refresh()
-    time.sleept(10)
+    time.sleep(10)
     for i in range(len(unregDev)):
         row = GetDevice(unregDev[i])
         icon = GetElement(row, By.XPATH, "td[4]/span")
@@ -1409,8 +1409,10 @@ def RegisterDevice(input_file_path=None, commserver=None, sgw_group_name=None, r
         try:
             sensorgatewayOptions = GetElement(Global.driver, By.XPATH, "//single-select[@options='commServerSelection.list']/div/button")
             sensorgatewayOptions.click()
+            time.sleep(2)
             sensorgateway = GetElement(Global.driver, By.XPATH, "//li[@ng-repeat='option in options']/a/span[text()='"+commserver+"']")
             sensorgateway.click()
+            time.sleep(2)
         except:
             printFP("INFO - Test ran into exception while trying to click on SGW. Refreshing page and ending test.")
             Global.driver.refresh()
@@ -1420,8 +1422,10 @@ def RegisterDevice(input_file_path=None, commserver=None, sgw_group_name=None, r
             try:
                 networkGroupButton = GetElement(Global.driver, By.XPATH, "//single-select[@options='groupNameSelection.list']/div/button")
                 networkGroupButton.click()
+                time.sleep(2)
                 networkGroupElement = GetElement(Global.driver, By.XPATH, "//li[@ng-repeat='option in options']/a/span[text()='"+sgw_group_name+"']")
                 networkGroupElement.click()
+                time.sleep(2)
             except:
                 printFP("INFO - Test ran into exception while trying to click on Network Group. Refreshing page and ending test.")
                 Global.driver.refresh()
@@ -1770,8 +1774,7 @@ def ChangeUpgradeSettings(upgrade_settings):
     #   to_time[hour,minute,am/pm]
     # upgradeSettings['numRetries']
     #   2 to 5
-    ClickButton(Global.driver, By.XPATH, xpaths['dash_gear'])
-    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_button'])
+    
 
     # Select day
     if ValidDay(upgrade_settings['day']):
@@ -1800,7 +1803,7 @@ def ChangeUpgradeSettings(upgrade_settings):
     time.sleep(1)
     try:
         msg = GetText(Global.driver, By.XPATH, xpaths['settings_upgrade_setting_errmsg'])
-        if 'Start time must be earlier' in msg:
+        if 'Start time must be earlier than end time.' in msg:
             ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
             printFP(msg)
             return Global.FAIL, msg
@@ -1895,6 +1898,7 @@ def OTAPWrongUpdateSetting(input_file_path=None, device_name=None, target_versio
     if time_or_day == 'Day':
         Dates = ["Saturday", "Sunday", "Monday","Tuesday", "Wednesday", "Thursday", "Friday"]
         i = datetime.datetime.today().weekday()
+        print i
         #print datetime.datetime.today().weekday()
         #print Dates[i]
 
@@ -1911,8 +1915,8 @@ def OTAPWrongUpdateSetting(input_file_path=None, device_name=None, target_versio
 
         upgrade_settings = {
             "day": Dates[datetime.datetime.today().weekday()],
-            "from_time":"11:58PM",
-            "to_time":"11:59PM",
+            "from_time":"11:57PM",
+            "to_time":"11:58PM",
             "num_retries": 3
         }
 
@@ -1940,137 +1944,8 @@ def OTAPWrongUpdateSetting(input_file_path=None, device_name=None, target_versio
         printFP(testComment)
         return Global.FAIL, testComment
 
-
-def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, actionButton=False, timeout=1200):
-    """This test will perform an OTAP upgrade on a device, monitor the progress,
-    then return PASS when the upgrade completes. It checks that the job and otap
-    status show complete, and that the software version reflects the target.
-
-    Before starting the upgrade, it will check that the device is on the correct
-    starting version.
-
-    It is built to also use the simulators, but the simulators do not support
-    OTAP yet."""
-    if input_file_path == None or target_version == None:
-        testComment = 'Test is missing an input parameter value for this test'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    #Navigate to Upgrade page
-    params = ParseJsonInputFile(input_file_path)
-    GoToDevMan()
-    GoToDevUpgrade()
-
-    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
-        testComment = "Unable to locate site based on input file"
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    # Start the upgrade
-    if not actionButton:
-        try:
-            for i in range(len(device_name)):
-                SelectDevice(device_name[i])
-        except Exception as e:
-            printFP("INFO - Unable to select the device(s)")
-            return Global.FAIL, 'TEST FAIL - Unable to select the device(s)'
-    try:
-        upgradebutton = GetElement(Global.driver, By.XPATH, "//button[text()='Firmware Upgrade']")
-        if 'disabled' in upgradebutton.get_attribute('class'):
-            printFP("INFO - Upgrade button was disabled.")
-            return Global.FAIL, 'TEST FAIL - Upgrade button was disabled for this test.'
-        upgradebutton.click()
-    except:
-        testComment = 'Test failed to click Upgrade button.'
-        printFP('INFO - ' + testComment)
-        return Global.FAIL , 'TEST FAIL - ' + testComment
-
-    try:
-        GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_warning_pass']).click()
-        printFP('INFO - Commserver or SGW has short poll interval')
-    except:
-        printFP('INFO - Commserver or SGW does not have short poll interval')
-
-    try:
-        upgradeTitle = GetElement(Global.driver, By.XPATH, "//span[contains(@class, 'modal-title')]").text
-        printFP("INFO - Upgrade Title: %s" %upgradeTitle)
-        if str(len(device_name)) + ' Device' in upgradeTitle:
-            printFP("Number of Devices Selected Matches the Amount to be Upgraded.")
-        else:
-            printFP("Number of Devices Selected Does not Match the Amount to be Upgraded.")
-    except:
-        printFP("INFO - No title was displayed. Refreshing and ending test.")
-        Global.driver.refresh()
-        return Global.FAIL, 'TEST FAIL - No title was displayed.'
-
-    try:
-        textBox = GetElement(Global.driver, By.CSS_SELECTOR, 'div.alert.ng-isolate-scope.alert-dismissable.alert-danger')
-        divElement = GetElement(textBox, By.TAG_NAME, 'div')
-        textmsg = GetElement(divElement, By.TAG_NAME, 'span').text
-        ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
-        if any(word in textmsg for word in ['not available', 'Selection contains different']):
-            printFP('INFO - ' + textmsg)
-            return Global.FAIL, 'TEST FAIL - ' + textmsg
-    except:
-        singleselectElement = GetElement(Global.driver, By.TAG_NAME, 'single-select')
-        dropdown = GetElement(singleselectElement, By.XPATH, xpaths['dev_upgrade_sw_dropdown'])
-        dropdown.click()
-        dropdownMenu = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_sw_dropdown_menu'])
-        if SelectFromMenu(dropdownMenu, By.TAG_NAME, 'li', target_version):
-            print "Found upgrade version %s" % target_version
-        else:
-            ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
-            testComment = "Test did not find upgrade version %s. Please upload the firmware bundle for this version" % target_version
-            printFP('INFO - ' + testComment)
-            return Global.FAIL, 'TEST FAIL - ' + testComment
-    try:
-        upgradeStart = GetElement(Global.driver, By.XPATH, "//button[text()='Start FW Upgrade']")
-        if 'disabled' in upgradeStart.get_attribute('class'):
-            closeButton = GetElement(Global.driver, By.XPATH, 'glyphicon-remove-circle')
-            closeButton.click()
-            printFP("INFO - Upgrade button was disabled.")
-            return Global.FAIL, 'TEST FAIL - Upgrade button was disabled for this test.'
-        upgradeStart.click()
-    except:
-        testComment = 'Test failed to click Start FW Upgrade button.'
-        printFP('INFO - ' + testComment)
-        return Global.FAIL , 'TEST FAIL - ' + testComment
-
-    try:
-        msg = GetText(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_msg'], True)
-        if any( word in msg for word in ['selected day','selected time','Configuration']):
-            ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
-            printFP('INFO - ' + msg)
-            return Global.FAIL, 'TEST FAIL - ' + msg
-    except:
-        printFP("INFO - No error messages were displayed.")
-
-    for i in range(len(device_name)):
-        SelectDevice(device_name[i])
-        devicesfwupgradestatus = FilteredDataFromTableMapping('Serial Number', 'FW Upgrade Status', 'device-management')
-        try:
-            upgradeButton = WebDriverWait(Global.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Firmware Upgrade']")))
-            if 'disabled' in upgradeButton.get_attribute('class'):
-                printFP("After initiating upgrade, device cannot click upgrade again.")
-            else:
-                testComment = 'Upgrade Button is still click-able despite starting Upgrade for the device: {}' .format(device_name[i])
-                printFP(testComment)
-                return Global.FAIL, testComment
-            upgradeButton.click()
-        except:
-            printFP("After initiating upgrade, device cannot click upgrade again.")
-
-        if str(devicesfwupgradestatus[device_name[i]]) == 'INPROGRESS':
-            printFP('INFO - Device firmware upgrade is started. Current Status: INPROGRESS')
-        elif str(devicesfwupgradestatus[device_name[i]]) == 'FAILED':
-            fwstatusmsg = GetFWSatusMsgFromFWScreen(device_name[i])
-            testComment = 'Test Fail - Device firmware upgrade is failed immediately. Current Status: FAILED and FW Status msg: {}' .format(fwstatusmsg)
-            return Global.FAIL, testComment
-
-    return Global.PASS, 'TEST PASS - Test started an upgrade for selected devices'
-
-def OTAPPostCheckVersionStatus(input_file_path=None, device_names=None, target_version=None, desiredOtapStatus=None):
-    if input_file_path == None or device_names==None or target_version == None or desiredOtapStatus == None:
+def OTAPPostCheckVersion(input_file_path=None, device_names=None, target_version=None):
+    if input_file_path == None or device_names==None or target_version == None:
         testComment = 'Missing an input parameter value for this test'
         printFP(testComment)
         return Global.FAIL, testComment
@@ -2358,3 +2233,133 @@ def OTAPEmptyData(input_file_path=None):
         testComment = 'Data available still for this empty site; data has not been cleared.'
         printFP(testComment)
         return Global.FAIL, testComment
+
+
+
+def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, actionButton=False, timeout=1200):
+    """This test will perform an OTAP upgrade on a device, monitor the progress,
+    then return PASS when the upgrade completes. It checks that the job and otap
+    status show complete, and that the software version reflects the target.
+
+    Before starting the upgrade, it will check that the device is on the correct
+    starting version.
+
+    It is built to also use the simulators, but the simulators do not support
+    OTAP yet."""
+    if input_file_path == None or target_version == None:
+        testComment = 'Test is missing an input parameter value for this test'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    #Navigate to Upgrade page
+    params = ParseJsonInputFile(input_file_path)
+    GoToDevMan()
+    GoToDevUpgrade()
+
+    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+        testComment = "Unable to locate site based on input file"
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    # Start the upgrade
+    if not actionButton:
+        try:
+            for i in range(len(device_name)):
+                SelectDevice(device_name[i])
+        except Exception as e:
+            printFP("INFO - Unable to select the device(s)")
+            return Global.FAIL, 'TEST FAIL - Unable to select the device(s)'
+    try:
+        upgradebutton = GetElement(Global.driver, By.XPATH, "//button[text()='Firmware Upgrade']")
+        if 'disabled' in upgradebutton.get_attribute('class'):
+            printFP("INFO - Upgrade button was disabled.")
+            return Global.FAIL, 'TEST FAIL - Upgrade button was disabled for this test.'
+        upgradebutton.click()
+    except:
+        testComment = 'Test failed to click Upgrade button.'
+        printFP('INFO - ' + testComment)
+        return Global.FAIL , 'TEST FAIL - ' + testComment
+
+    try:
+        GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_warning_pass']).click()
+        printFP('INFO - Commserver or SGW has short poll interval')
+    except:
+        printFP('INFO - Commserver or SGW does not have short poll interval')
+
+    try:
+        upgradeTitle = GetElement(Global.driver, By.XPATH, "//span[contains(@class, 'modal-title')]").text
+        printFP("INFO - Upgrade Title: %s" %upgradeTitle)
+        if str(len(device_name)) + ' Device' in upgradeTitle:
+            printFP("Number of Devices Selected Matches the Amount to be Upgraded.")
+        else:
+            printFP("Number of Devices Selected Does not Match the Amount to be Upgraded.")
+    except:
+        printFP("INFO - No title was displayed. Refreshing and ending test.")
+        Global.driver.refresh()
+        return Global.FAIL, 'TEST FAIL - No title was displayed.'
+
+    try:
+        textBox = GetElement(Global.driver, By.CSS_SELECTOR, 'div.alert.ng-isolate-scope.alert-dismissable.alert-danger')
+        divElement = GetElement(textBox, By.TAG_NAME, 'div')
+        textmsg = GetElement(divElement, By.TAG_NAME, 'span').text
+        ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
+        if any(word in textmsg for word in ['not available', 'Selection contains different']):
+            printFP('INFO - ' + textmsg)
+            return Global.FAIL, 'TEST FAIL - ' + textmsg
+    except:
+        singleselectElement = GetElement(Global.driver, By.TAG_NAME, 'single-select')
+        dropdown = GetElement(singleselectElement, By.XPATH, xpaths['dev_upgrade_sw_dropdown'])
+        dropdown.click()
+        dropdownMenu = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_sw_dropdown_menu'])
+        if SelectFromMenu(dropdownMenu, By.TAG_NAME, 'li', target_version):
+            print "Found upgrade version %s" % target_version
+        else:
+            ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
+            testComment = "Test did not find upgrade version %s. Please upload the firmware bundle for this version" % target_version
+            printFP('INFO - ' + testComment)
+            return Global.FAIL, 'TEST FAIL - ' + testComment
+    try:
+        upgradeStart = GetElement(Global.driver, By.XPATH, "//button[text()='Start FW Upgrade']")
+        if 'disabled' in upgradeStart.get_attribute('class'):
+            closeButton = GetElement(Global.driver, By.XPATH, 'glyphicon-remove-circle')
+            closeButton.click()
+            printFP("INFO - Upgrade button was disabled.")
+            return Global.FAIL, 'TEST FAIL - Upgrade button was disabled for this test.'
+        upgradeStart.click()
+    except:
+        testComment = 'Test failed to click Start FW Upgrade button.'
+        printFP('INFO - ' + testComment)
+        return Global.FAIL , 'TEST FAIL - ' + testComment
+
+    try:
+        msg = GetText(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_msg'], True)
+        if any( word in msg for word in ['selected day','selected time','Configuration']):
+            ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
+            printFP('INFO - ' + msg)
+            return Global.FAIL, 'TEST FAIL - ' + msg
+    except:
+        printFP("INFO - No error messages were displayed.")
+
+    for i in range(len(device_name)):
+        SelectDevice(device_name[i])
+        devicesfwupgradestatus = FilteredDataFromTableMapping('Serial Number', 'FW Upgrade Status', 'device-management')
+        try:
+            upgradeButton = WebDriverWait(Global.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Firmware Upgrade']")))
+            if 'disabled' in upgradeButton.get_attribute('class'):
+                printFP("After initiating upgrade, device cannot click upgrade again.")
+            else:
+                testComment = 'Upgrade Button is still click-able despite starting Upgrade for the device: {}' .format(device_name[i])
+                printFP(testComment)
+                return Global.FAIL, testComment
+            upgradeButton.click()
+        except:
+            printFP("After initiating upgrade, device cannot click upgrade again.")
+
+        if str(devicesfwupgradestatus[device_name[i]]) == 'INPROGRESS':
+            printFP('INFO - Device firmware upgrade is started. Current Status: INPROGRESS')
+        elif str(devicesfwupgradestatus[device_name[i]]) == 'FAILED':
+            fwstatusmsg = GetFWSatusMsgFromFWScreen(device_name[i])
+            testComment = 'Test Fail - Device firmware upgrade is failed immediately. Current Status: FAILED and FW Status msg: {}' .format(fwstatusmsg)
+            return Global.FAIL, testComment
+
+    return Global.PASS, 'TEST PASS - Test started an upgrade for selected devices'

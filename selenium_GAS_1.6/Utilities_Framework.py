@@ -22,7 +22,6 @@ def SpawnBrowser(browser, platform):
         print('desired: %s' % desired)
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
-        #driver.session_id = '60b560b2-759b-44ec-b9f9-06c00a363374' # To connect with your desirable session
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
         desired['platform'] = platform
@@ -297,7 +296,7 @@ def BackupScreenshotsAndTestReport(src):
             except OSError:
                 os.remove(filepath)
     else:
-        printFP('Not found given screenshot path directory to back up screenshots : %s' % src)
+        print('Not found given screenshot path directory to back up screenshots : %s' % src)
 
 def FindAndReplace(directory, find, replace, filePattern):
     if 'Utilities_Framework.py' in filePattern or 'connections.json' in filePattern or 'configurations.json' in filePattern:

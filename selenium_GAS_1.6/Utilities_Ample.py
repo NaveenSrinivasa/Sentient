@@ -437,6 +437,13 @@ def GoToConfigProp():
     time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['settings_config_prop'])
 
+def GoToFWUpgradeSettings():
+    
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['dash_gear'])
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_button'])
+
 def GoToEmailAlert():
     time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['dash_person_dropdown'])
@@ -4269,17 +4276,29 @@ def GetLatAndLonValuesOfSite(region, substation, feeder, site):
     else:
         return None, None
 
+def GetCurrentTableDisplayedColumnNames():
+
+    # Create a list
+    tablecolumnnameslist = []
+    html = Global.driver.page_source
+    Elements = soup(html, "lxml")
+    table = Elements.find('table')
+    tablehead = table.find('thead')
+    tablecolumnnames = tablehead.find_all('th', {"class" : "text-center sortable ng-scope"})
+
+    for div_tag in tablecolumnnames:
+        tablecolumnname = div_tag.text.strip().strip('\n')
+        tablecolumnnameslist.append(tablecolumnname)
+
+    return tablecolumnnameslist
+
 
 def GetCurrentTableColumnNamesNotShown():
 
     # Create a list
     tablecolumnnameslist = []
-
     html = Global.driver.page_source
-
     Elements = soup(html, "lxml")
-
-    # Get all dnp3 points table hidden column names
     table = Elements.find('table')
     tablehead = table.find('thead')
     tablecolumnnames = tablehead.find_all('th', class_=re.compile('ng-hide'))
@@ -4380,3 +4399,221 @@ def CheckAllJobsPresence():
 
     return True, ''
 
+def SelectFromTableColumnFilters(list_of_filters, state=True):
+
+    selectfilters = list(list_of_filters)
+    if state:
+        value = 'true'
+    else:
+        value = 'false'
+
+    time.sleep(2)
+
+    dropdownmenubutton = GetElement(Global.driver, By.XPATH, "//button[contains(@class, 'column-settings-btn')]")
+    time.sleep(2)
+    try:
+        JustClick(dropdownmenubutton)
+    except Exception as e:
+        print e.message
+        return False
+    time.sleep(1)
+
+    # Get all filters name
+    filterstmp = Global.driver.find_element_by_css_selector('.dropdown-menu.column-wrap')
+    time.sleep(1)
+    filters = filterstmp.find_elements_by_css_selector('.checkbox.column-label')
+
+    for filter in filters:
+        filterelement = GetElement(filter, By.CLASS_NAME, 'column-title')
+        time.sleep(1)
+        filterName = filterelement.text
+        if filterName in selectfilters:
+            printFP("Column Filter Name : " + filterName)
+            inputElement = GetElement(filter, By.TAG_NAME, 'input')
+            inputType = inputElement.get_attribute('type')
+            inputType
+            if 'checkbox' in inputType:
+                SetCheckBox(inputElement, value)
+                #JustClick(dropdownmenubutton)
+                TableColumnNamesNotShown = GetCurrentTableColumnNamesNotShown()
+                printFP(TableColumnNamesNotShown)
+                if state and filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Fail - checked filter " + filterName + " is not shown in the table column header"
+                    printFP(testComment)
+                elif state and not filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Pass - checked filter " + filterName + " is shown in the table column header"
+                    printFP(testComment)
+                elif not state and filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Pass - unchecked filter " + filterName + " is not shown in the table column header"
+                    printFP(testComment)
+                elif not state and not filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Fail - unchecked filter " + filterName + " is shown in the table column header"
+                    printFP(testComment)
+            else:
+                printFP('INFO - Do not recognize this input type')
+
+    JustClick(dropdownmenubutton)
+    if state:
+        testComment = 'INFO - Given filters are selected successfully'
+    else:
+        testComment = 'INFO - Given filters are unselected successfully'
+
+    printFP(testComment)
+    return True
+
+def selectFiltersByFirmware(fw_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+    except:
+        try:
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+        except:
+            printFP("INFO - Test could not locate the Firmware Version Filter")
+            return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(fw_list)):
+        try:
+            fw = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_list[i] +"']")
+            fw.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)
+        except:
+            printFP("INFO - Test could not find firmware version %s" %fw_list[i])
+
+    return True
+
+def selectFiltersByUpgradeStatus(fw_status_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwUpgradeStatusSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Firmware Upgrade Status Filter")
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(fw_status_list)):
+        try:
+            fwStatus = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_status_list[i] +"']")
+            fwStatus.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)
+        except:
+            printFP("INFO - Test could not find Upgrade Status %s" %fw_status_list[i])
+
+    return True
+
+def selectFiltersByNetworkGroup(network_group_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
+    except:
+        try:
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSettings.list']/div/button")
+        except:
+            printFP("INFO - Test could not locate the Network Group filter")
+            return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(network_group_list)):
+        try:
+            ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ network_group_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)
+        except:
+            printFP("INFO - Test could not find network group %s" %(network_group_list[i]))
+
+    return True
+
+def selectFiltersBySerialNumber(serial_number):
+    try:
+        searchButton = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+    except:
+        try:
+            searchButton = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+        except:
+            printFP("INFO - Test could not locate the Serial number input box")
+            return False
+
+    ClearInput(searchButton)
+    searchButton.send_keys(serial_number)
+    GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+    time.sleep(4)
+    return True
+
+
+def GoToRootNodeAndClickOnRegion():
+    rootElement = GetElement(Global.driver, By.XPATH, '//*[@id="node-1"]')
+    try:
+        if rootElement.get_attribute('collapsed') == 'true':
+            rootElement.click()
+            time.sleep(1)
+        else:
+            GetRootNode()
+            time.sleep(1)
+            region = GetElement(Global.driver, By.XPATH, "//span[contains(@class,'REGION-name')]")
+            JustClick(region)
+    except:
+        testComment = 'TEST FAIL - Unable to click on region'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+def CheckFiltersInSite():
+    fwversion = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+    fwstatus = GetElement(Global.driver, By.XPATH, "//span[@options='fwUpgradeStatusSelection.list']/div/button")
+    nwgroup = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
+    serialnumber = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+    if fwversion.is_displayed() and fwstatus.is_displayed() and nwgroup.is_displayed() and serialnumber.is_displayed():
+        testComment = 'TEST FAIL - Filters are present when user is in site.'
+        printFP(testComment)
+        return Global.FAIL, testComment
+    else:
+        testComment = 'TEST PASS - Filters are NOT present when user is in site.'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+def CheckPageButtonLinkAccessibility(xpathofelement, expectedstatus, xpathtonavigate=None):
+
+    if not xpathtonavigate == None:
+        GetElement(Global.driver, By.XPATH, xpathtonavigate).click()
+
+    if 'disabled' in expectedstatus:
+        try:
+            link = GetElement(Global.driver, By.XPATH, xpathofelement)
+            if 'disabled' in link.get_attribute('class'):
+                pass
+            else:
+                link.click()
+                Global.driver.refresh()
+                time.sleep(1)
+                testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
+                return False, testComment
+        except Exception as e:
+            printFP(e.message)
+            Global.driver.refresh()
+            time.sleep(1)
+            return False, e.message
+
+    elif 'enabled' in expectedstatus:
+        try:
+            link = GetElement(Global.driver, By.XPATH, xpathofelement)
+            if 'disabled' in link.get_attribute('class'):
+                testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
+                return False, testComment
+        except Exception as e:
+            printFP(e.message)
+            Global.driver.refresh()
+            time.sleep(1)
+            return False, e.message
+
+    return True, ''

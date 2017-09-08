@@ -29,6 +29,7 @@ from Ample_SysAdmin_MTF import *
 from testdebug import *
 from Ample_DevMan_ManageDevices import *
 from Ample_LinMon_LogI import *
+from Ample_OTAP import *
 
 def ConfigureLogging(parsed_config, browser, platform):
     configured_log_level = parsed_config['log_level'].lower()
