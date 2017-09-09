@@ -202,20 +202,14 @@ def SetCheckBox(inputElement, value):
     """This function sets the checkbox to value."""
     value= value.replace("\r","")
     if value in ['false','False']:
-        #print('false value %s' % value)
-        #print inputElement
         if inputElement.is_selected():
             print('Unchecking')
-            #inputElement.click()
             time.sleep(1)
             inputElement.click()
             print('Unchecked')
     elif value in ['true','True']:
-        #print('true value %s' % value)
-        #print inputElement
         if not inputElement.is_selected():
             print('Checking')
-            #inputElement.click()
             time.sleep(1)
             inputElement.click()
             print('Checked')
@@ -485,11 +479,9 @@ def GetRootNode():
 
     try:
         node = WebDriverWait(Global.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'ROOTNODE-name')))
-        #print('node2 %s' %node)
         time.sleep(2)
         node.click()
     except:
-        #print('node3 %s' %node)
         return None
     return node
 
@@ -498,9 +490,7 @@ def GetRegion(regionName):
     Return the region element."""
 
     allRegions = Global.driver.find_elements_by_class_name('REGION-name')
-    #printFP('num regions: %d' % len(allRegions))
     for region in allRegions:
-        #printFP(region.text)
         if regionName == region.text:
             printFP('Found %s' % region.text)
             actions = ActionChains(Global.driver)
@@ -517,14 +507,11 @@ def GetSubstation(substationName):
     Return the substation element."""
 
     allSubs = Global.driver.find_elements_by_class_name('SUBSTATION-name')
-    #printFP('num subs: %d' % len(allSubs))
     for sub in allSubs:
-        #printFP(sub.text)
         if substationName == sub.text:
             printFP('Found %s' % sub.text)
             actions = ActionChains(Global.driver)
             actions.move_to_element(sub).click(sub).perform()
-            #sub.click()
             sub = GetElement(sub, By.XPATH, '../..')
             time.sleep(1)
             return sub
@@ -536,7 +523,6 @@ def GetFeeder(feederName):
     Return the feeder element."""
     allFeeders = Global.driver.find_elements_by_class_name('FEEDER-name')
     for feeder in allFeeders:
-        #printFP(feeder.text)
         if feederName == feeder.text:
             printFP('Found %s' % feeder.text)
             ActionChains(Global.driver).move_to_element(feeder).click().perform()
@@ -738,11 +724,7 @@ def GetDevice(serial):
         time.sleep(1)
         for finddevice in devicedetails:
             tmpdevicename = finddevice.text
-            #print ('tmpdevicename: %s' %tmpdevicename)
-            #print ('Given devicename: %s' %serial)
             if serial == tmpdevicename:
-                #parentelementfinddevice = finddevice.find_element_by_xpath("..")
-                #return parentelementfinddevice
                 return device
     return None
 
@@ -763,15 +745,12 @@ def IsOnline(serial, interval = 120, timeout = 1200):
         elapsed += interval
         Global.driver.refresh()
         time.sleep(10)
-        #try:
         device = GetDevice(serial)
         icon = GetElement(device, By.XPATH, 'td[4]/span').get_attribute('class')
         if 'ion-checkmark-circled' in icon:
-            #GetElement(device, By.CLASS_NAME, 'ion-checkmark-circled')
             printFP('Device %s is online' % serial)
             return True
         else:
-        #except:
             printFP('Device %s is not online yet' % serial)
     printFP('Device %s failed to come online within timeout range' % serial)
     return False
@@ -782,7 +761,6 @@ def RightClickElement(element):
     actions = ActionChains(Global.driver)
     actions.move_to_element_with_offset(element, 1, 5).perform()
     time.sleep(2)
-    #actions.move_to_element(element)
     actions.context_click().perform()
 
 def RefreshMenuTree(menuID):
@@ -809,7 +787,6 @@ def CreateRegion(regionName, node):
     node - root node (ie. Sentient)"""
 
     menuID = GetContextMenuID(node)
-    #OpenContextMenu(menuID)
 
     RightClickElement(node)
     time.sleep(1)
@@ -842,7 +819,6 @@ def CreateRegion(regionName, node):
     except:
         pass
 
-    #CloseContextMenu(menuID)
     time.sleep(1)
 
     if RefreshMenuTree(menuID):
@@ -866,7 +842,6 @@ def CreateSubstation(substationName, region):
     region - web element of the region to create the substation from"""
 
     menuID = GetContextMenuID(region)
-    #OpenContextMenu(menuID)
 
     RightClickElement(region)
     time.sleep(1)
@@ -899,7 +874,6 @@ def CreateSubstation(substationName, region):
     except:
         pass
 
-    #CloseContextMenu(menuID)
     time.sleep(1)
 
     if RefreshMenuTree(menuID):
@@ -918,7 +892,6 @@ def CreateFeeder(feederName, substation):
     substation - web element of the substation to create the feeder from"""
 
     menuID = GetContextMenuID(substation)
-    #OpenContextMenu(menuID)
     RightClickElement(substation)
     time.sleep(1)
     SelectFromMenu(substation, By.CLASS_NAME, 'pull-left', 'Add Feeder')
@@ -950,7 +923,6 @@ def CreateFeeder(feederName, substation):
         return None
     except:
         pass
-    #CloseContextMenu(menuID)
     time.sleep(1)
 
     if RefreshMenuTree(menuID):
@@ -972,7 +944,6 @@ def CreateSite(siteName, feeder, latitude, longitude):
     longitude - string representing the longitude of the site"""
 
     menuID = GetContextMenuID(feeder)
-    #OpenContextMenu(menuID)
     RightClickElement(feeder)
     time.sleep(1)
     SelectFromMenu(feeder, By.CLASS_NAME, 'pull-left', 'Add Site')
@@ -1006,7 +977,6 @@ def CreateSite(siteName, feeder, latitude, longitude):
 
     # Submit
     ClickButton(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
-    #CloseContextMenu(menuID)
     time.sleep(1)
     try:
         errorBox = GetElement(Global.driver, By.CLASS_NAME, 'alert-danger')
@@ -1033,13 +1003,9 @@ def SelectDevice(serial):
 
     try:
         device = GetDevice(serial)
-		#checkbox = GetElement(device, By.XPATH, '/td[1]/input')
-
         checkbox = GetElement(device, By.TAG_NAME, 'input')
-		#printFP('checkbox %s ' % checkbox)
         time.sleep(1)
         SetCheckBox(checkbox, 'true')
-        #checkbox.click()
         return device
     except:
         return None
@@ -1229,7 +1195,6 @@ def ApplyProfile(device, profileName, timeout=600):
     # Go check current jobs
     time.sleep(1)
     GoToCurrentJobsConfig()
-    #driver.refresh()
     time.sleep(1)
 
     # Monitor for success
@@ -1574,7 +1539,6 @@ def SelectYearMonthAndDateFromCalendar(year, month, date):
             if year < focusedyear:
                 while not (year == focusedyear):
                     buttonpullleft = Global.driver.find_element_by_xpath("//i[contains(@class, 'glyphicon-chevron-left')]")
-                    #buttonpullleft = GetElement(column, By.ID, 'glyphicon glyphicon-chevron-left')
                     try:
                         buttonpullleft.click()
                     except:
@@ -1615,7 +1579,6 @@ def SelectMonthAndDateFromCalendar(month, date):
 
     findcurrentmonthandyear = GetDatePickerCurrentTitle()
     currentmonthandyear = findcurrentmonthandyear.text.strip()
-    #print('month_currentmonthandyear %s' %currentmonthandyear)
 
     if not currentmonthandyear.isalnum():
         findcurrentmonthandyear.click()
@@ -1623,11 +1586,9 @@ def SelectMonthAndDateFromCalendar(month, date):
         pass
 
     tables = GetElements(Global.driver, By.TAG_NAME, 'table')
-    #print('month_tables %s:' %tables)
     for table in tables:
         try:
             findcorrectable = table.get_attribute('aria-labelledby')
-            #print('month_findcorrectable %s:' %findcorrectable)
         except Exception as e:
             print e.message
             findcorrectable = None
@@ -1668,7 +1629,6 @@ def SelectDateFromCalendar(date):
 
     findcurrentmonthandyear = GetDatePickerCurrentTitle()
     currentmonthandyear = findcurrentmonthandyear.text.strip()
-    #print('date_currentmonthandyear %s' %currentmonthandyear)
 
     if not currentmonthandyear.isalnum():
 
@@ -1689,7 +1649,6 @@ def SelectDateFromCalendar(date):
                     columns = GetElements(row, By.TAG_NAME, 'td')
                     for column in columns:
                         focuseddate = column.text.strip()
-                        #print focuseddate
                         if n == 0:
                             if focuseddate == "01":
                                 startdate = focuseddate
@@ -1698,17 +1657,12 @@ def SelectDateFromCalendar(date):
                                 startdate = None
                         else:
                             startdate = "01"
-                        #print('startdate = %s' %startdate)
                         if startdate == "01":
                             startdate == "01"
-                            #print('startdate_2: %s' %startdate)
-                            #print('sfocuseddate: %s' %focuseddate)
-                            #print('date: %s' %date)
                             if focuseddate == date:
                                 buttonelement = GetElement(column, By.TAG_NAME, 'button')
                                 try:
                                     isdisabled = buttonelement.get_attribute('disabled')
-                                    #print('isdisabled_1: %s' %isdisabled)
                                 except Exception as e:
                                     print e.message
 
@@ -1739,7 +1693,6 @@ def GetDatePickerCurrentTitle():
             row = GetElement(thead, By.TAG_NAME, 'tr')
             columns = GetElements(row, By.TAG_NAME, 'th')
             currenttitle = GetElement(columns[1], By.TAG_NAME, 'button')
-            #print('currenttitle %s:' %currenttitle.text)
             return currenttitle
         else:
             return None
@@ -1782,7 +1735,6 @@ def FaultEventsRegionTableGetColumnOrder(pagename):
 
     # find Page view
     page = Elements.find('div', class_=re.compile(pagename))
-    #table = page.find('table', class_=re.compile('margin-t-30'))
     table = page.find('table')
 
     if table:
@@ -1811,7 +1763,6 @@ def FaultEventsRegionTableFilteredAllData(pagename, columnname):
 
     # find Page view
     page = FilterElements.find('div', class_=re.compile(pagename))
-    #table = page.find('table', class_=re.compile('margin-t-30'))
     table = page.find('table')
 
     if table:
@@ -1842,7 +1793,6 @@ def FaultEventsFindSubstationWithFaults(pagename, columnname):
 
     # find Page view
     page = FilterElements.find('div', class_=re.compile(pagename))
-    #table = page.find('table', class_=re.compile('margin-t-30'))
     table = page.find('table')
 
     if table:
@@ -1894,7 +1844,6 @@ def FaultEventsGetSubstationFaultEventsCountInRegionTable(pagename, substationna
 
     # find Page view
     page = Elements.find('div', class_=re.compile(pagename))
-    #table = page.find('table', class_=re.compile('margin-t-30'))
     table = page.find('table')
 
     if table:
@@ -2382,7 +2331,6 @@ def FaultEventsGetFeederFaultEventsCountInSubstationTable(pagename, columnname, 
                                 if feedername in value:
                                     columnnamevalueslist.append(value)
                                     count = count+1
-                                    #print('count: %s' %count)
                             n = n+1
                 nextbuttonstatus = FaultEventsCheckButtonStateandClick('Next')
 
@@ -2521,7 +2469,6 @@ def FaultEventsGetFaultEventsCount(pagename, columnname):
                                 value = td_tag.find('span').text.strip()
                                 columnnamevalueslist.append(value)
                                 count = count+1
-                                #print('count: %s' %count)
                             n = n+1
                 nextbuttonstatus = FaultEventsCheckButtonStateandClick('Next')
 
@@ -2592,7 +2539,6 @@ def FaultEventsTableFilteredSpecificData(pagename, columnname, filtervalue):
                                 if value in filtervalue:
                                     columnnamevalueslist.append(value)
                                     count = count+1
-                                    #print('count: %s' %count)
                             n = n+1
                 nextbuttonstatus = FaultEventsCheckButtonStateandClick('Next')
 
@@ -2691,7 +2637,6 @@ def FaultEventsGroupViewTableFilteredSpecificData(pagename, columnname, filterva
                     if n == columnposition:
                         value = td_tag.find('span').text.strip()
                         print value
-                        #print filtervalue
                         if filtervalue in value:
                             columnnamevalueslist.append(value)
                             count = count+1
@@ -2829,7 +2774,6 @@ def UnCheckAllEventTypes():
             rawfiltername = option.text
             filtername = rawfiltername.strip().replace(' ','').replace('"','')
             filtername = ''.join(filtername.split())
-            #printFP('UnCheckAll Event Type: %s' %filtername)
             if filtername and not 'UncheckAll' in filtername:
                 currentbuttonstatus = GetElement(option, By.TAG_NAME, 'span')
                 classname = currentbuttonstatus.get_attribute('class')
@@ -3057,7 +3001,6 @@ def UnCheckAllEventStates():
             rawfiltername = option.text
             filtername = rawfiltername.strip().replace(' ','').replace('"','')
             filtername = ''.join(filtername.split())
-            #printFP('UnCheckAll Event State: %s' %filtername)
             if filtername and not 'UncheckAll' in filtername:
                 currentbuttonstatus = GetElement(option, By.TAG_NAME, 'span')
                 classname = currentbuttonstatus.get_attribute('class')
@@ -3285,7 +3228,6 @@ def UnCheckAllTriggeredDetectors():
             rawfiltername = option.text
             filtername = rawfiltername.strip().replace(' ','').replace('"','')
             filtername = ''.join(filtername.split())
-            #printFP('UnCheckAll Event State: %s' %filtername)
             if filtername and not 'UncheckAll' in filtername:
                 currentbuttonstatus = GetElement(option, By.TAG_NAME, 'span')
                 classname = currentbuttonstatus.get_attribute('class')
@@ -3744,7 +3686,6 @@ def GetHeadersOfLogiCharts(sitename):
         frame = header.find('span')
         nametags = frame.find_all('span', class_=re.compile('ng-binding'))
         for nametag in nametags:
-            #print ('nametag: %s'  %nametag)
             value = nametag.text.strip()
             listofheaders.append(value)
         if sitename in listofheaders:
@@ -3856,7 +3797,6 @@ def GetPhaseStatusOnDnp3ViewChartGraph(chartname, phase):
             for group in currentseries:
                 if group.attrs.get('visibility'):
                     visibility = group['visibility']
-                    #print('visibility: %s' %visibility)
                     if 'hidden' in visibility:
                         return False
                     else:
@@ -3893,7 +3833,6 @@ def CheckAllTimeStampsForSelectedDate():
                             if compare != 0:
                                 return False
                         tmp = value
-                        #print('tmp: %s' %tmp)
                         n = n+1
     return True
 
@@ -3919,8 +3858,6 @@ def GetCurrentTimeStamp():
                 if hasattr(td_tag, 'class'):
                     if n == columnposition:
                         value = td_tag.text.split(" ")
-                        #print value
-                        #print value[0]
                         value = value[0].strip()
                         if value is not None:
                             return value
@@ -4023,7 +3960,6 @@ def Dnp3FilteredDataFromTable(Phase):
                     if n == columnposition:
                         if n<7:
                             value = td_tag.text.strip()
-                            #print('value %s' %value)
                             dnp3tablephasevaluelist.append(value)
                             columnposition = columnposition+2
                         else:
