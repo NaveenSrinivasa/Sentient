@@ -23,7 +23,7 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         print('session_id : %s' %session_id)
-        # driver.session_id = '55d7689f-58b2-490e-8110-51bd95c31321' # To connect with your desirable session
+        #driver.session_id = 'b19d6912-06f1-400f-a583-482678f3001f' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
@@ -41,8 +41,7 @@ def SpawnBrowser(browser, platform):
         print('desired: %s' % desired)
         if '11' in browser:
             # driver = webdriver.Remote(command_executor='http://10.16.56.154:5555/wd/hub', desired_capabilities=desired)
-            driver = webdriver.Remote(command_executor='http://internet_explorer_machine_ip:5555/wd/hub', desired_capabilities=desired)
-            # driver = webdriver.Remote(command_executor='http://10.16.16.217:5555/wd/hub', desired_capabilities=desired)
+            driver = webdriver.Remote(command_executor='http://172.20.3.50:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
             driver = webdriver.Remote(command_executor='http://172.20.3.49:5555/wd/hub', desired_capabilities=desired)
     return driver
@@ -130,9 +129,6 @@ def FormatParams(dictParams):
     i = 0
     for key in dictParams:
         i += 1
-        #if i > 3:
-           # params += '\n, '
-            #i = 1
         params += '%s=%s;  ' % (key, PrettyParam(dictParams[key]))
     return params
 
@@ -149,7 +145,6 @@ def StartSims(inputfp):
     cmd = 'mv %s/MTF.csv /tmp/MTF.csv' % pathToSimulators
     printFP(cmd)
     os.system(cmd)
-    #sims.close()
 
 def GenerateXPATHDictionary(xpath_file_path):
     # open xpath dictionary
@@ -220,7 +215,6 @@ def DeviceDictionaryForPreSetUp(info, device):
     devDataDic[prefix + 'networktype'] = str(info[19])
     devDataDic[prefix + 'networkgroupname'] = str(info[20])
 
-    #print ('devDataDic: %s' %devDataDic)
     return devDataDic
 
 def CreateAllDevicesDictionary(devData):
@@ -367,13 +361,11 @@ def InitialDirectorySetup(src):
 def FilePathAndInputDataSetup(userdefinedvariables, directory):
     if directory == 'none':
         directory = userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'
-    #print('directory:%s' %directory)
     for key, value in userdefinedvariables.items():
-        if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not key == 'internet_explorer_machine_ip':
+        if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not key == '172.20.3.50':
             FindAndReplace(directory, key, value, "*")
         elif key == 'browser_name':
             for i in range(len(userdefinedvariables['browser_name'])):
-                #tmp = userdefinedvariables['browser_name'][i]
                 if i==0:
                     tmpvalue = '"' + userdefinedvariables['browser_name'][i] + '",'
                 else:
@@ -383,7 +375,6 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
             FindAndReplace(directory, key, newvalue, "connections.json")
         elif key == 'platform_name':
             for i in range(len(userdefinedvariables['platform_name'])):
-                #tmp = userdefinedvariables['platform_name'][i]
                 if i==0:
                     tmpvalue = '"' + userdefinedvariables['platform_name'][i] + '",'
                 else:
@@ -393,7 +384,6 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
             FindAndReplace(directory, key, newvalue, "connections.json")
         elif key == 'email_recipients':
             for i in range(len(userdefinedvariables['email_recipients'])):
-                # tmp = userdefinedvariables['email_recipients'][i]
                 if i==0:
                     tmpvalue = '"' + userdefinedvariables['email_recipients'][i] + '",'
                 else:
@@ -401,6 +391,6 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                 value = tmpvalue
             newvalue = value[:-1]
             FindAndReplace(directory, key, newvalue, "configurations.json")
-        elif key == 'internet_explorer_machine_ip':
+        elif key == '172.20.3.50':
             directory = userdefinedvariables['seleniumDir']
             FindAndReplace(directory, key, value, "Utilities_Framework.py")

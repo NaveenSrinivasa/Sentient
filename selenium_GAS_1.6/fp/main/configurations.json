@@ -8,7 +8,7 @@
         "test_report_path": "seleniumDir/report",
         "log_path": "seleniumDir/log/",
         "mtf_file_path": "seleniumDir/inputfilesDir/device_1.csv",
-        "xpath_file_path": "seleniumDir/inputfilesDir/xpaths",
+        "xpath_file_path": "seleniumDir/xpaths",
         "tmp_file_path": "seleniumDir/inputfilesDir/tmp",
         "screenshots_path": "seleniumDir/screenshots",
         "hiptest":
