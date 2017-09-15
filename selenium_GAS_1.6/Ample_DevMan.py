@@ -2008,7 +2008,7 @@ def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, act
             print "Found upgrade version %s" % target_version
         else:
             ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
-            testComment = "Test did not find upgrade version %s" % target_version
+            testComment = "Test did not find upgrade version %s. Please upload the firmware bundle for this version" % target_version
             printFP('INFO - ' + testComment)
             return Global.FAIL, 'TEST FAIL - ' + testComment
     try:
@@ -2020,7 +2020,7 @@ def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, act
             return Global.FAIL, 'TEST FAIL - Upgrade button was disabled for this test.'
         upgradeStart.click()
     except:
-        testComment = 'Test failed to click confirm button.'
+        testComment = 'Test failed to click Start FW Upgrade button.'
         printFP('INFO - ' + testComment)
         return Global.FAIL , 'TEST FAIL - ' + testComment
 
@@ -2035,22 +2035,30 @@ def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, act
 
     for i in range(len(device_name)):
         SelectDevice(device_name[i])
-    try:
-        upgradeButton = WebDriverWait(Global.driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpaths['dev_upgrade_button'])))
-        if 'disabled' in upgradeButton.get_attribute('class'):
+        devicesfwupgradestatus = FilteredDataFromTableMapping('Serial Number', 'FW Upgrade Status', 'device-management')
+        try:
+            upgradeButton = WebDriverWait(Global.driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Firmware Upgrade']")))
+            if 'disabled' in upgradeButton.get_attribute('class'):
+                printFP("After initiating upgrade, device cannot click upgrade again.")
+            else:
+                testComment = 'Upgrade Button is still click-able despite starting Upgrade for the device: {}' .format(device_name[i])
+                printFP(testComment)
+                return Global.FAIL, testComment
+            upgradeButton.click()
+        except:
             printFP("After initiating upgrade, device cannot click upgrade again.")
-        else:
-            testComment = 'Upgrade Button is still clickable despite starting Upgrade'
-            printFP(testComment)
+
+        if str(devicesfwupgradestatus[device_name[i]]) == 'INPROGRESS':
+            printFP('INFO - Device firmware upgrade is started. Current Status: INPROGRESS')
+        elif str(devicesfwupgradestatus[device_name[i]]) == 'FAILED':
+            fwstatusmsg = GetFWSatusMsgFromFWScreen(device_name[i])
+            testComment = 'Test Fail - Device firmware upgrade is failed immediately. Current Status: FAILED and FW Status msg: {}' .format(fwstatusmsg)
             return Global.FAIL, testComment
-        upgradeButton.click()
-    except:
-        printFP("After initiating upgrade, device cannot click upgrade again.")
 
     return Global.PASS, 'TEST PASS - Test started an upgrade for selected devices'
 
-def OTAPPostCheckVersion(input_file_path=None, device_names=None, target_version=None):
-    if input_file_path == None or device_names==None or target_version == None:
+def OTAPPostCheckVersionStatus(input_file_path=None, device_names=None, target_version=None, desiredOtapStatus=None):
+    if input_file_path == None or device_names==None or target_version == None or desiredOtapStatus == None:
         testComment = 'Missing an input parameter value for this test'
         printFP(testComment)
         return Global.FAIL, testComment
@@ -2067,11 +2075,13 @@ def OTAPPostCheckVersion(input_file_path=None, device_names=None, target_version
         printFP(testComment)
         return Global.FAIL, testComment
 
+    devicesfwupgradeversion = FilteredDataFromTableMapping('Serial Number', 'FW Version', 'device-management')
+
     for i in range(len(device_names)):
-        row = GetDevice(device_names[i])
-        swVerText = GetElement(row, By.XPATH, 'td[6]/span').text
-        if not swVerText == target_version:
-            testComment = '%s does not match target version %s' % (device_names, target_version)
+        device_name = device_names[i]
+        #swVerText = GetElement(row, By.XPATH, 'td[6]/span').text
+        if not target_version in devicesfwupgradeversion[device_name]:
+            testComment = '%s does not match target version %s. Found %s' % (device_name, target_version, devicesfwupgradeversion[device_name])
             printFP(testComment)
             return Global.FAIL, testComment
 
@@ -2084,11 +2094,19 @@ def OTAPPostCheckVersion(input_file_path=None, device_names=None, target_version
         printFP(testComment)
         return Global.FAIL, testComment
 
+    devicesfwupgradeversion = FilteredDataFromTableMapping('Serial Number', 'FW Version', 'device-management')
+    devicesfwupgradestatus = FilteredDataFromTableMapping('Serial Number', 'FW Upgrade Status', 'device-management')
+
     for i in range(len(device_names)):
-        row = GetDevice(device_names[i])
-        swVerText = GetElement(row, By.XPATH, 'td[5]/span').text
-        if not swVerText == target_version:
-            testComment = '%s does not match target version %s' % (device_names, target_version)
+        device_name = device_names[i]
+        #row = GetDevice(device_names[i])
+        #swVerText = GetElement(row, By.XPATH, 'td[5]/span').text
+        if not target_version in devicesfwupgradeversion[device_name]:
+            testComment = '%s does not match target version %s. Found %s' % (device_name, target_version, devicesfwupgradeversion[device_name])
+            printFP(testComment)
+            return Global.FAIL, testComment
+        if not desiredOtapStatus == str(devicesfwupgradestatus[device_name]):
+            testComment = 'Target version matched . but %s does not match desiredOtapStatus %s. Found %s' % (device_name, desiredOtapStatus, devicesfwupgradestatus[device_name])
             printFP(testComment)
             return Global.FAIL, testComment
 
@@ -2116,7 +2134,7 @@ def OTAPPollCurrentJobs(device_name=None, polltime = 20, target_version =None, d
             allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
         except:
             printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
-            return Global.FAIL, 'TEST FAIL - Exception occured while trying to get jobs in the current jobs Upgrade Page'
+            return Global.FAIL, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Upgrade Page'
 
         if len(allJobs) == 0:
             printFP("INFO - No upgrades were found.")
@@ -2145,11 +2163,20 @@ def OTAPPollCurrentJobs(device_name=None, polltime = 20, target_version =None, d
             status = GetElement(DeviceRow, By.TAG_NAME, 'a')
             status.click()
             time.sleep(1)
-            msgBox = GetElement(Global.driver, By.XPATH, "//div[@class='modal-content']")
-            msg = GetText(msgBox, By.CSS_SELECTOR, 'p.ng-binding')
-            time.sleep(2)
-            printFP('INFO - Detailed OTAP message: %s' % msg)
-            closeButton = GetElement(Global.driver, By.XPATH, "//button[text()='Close']")
+            fwupgradeprocesstitle = GetElement(Global.driver, By.XPATH, "//span[contains(@class, 'modal-title')]").text
+            printFP("INFO - Firmware Upgrade Process Title: %s" %fwupgradeprocesstitle)
+            if str(listOfDevices[n]) in fwupgradeprocesstitle:
+                printFP("INFO - Device name is matched in Firmware Upgrade Process Title")
+            else:
+                printFP("Test Fail - Device name is not matched in Firmware Upgrade Process Title")
+            time.sleep(1)
+            firmwareupgradeeachphasestatus = GetFirmwareUpgradeEachPhaseStatus()
+            try:
+                if any(str(firmwareupgradeeachphasestatus[x]) == 'error' for x in list(firmwareupgradeeachphasestatus)):
+                    phaseerrormessage = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'glyphicon-remove-circle')]/following-sibling::div[contains(@class, 'redFont')]").text
+            except Exception as e:
+                print e.message
+            closeButton = GetElement(Global.driver, By.XPATH, "//a[contains(@class, 'close-icon')]")
             closeButton.click()
             if not CheckIfStaleElement(closeButton):
                 printFP("INFO - Detailed OTAP message box did not close.")
@@ -2158,17 +2185,26 @@ def OTAPPollCurrentJobs(device_name=None, polltime = 20, target_version =None, d
                 pass
             else:
                 if jobStatus == desiredJobStatus and otapStatus == desiredOtapStatus:
-                    printFP("INFO - Device %s is finished and matched desired output." % listOfDevices[n])
+                    printFP("INFO - Firmware Upgrade job for the device %s is finished and matched desired output." % listOfDevices[n])
+                    if any(firmwareupgradeeachphasestatus[x] in ('inprogress', 'pending') for x in list(firmwareupgradeeachphasestatus)):
+                        printFP("INFO - Firmware Upgrade Phase of the device %s is still inprogress." % listOfDevices[n])
+                        pass
+                    elif any(str(firmwareupgradeeachphasestatus[x]) == 'error' for x in list(firmwareupgradeeachphasestatus)):
+                        result = Global.FAIL
+                        printFP("Test Fail - Job and Otap Status shows success. But one of Firmware Upgrade Phase of the device %s is failed." % listOfDevices[n])
+                    elif all(str(firmwareupgradeeachphasestatus[x]) == 'success' for x in list(firmwareupgradeeachphasestatus)):
+                        result = Global.PASS
+                        printFP("Test Pass - All Phases of firmware Upgrade process for the device %s is successful." % listOfDevices[n])
                 else:
                     result = Global.FAIL
-                    printFP("INFO - Device %s is finished and did not match desired output." % listOfDevices[n])
+                    printFP("INFO - Device %s is finished and did not match desired output. Inline Error Message: %s" % (listOfDevices[n], phaseerrormessage))
                 devicesDone += 1
 
         if devicesDone == len(device_name):
             break
         else:
-            printFP('INFO - Not all devices were complete .. waiting 60 seconds before checking again.')
-            time.sleep(60)
+            printFP('INFO - Not all devices were complete .. waiting 5 minutes before checking again.')
+            time.sleep(360)
             Global.driver.refresh()
 
     # Return of otap job failed
@@ -2187,7 +2223,7 @@ def OTAPPollCurrentJobs(device_name=None, polltime = 20, target_version =None, d
             result = Global.FAIL
             printFP("INFO - Upgraded OTAP version on Ample does not match target version for device %s." %listOfDevices[m])
 
-    return result, ('TEST PASS - Test upgraded with no issue.') if result == Global.PASS else ('TEST FAIL - Test did not upgrade properly and encountered issues.')
+    return result, ('TEST PASS - OTAP done successfully with no issue.') if result == Global.PASS else ('TEST FAIL - Test did not upgrade properly and encountered issues.')
 
 def OTAPAbort(input_file_path=None, device_name=None):
     if input_file_path == None or device_name == None:

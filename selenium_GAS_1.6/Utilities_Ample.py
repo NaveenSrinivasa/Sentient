@@ -4204,3 +4204,26 @@ def GetCurrentTableColumnNamesNotShown():
         tablecolumnnameslist.append(tablecolumnname)
 
     return tablecolumnnameslist
+
+
+def GetFWSatusMsgFromFWScreen(device_name):
+    GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
+    time.sleep(1)
+    fwstatusmsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body')]/p").text
+    ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
+    return fwstatusmsg
+
+
+def GetFirmwareUpgradeEachPhaseStatus():
+
+    firmwareupgradeeachphasestatus = {}
+    otapstatusframe = GetElement(Global.driver, By.XPATH, "//div[@class='otapStatusModel']")
+    otapstatus = GetElement(otapstatusframe, By.TAG_NAME, 'ul')
+    options = GetElements(otapstatus, By.XPATH, "li[@class='ng-scope']")
+    for option in options:
+        phasename = GetElement(option, By.XPATH, 'div[1]').text
+        phasestatus = GetElement(option, By.XPATH, 'div[2]').get_attribute('class')
+        phasestatus = phasestatus.split(' ')
+        firmwareupgradeeachphasestatus[phasename] = phasestatus[2]
+    printFP(firmwareupgradeeachphasestatus)
+    return firmwareupgradeeachphasestatus

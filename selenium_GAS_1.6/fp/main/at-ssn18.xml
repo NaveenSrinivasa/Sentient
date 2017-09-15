@@ -1,0 +1,37 @@
+<MasterTestSet PhysicalLayer="ip-link" LogFile="/tmp/fd02:dead:beef:2:213:5003:4d:9d6b_testset.log">
+    <Log Filter="LOG_DEBUG" />
+    <Master>
+        <Stack>
+            <LinkLayer IsMaster="true" LocalAddress="42362" RemoteAddress="128" UseConfirmations="false" AckTimeoutMS="5000" NumRetries="3" />
+            <AppLayer TimeoutMS="10000" MaxFragSize="2048" NumRetries="10" />
+        </Stack>
+        <MasterSettings AllowTimeSync="true" TaskRetryMS="5000" IntegrityPeriodMS="10000" UseNonStandardVtoTransferCode="true" />
+        <ScanList>
+            <ExceptionScan Class1="true" Class2="true" Class3="true" PeriodMS="10000" />
+        </ScanList>
+        <Unsol DoTask="true" Enable="true" Class1="true" Class2="true" Class3="true" />
+        <VtoPorts>
+            <VtoPort PhysicalLayer="vto-ssh-1"   Index="0" StartLocal="true"  OpenRetry="5000" />
+            <VtoPort PhysicalLayer="vto-ssh-2"   Index="1" StartLocal="true"  OpenRetry="5000" />
+            <VtoPort PhysicalLayer="vto-ssh-3"   Index="2" StartLocal="true"  OpenRetry="5000" />
+            <VtoPort PhysicalLayer="vto-ssh-4"   Index="3" StartLocal="true"  OpenRetry="5000" />
+            <VtoPort PhysicalLayer="vto-ssh-5"   Index="4" StartLocal="true"  OpenRetry="5000" />
+            <VtoPort PhysicalLayer="vto-rsync-1" Index="5" StartLocal="true"  OpenRetry="5000" />
+            <VtoPort PhysicalLayer="vto-http-1"  Index="6" StartLocal="false" OpenRetry="5000" />
+            <VtoPort PhysicalLayer="vto-rsync-2" Index="7" StartLocal="false" OpenRetry="5000" />
+        </VtoPorts>
+    </Master>
+    <PhysicalLayerList>
+        <!-- VTO router ports -->
+        <TCPServer Name="vto-ssh-1"   OpenRetryMS="5000" Endpoint="0.0.0.0"  Port="21181" />
+        <TCPServer Name="vto-ssh-2"   OpenRetryMS="5000" Endpoint="0.0.0.0"  Port="21182" />
+        <TCPServer Name="vto-ssh-3"   OpenRetryMS="5000" Endpoint="0.0.0.0"  Port="21183" />
+        <TCPServer Name="vto-ssh-4"   OpenRetryMS="5000" Endpoint="0.0.0.0"  Port="21184" />
+        <TCPServer Name="vto-ssh-5"   OpenRetryMS="5000" Endpoint="0.0.0.0"  Port="21185" />
+        <TCPServer Name="vto-rsync-1" OpenRetryMS="5000" Endpoint="0.0.0.0"  Port="21186" />
+        <TCPClient Name="vto-http-1"  OpenRetryMS="5000" Address="127.0.0.1" Port="21187"  />
+        <TCPClient Name="vto-rsync-2" OpenRetryMS="5000" Address="127.0.0.1" Port="21188" />
+        <!-- method to access the remote system -->
+	<TCPClient Name="ip-link" OpenRetryMS="5000" Address="fd02:dead:beef:3:213:5003:4d:9d6b" Port="20000" />
+    </PhysicalLayerList>
+</MasterTestSet>

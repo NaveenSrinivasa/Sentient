@@ -22,8 +22,7 @@ def SpawnBrowser(browser, platform):
         print('desired: %s' % desired)
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
-        print('session_id : %s' %session_id)
-        #driver.session_id = 'b19d6912-06f1-400f-a583-482678f3001f' # To connect with your desirable session
+        #driver.session_id = 'beffe830-4d48-4fea-a07f-2f8e9f83c474' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
@@ -40,7 +39,6 @@ def SpawnBrowser(browser, platform):
         desired['IE_ENSURE_CLEAN_SESSION'] = True
         print('desired: %s' % desired)
         if '11' in browser:
-            # driver = webdriver.Remote(command_executor='http://10.16.56.154:5555/wd/hub', desired_capabilities=desired)
             driver = webdriver.Remote(command_executor='http://172.20.3.50:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
             driver = webdriver.Remote(command_executor='http://172.20.3.49:5555/wd/hub', desired_capabilities=desired)

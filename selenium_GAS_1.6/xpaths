@@ -59,7 +59,7 @@ dev_man_unregister /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div[2]
 dev_man_unregister_close /html/body/div[4]/div/div/div[1]/span[2]/a
 dev_man_unregister_ok /html/body/div[4]/div/div/div[3]/button[1]
 dev_man_upgrade /html/body/div[1]/div/div/div/div[1]/header-sub-nav/div/div/div/div/div/ul/li[3]/a
-dev_upgrade_button /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[5]/div[2]/div[2]/div[1]/div[1]/button[1]
+dev_upgrade_button /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div[3]/div/div[2]/div[2]/div/span/div/button[1]
 dev_upgrade_col_btn /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[5]/div[2]/div[2]/div[2]/div/button
 dev_upgrade_cols /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[5]/div[2]/div[2]/div[2]/div/div
 dev_upgrade_days_menu /html/body/div[4]/div/div/div[2]/form/div[2]/span[1]/span[2]/single-select/div/ul
