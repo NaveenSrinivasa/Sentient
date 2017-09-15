@@ -270,7 +270,7 @@ def DeviceFilters(input_file_path=None, page=None):
     return result, 'TEST PASS - ' + testComment if result == Global.PASS else 'TEST FAIL - ' + testComment
 
 
-def NavigatePages(input_file_path=None, UpgradePage=False):
+def NavigatePages(input_file_path=None, UpgradePage=True):
     if not (input_file_path):
         testComment = 'Missing an input parameter value for this test'
         printFP(testComment)
@@ -1134,12 +1134,16 @@ def OTAPCheckOfflineDeviceUpgrade(input_file_path=None, device_name=None, waitOn
 
     status = GetElement(row, By.XPATH, 'td[4]/span')
     if status.get_attribute('class') == 'icon ion-checkmark-circled':
+        
         printFP("Device is currently in Online State..Changing it to Offline")
         UnregisterTest(input_file_path, [device_name], False, False)
         RegisterDevice(input_file_path, commserver, networkgroup, device_name, False)
     elif status.get_attribute('class') == 'icon glyphicon glyphicon-transfer':
         printFP("Device is currently in Unregistered State.. Changing it to Offline")
         RegisterDevice(input_file_path, commserver, networkgroup, device_name, False)
+    '''elif status.get_attribute('class') == 'icon ion-close-circled':
+        printFP("Device is currently in Offline State")'''
+
 
     GoToDevUpgrade()
     if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
@@ -1318,8 +1322,12 @@ def UnregisterTest(input_file_path=None, unregDev=None, checkRegisterButton=True
             row = GetDevice(unregDev[i])
             action = GetElement(row, By.XPATH, 'td[22]/div/span[4]/span')
             ActionChains(Global.driver).click(action).perform()
+            '''Unregister_button = GetElement(Global.driver, By.XPATH, "//button[text()='Unregister']")
+            Unregister_button.click()
+            time.sleep(1)'''
             confirmUnregister = GetElement(Global.driver, By.XPATH, "//button[text()='Ok']")
             confirmUnregister.click()
+            time.sleep(2)
             if not CheckIfStaleElement(confirmUnregister):
                 printFP("INFO - Unregister pop up did not disappear.")
     else:
@@ -1366,7 +1374,7 @@ def UnregisterTest(input_file_path=None, unregDev=None, checkRegisterButton=True
     #check if Unregistered
     result = Global.PASS
     Global.driver.refresh()
-    time.sleept(10)
+    time.sleep(10)
     for i in range(len(unregDev)):
         row = GetDevice(unregDev[i])
         icon = GetElement(row, By.XPATH, "td[4]/span")
@@ -1409,8 +1417,10 @@ def RegisterDevice(input_file_path=None, commserver=None, sgw_group_name=None, r
         try:
             sensorgatewayOptions = GetElement(Global.driver, By.XPATH, "//single-select[@options='commServerSelection.list']/div/button")
             sensorgatewayOptions.click()
+            time.sleep(2)
             sensorgateway = GetElement(Global.driver, By.XPATH, "//li[@ng-repeat='option in options']/a/span[text()='"+commserver+"']")
             sensorgateway.click()
+            time.sleep(2)
         except:
             printFP("INFO - Test ran into exception while trying to click on SGW. Refreshing page and ending test.")
             Global.driver.refresh()
@@ -1420,8 +1430,10 @@ def RegisterDevice(input_file_path=None, commserver=None, sgw_group_name=None, r
             try:
                 networkGroupButton = GetElement(Global.driver, By.XPATH, "//single-select[@options='groupNameSelection.list']/div/button")
                 networkGroupButton.click()
+                time.sleep(2)
                 networkGroupElement = GetElement(Global.driver, By.XPATH, "//li[@ng-repeat='option in options']/a/span[text()='"+sgw_group_name+"']")
                 networkGroupElement.click()
+                time.sleep(2)
             except:
                 printFP("INFO - Test ran into exception while trying to click on Network Group. Refreshing page and ending test.")
                 Global.driver.refresh()
@@ -1892,6 +1904,7 @@ def OTAPWrongUpdateSetting(input_file_path=None, device_name=None, target_versio
     if time_or_day == 'Day':
         Dates = ["Saturday", "Sunday", "Monday","Tuesday", "Wednesday", "Thursday", "Friday"]
         i = datetime.datetime.today().weekday()
+        print i
         #print datetime.datetime.today().weekday()
         #print Dates[i]
 

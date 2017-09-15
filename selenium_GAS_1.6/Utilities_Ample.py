@@ -443,6 +443,13 @@ def GoToConfigProp():
     time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['settings_config_prop'])
 
+def GoToFWUpgradeSettings():
+    Global.driver.refresh()
+    time.sleep(2)
+    GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['settings_fw'])
+
 def GoToEmailAlert():
     time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['dash_person_dropdown'])
@@ -1033,10 +1040,10 @@ def SelectDevice(serial):
 
     try:
         device = GetDevice(serial)
-		#checkbox = GetElement(device, By.XPATH, '/td[1]/input')
+        #checkbox = GetElement(device, By.XPATH, '/td[1]/input')
 
         checkbox = GetElement(device, By.TAG_NAME, 'input')
-		#printFP('checkbox %s ' % checkbox)
+        #printFP('checkbox %s ' % checkbox)
         time.sleep(1)
         SetCheckBox(checkbox, 'true')
         #checkbox.click()
@@ -4248,16 +4255,29 @@ def GetLatAndLonValuesOfSite(region, substation, feeder, site):
         return None, None
 
 
+def GetCurrentTableDisplayedColumnNames():
+
+    # Create a list
+    tablecolumnnameslist = []
+    html = Global.driver.page_source
+    Elements = soup(html, "lxml")
+    table = Elements.find('table')
+    tablehead = table.find('thead')
+    tablecolumnnames = tablehead.find_all('th', {"class" : "text-center sortable ng-scope"})
+
+    for div_tag in tablecolumnnames:
+        tablecolumnname = div_tag.text.strip().strip('\n')
+        tablecolumnnameslist.append(tablecolumnname)
+
+    return tablecolumnnameslist
+
+
 def GetCurrentTableColumnNamesNotShown():
 
     # Create a list
     tablecolumnnameslist = []
-
     html = Global.driver.page_source
-
     Elements = soup(html, "lxml")
-
-    # Get all dnp3 points table hidden column names
     table = Elements.find('table')
     tablehead = table.find('thead')
     tablecolumnnames = tablehead.find_all('th', class_=re.compile('ng-hide'))
@@ -4268,3 +4288,67 @@ def GetCurrentTableColumnNamesNotShown():
         tablecolumnnameslist.append(tablecolumnname)
 
     return tablecolumnnameslist
+
+def SelectFromTableColumnFilters(list_of_filters, state=True):
+
+    selectfilters = list(list_of_filters)
+    if state:
+        value = 'true'
+    else:
+        value = 'false'
+
+    time.sleep(2)
+
+    dropdownmenubutton = GetElement(Global.driver, By.XPATH, "//button[contains(@class, 'column-settings-btn')]")
+    time.sleep(2)
+    try:
+        JustClick(dropdownmenubutton)
+    except Exception as e:
+        print e.message
+        return False
+    time.sleep(1)
+
+    # Get all filters name
+    filterstmp = Global.driver.find_element_by_css_selector('.dropdown-menu.column-wrap')
+    time.sleep(1)
+    filters = filterstmp.find_elements_by_css_selector('.checkbox.column-label')
+
+    for filter in filters:
+        filterelement = GetElement(filter, By.CLASS_NAME, 'column-title')
+        time.sleep(1)
+        filterName = filterelement.text
+        if filterName in selectfilters:
+            printFP("Column Filter Name : " + filterName)
+            inputElement = GetElement(filter, By.TAG_NAME, 'input')
+            inputType = inputElement.get_attribute('type')
+            inputType
+            if 'checkbox' in inputType:
+                SetCheckBox(inputElement, value)
+                #JustClick(dropdownmenubutton)
+                TableColumnNamesNotShown = GetCurrentTableColumnNamesNotShown()
+                printFP(TableColumnNamesNotShown)
+                if state and filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Fail - checked filter " + filterName + " is not shown in the table column header"
+                    printFP(testComment)
+                elif state and not filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Pass - checked filter " + filterName + " is shown in the table column header"
+                    printFP(testComment)
+                elif not state and filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Pass - unchecked filter " + filterName + " is not shown in the table column header"
+                    printFP(testComment)
+                elif not state and not filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Fail - unchecked filter " + filterName + " is shown in the table column header"
+                    printFP(testComment)
+            else:
+                printFP('INFO - Do not recognize this input type')
+
+    JustClick(dropdownmenubutton)
+    if state:
+        testComment = 'INFO - Given filters are selected successfully'
+    else:
+        testComment = 'INFO - Given filters are unselected successfully'
+
+    printFP(testComment)
+    return True
+
+>>>>>>> c7bad6e... Firmware Upgrade test cases 15/09/2017
