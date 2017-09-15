@@ -1,0 +1,10 @@
+{
+
+	"Region": "SelTestReg1",
+	"Substation": "SelTestSub2",
+	"Feeder": "SelTestFeeder1",
+	"Site": "SelTestSite1",
+	"Phase": "A",
+	"Device State": "Other",
+	"Description": "Automation Testing"
+}

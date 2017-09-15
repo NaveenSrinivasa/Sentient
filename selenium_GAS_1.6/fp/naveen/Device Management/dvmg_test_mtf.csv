@@ -1,0 +1,2 @@
+Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
+dvmg_test_region,dvmg_test_substation1,dvmg_test_feeder1,dvmg_test_site1,A,serial_site1A,MM3,1.4.3,corgi,-115.149004,31.735846,135000000000000000000000,fcba::243:5003:4d:a18a,901,note1,20000,sensor_gw1_name,0-00001-05,,SSN,networkgroup1_name

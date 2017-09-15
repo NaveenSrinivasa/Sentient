@@ -1,0 +1,210 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "seleniumtest",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/seleniumtest.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "changeeverything",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/changeeverything.json"
+        },
+        {
+            "method_name": "ValidateProfileFieldValues",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "comment": "Validate Boundary Values of each Manage Profile form fields",
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/DNP3_Point_Map v2.11.0.csv"
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/at-ssn19.csv",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/d1_reg_sub_names.json",
+            "device_name": ["at-ssn19"],
+            "config": "changeeverything",
+            "actionButton": true
+        },
+        {
+            "method_name": "VerifyDefaultManagePage",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "method_name": "VerifyDefaultSelectedProfile",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "method_name": "VerifyProfileTabs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile_name": "seleniumtest"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "AccDefault",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/profiles/AccDefault.json"
+        },
+        {
+            "method_name": "VerifyProfileTabs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile_name": "AccDefault"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass" : false,
+            "profile_name": "AccDefault",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/profiles/AccDefault.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/profiles/AccDefault.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass": false,
+            "profile_name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/profiles/AccDefault.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "Acc Default Test",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/profiles/AccDefault.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": false,
+            "expect_pass": false,
+            "profile_name": "Acc@Default@Test",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/profiles/AccDefault.json"
+        },
+        {
+            "method_name": "CloneProfile",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "AccDefault",
+            "clone_profile_name" : "hello2"
+        },
+        {
+            "method_name": "CloneProfile",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "profile_name": "AccDefault",
+            "clone_profile_name" : "AccDefault"
+        },
+        {
+            "method_name": "SaveProfileWithoutChanges",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile_name": "AccDefault"
+        },
+        {
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "Acc Default Test"
+        },
+        {
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "hello2"
+        },
+        {
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "AccDefault"
+        },
+        {
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "changeeverything"
+        },
+        {
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "seleniumtest"
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Manage Profiles/d1_reg_sub_names.json",
+            "device_name": ["at-ssn19"]
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

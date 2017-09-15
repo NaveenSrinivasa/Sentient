@@ -1,0 +1,2 @@
+Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
+SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite1,A,at-ssn19,MM3,2.4.3,corgi,42.7577,-75.9857,00:13:50:03:00:4D:9F:D1,fd02:dead:beef:2:213:5003:4d:9fd1,1000,note1,20000,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,

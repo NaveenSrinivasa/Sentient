@@ -2,54 +2,54 @@
     "Tests":
     [
         {
-            "test_name": "Login",
+            "method_name": "Login",
             "skip": false,
             "expect_pass": true,
             "username": "username_valid",
             "password": "password_valid"
         },
         {
-            "test_name": "GoToDevman",
+            "method_name": "GoToDevman",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "GoToDevmanUp",
+            "method_name": "GoToDevmanUp",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "GoToDevmanConfig",
+            "method_name": "GoToDevmanConfig",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "GoToLineMonitoring",
+            "method_name": "GoToLineMonitoring",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "GoToDashBoard",
+            "method_name": "GoToDashBoard",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "CurrentJobsConfig",
+            "method_name": "CurrentJobsConfig",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "CurrentJobsUpgrade",
+            "method_name": "CurrentJobsUpgrade",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "ManageProfile",
+            "method_name": "ManageProfile",
             "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "Logout",
+            "method_name": "Logout",
             "skip": false,
             "expect_pass": true
         }

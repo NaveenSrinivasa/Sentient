@@ -23,7 +23,7 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         print('session_id : %s' %session_id)
-        #driver.session_id = '63e9c0de-f62a-46c3-81aa-26e2db7c99a3' # To connect with your desirable session
+        driver.session_id = 'd7e90404-2fed-4f3c-811e-3c74dcd61873' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
@@ -42,7 +42,6 @@ def SpawnBrowser(browser, platform):
         if '11' in browser:
             # driver = webdriver.Remote(command_executor='http://10.16.56.154:5555/wd/hub', desired_capabilities=desired)
             driver = webdriver.Remote(command_executor='http://172.20.3.50:5555/wd/hub', desired_capabilities=desired)
-            # driver = webdriver.Remote(command_executor='http://10.16.16.217:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
             driver = webdriver.Remote(command_executor='http://172.20.3.49:5555/wd/hub', desired_capabilities=desired)
     return driver
@@ -130,9 +129,6 @@ def FormatParams(dictParams):
     i = 0
     for key in dictParams:
         i += 1
-        #if i > 3:
-           # params += '\n, '
-            #i = 1
         params += '%s=%s;  ' % (key, PrettyParam(dictParams[key]))
     return params
 
@@ -149,7 +145,6 @@ def StartSims(inputfp):
     cmd = 'mv %s/MTF.csv /tmp/MTF.csv' % pathToSimulators
     printFP(cmd)
     os.system(cmd)
-    #sims.close()
 
 def GenerateXPATHDictionary(xpath_file_path):
     # open xpath dictionary
@@ -171,10 +166,12 @@ def CreateDeviceDictionary(info):
     devDataDic['product'] = info[6]
     devDataDic['swversion'] = info[7]
     devDataDic['platform'] = info[8]
-    print info[9]
-    devDataDic['lat'] = float(info[9])
-    print devDataDic['lat']
-    devDataDic['lon'] = float(info[10])
+    if not info[9] or info[9] is None or not info[10] or info[10] is None:
+        devDataDic['lon'] = info[9]
+        devDataDic['lat'] = info[10]
+    else:
+        devDataDic['lon'] = float(info[9])
+        devDataDic['lat'] = float(info[10])
     devDataDic['mac'] = info[11]
     devDataDic['ipaddr'] = info[12]
     devDataDic['dnpaddr'] = int(info[13])
@@ -184,6 +181,7 @@ def CreateDeviceDictionary(info):
     devDataDic['sei'] = info[17]
     devDataDic['networktype'] = info[19]
     devDataDic['networkgroupname'] = info[20]
+    devDataDic['devicestate'] = info[21]
 
     return devDataDic
 
@@ -217,11 +215,9 @@ def DeviceDictionaryForPreSetUp(info, device):
     devDataDic[prefix + 'networktype'] = str(info[19])
     devDataDic[prefix + 'networkgroupname'] = str(info[20])
 
-    #print ('devDataDic: %s' %devDataDic)
     return devDataDic
 
 def CreateAllDevicesDictionary(devData):
-    #print devData
     for line in devData:
         info = line.strip('\n').split(',')
         serial = info[5]
@@ -235,7 +231,7 @@ def CreateAllDevicesDictionary(devData):
 
 def TakeScreenshot():
     currenttime = time.strftime("%b_%d_%Y__%H_%M_%S")
-    Global.driver.save_screenshot('%s/%s_%s.png' %(Global.screenshotsPath, Global.currenttest_name, currenttime))
+    Global.driver.save_screenshot('%s/%s_%s.png' %(Global.screenshotsPath, Global.currentmethod_name, currenttime))
     time.sleep(2)
 
 def BackupScreenshotsAndTestReport(src):
@@ -292,7 +288,6 @@ def BackupScreenshotsAndTestReport(src):
 
         for logfile in os.listdir(src_level_down + '/log'):
             logfilepath = os.path.join(src_level_down + '/log/', logfile)
-            print logfilepath
             os.remove(logfilepath)
 
         for filename in os.listdir(src):   # Cleaning up old screenshots from screenshots folder
@@ -302,17 +297,19 @@ def BackupScreenshotsAndTestReport(src):
             except OSError:
                 os.remove(filepath)
     else:
-        print 'Not found given screenshot path directory to back up screenshots : %s' % src
+        print('Not found given screenshot path directory to back up screenshots : %s' % src)
 
 def FindAndReplace(directory, find, replace, filePattern):
-    if 'connections.json' in filePattern:
-        filename = 'connections.json'
-        filepath = os.path.join(directory, filename)
+    if 'Utilities_Framework.py' in filePattern or 'connections.json' in filePattern or 'configurations.json' in filePattern:
+        filepath = os.path.join(directory, filePattern)
         #print(filepath)
+        time.sleep(2)
         with open(filepath) as f:
             s = f.read()
         #print('find: %s' %find)
+        time.sleep(3)
         #print('replace: %s' %replace)
+        time.sleep(3)
         s = s.replace(find, replace)
         with open(filepath, "w") as f:
             f.write(s)
@@ -364,13 +361,11 @@ def InitialDirectorySetup(src):
 def FilePathAndInputDataSetup(userdefinedvariables, directory):
     if directory == 'none':
         directory = userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'
-    #print('directory:%s' %directory)
     for key, value in userdefinedvariables.items():
-        if not key == 'devices' and not key == 'browser_name' and not key == 'platform_name':
+        if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not key == '172.20.3.50':
             FindAndReplace(directory, key, value, "*")
         elif key == 'browser_name':
             for i in range(len(userdefinedvariables['browser_name'])):
-                device = userdefinedvariables['browser_name'][i]
                 if i==0:
                     tmpvalue = '"' + userdefinedvariables['browser_name'][i] + '",'
                 else:
@@ -380,7 +375,6 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
             FindAndReplace(directory, key, newvalue, "connections.json")
         elif key == 'platform_name':
             for i in range(len(userdefinedvariables['platform_name'])):
-                device = userdefinedvariables['platform_name'][i]
                 if i==0:
                     tmpvalue = '"' + userdefinedvariables['platform_name'][i] + '",'
                 else:
@@ -388,5 +382,15 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                 value = tmpvalue
             newvalue = value[:-1]
             FindAndReplace(directory, key, newvalue, "connections.json")
-
-
+        elif key == 'email_recipients':
+            for i in range(len(userdefinedvariables['email_recipients'])):
+                if i==0:
+                    tmpvalue = '"' + userdefinedvariables['email_recipients'][i] + '",'
+                else:
+                    tmpvalue = value + '"' + userdefinedvariables['email_recipients'][i] + '",'
+                value = tmpvalue
+            newvalue = value[:-1]
+            FindAndReplace(directory, key, newvalue, "configurations.json")
+        elif key == '172.20.3.50':
+            directory = userdefinedvariables['seleniumDir']
+            FindAndReplace(directory, key, value, "Utilities_Framework.py")

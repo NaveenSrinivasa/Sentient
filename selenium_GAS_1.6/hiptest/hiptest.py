@@ -293,5 +293,5 @@ class HipTest:
         for test in tests['data']:
             test_id = int(test['id'])
             name = test['attributes']['name'].lower()
-            test_name = '_'.join(name.split()).replace('-','')
-            self.id_pairs[test_name] = test_id
+            method_name = '_'.join(name.split()).replace('-','')
+            self.id_pairs[method_name] = test_id

@@ -4,6 +4,10 @@ PASS = 1
 SKIP = 2
 NA = 3
 
+testCount = 0
+totalPass = 0
+totalFail = 0
+
 # path to the mtf file where device information is held
 mtfPath = ''
 
@@ -31,7 +35,7 @@ tmpPath = ''
 screenshots_path = ''
 
 # current test cases name
-currenttest_name = ''
+currentmethod_name = ''
 
 # path to newly created profiles name file
 tmpnewprofilesPath = ''

@@ -1,0 +1,362 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "FlashDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
+            "target_version": "2.2.1-release",
+            "ipaddr": "",
+            "portNumber": "21201",
+            "networktype": "SSN"
+        },
+        {
+            "method_name": "FlashDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
+            "target_version": "2.2.1-release",
+            "ipaddr": "",
+            "portNumber": "21450",
+            "networktype": "4G"
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/at-ssn19.csv",
+            "wait_for_online": true
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/cll24.csv",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "CheckDefaultUpgradePage",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_list": ["at-ssn19"]
+        },
+        {
+            "method_name": "DeviceFilters",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "page": "Upgrade"
+        },
+        {
+            "comment": "Description - Performs a search on the Upgrade Page for a name(string)",
+            "comment": "Parameter - negtest: determine if it is a negative test or not. True if negative test, or False else. Default Value is False.",
+            "comment": "Parameter - searchUpgrade: string to search for in Upgrade Page. Required. Default Value: None.",
+            "method_name": "SearchBarTestUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "searchKeyword": "at-ssn19",
+            "region_name": "SelTestReg1"
+        },
+        {
+            "method_name": "UpgradeSettingsTest",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "upgrade_settings": {
+                "day": "Thursday",
+                "from_time": "11:00PM",
+                "to_time": "7:59PM",
+                "num_retries": 3
+            }
+        },
+        {
+            "method_name": "OTAPWrongUpdateSetting",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn19"],
+            "target_version" : "2.3.0",
+            "actionButton" : false,
+            "time_or_day": "Day"
+        },
+        {
+            "method_name": "OTAPWrongUpdateSetting",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn19"],
+            "target_version" : "2.3.0",
+            "actionButton" : false,
+            "time_or_day": "Time"
+        },
+        {
+            "method_name": "UpgradeSettingsTest",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "upgrade_settings": {
+                "day": "Thursday",
+                "from_time": "12:00AM",
+                "to_time": "11:59PM",
+                "num_retries": 5
+            }
+        },
+        {
+            "method_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn19", "cll24"],
+            "target_version" : "2.4.1",
+            "actionButton" : false
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["cll24"],
+            "target_version": "2.4.1",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "method_name": "configureDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name": ["at-ssn19"],
+            "config": "default"
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn19"],
+            "target_version": "2.4.1",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "method_name": "OTAPPostCheckVersion",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_names": ["at-ssn19"],
+            "target_version": "2.4.1"
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name": ["at-ssn19"]
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name": ["cll24"]
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/at-ssn19.csv",
+            "wait_for_online": true
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/cll24.csv",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn19","cll24"],
+            "target_version" : "2.4.3",
+            "actionButton" : false
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn19","cll24"],
+            "target_version": "2.4.3",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "method_name": "FlashDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
+            "target_version": "2.2.1-release",
+            "ipaddr": "",
+            "portNumber": "21201",
+            "networktype": "SSN"
+        },
+        {
+            "method_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn19"],
+            "target_version" : "2.4.1",
+            "actionButton" : false
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn19"],
+            "target_version": "2.4.1",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "method_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name" : ["at-ssn19"],
+            "target_version" : "2.4.3",
+            "actionButton" : false
+        },
+        {
+            "method_name": "OTAPAbort",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name": "at-ssn19"
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn19"],
+            "target_version": "2.4.1",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "ABORTED",
+            "polltime": 50
+        },
+        {
+            "method_name": "OTAPRetryUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name": "at-ssn19"
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["at-ssn19"],
+            "target_version": "2.4.3",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 30
+        },
+        {
+            "method_name": "OTAPCheckOfflineDeviceUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name": "at-ssn19",
+            "waitOnline": false,
+            "commserver": "host46_sgw1",
+            "networkgroup": "seleniumtest_group2"
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name": ["at-ssn19"]
+        },
+        {
+            "method_name": "OTAPEmptyData",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": false,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json"
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json",
+            "device_name": ["cll24"]
+        },
+        {
+            "method_name": "OTAPEmptyData",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Device Upgrade/d1_reg_name.json"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "FaultEventsDebug",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "comment": "Debug",
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/region_substation_feeder_site_2_19.json"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

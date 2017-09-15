@@ -1,0 +1,406 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "createfault",
+            "profile_json": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/createfault.json"
+        },
+        {
+            "method_name": "DefaultCustomGroups",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true
+        },
+        {
+            "method_name": "AddRegion",
+            "hiptest_name": "Create Region - Positive",
+            "skip": false,
+            "expect_pass": true,
+            "regionName": "grouptreetestreg",
+            "node": "SentientEnergy"
+        },
+        {
+            "method_name": "AddRegion",
+            "hiptest_name": "Create Node - Duplicate Name",
+            "skip": true,
+            "expect_pass": false,
+            "regionName": "grouptreetestreg",
+            "node": "SentientEnergy"
+        },
+        {
+            "method_name": "AddRegion",
+            "hiptest_name": "Create Node - Empty Name",
+            "skip": true,
+            "expect_pass": false,
+            "regionName": " ",
+            "node": "SentientEnergy"
+        },
+        {
+            "method_name": "AddRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": false,
+            "regionName": "#;--",
+            "node": "SentientEnergy"
+        },
+        {
+            "method_name": "AddSubstation",
+            "hiptest_name": "Create Substation - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "substationName": "grouptreetestsub",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddSubstation",
+            "hiptest_name": "Create Node - Duplicate Name",
+            "skip": true,
+            "expect_pass": false,
+            "substationName": "grouptreetestsub",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddSubstation",
+            "hiptest_name": "Create Node - Empty Name",
+            "skip": true,
+            "expect_pass": false,
+            "substationName": " ",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddSubstation",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": false,
+            "substationName": "em_element",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddFeeder",
+            "hiptest_name": "Create Feeder - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "feederName": "grouptreetestfeeder",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddFeeder",
+            "hiptest_name": "Create Feeder - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "feederName": "EmptyFeeder",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddFeeder",
+            "hiptest_name": "Create Node - Duplicate Name",
+            "skip": true,
+            "expect_pass": false,
+            "feederName": "grouptreetestfeeder",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddFeeder",
+            "hiptest_name": "Create Node - Empty Name",
+            "skip": true,
+            "expect_pass": false,
+            "feederName": " ",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddFeeder",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": false,
+            "feederName": "em_element",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg"
+        },
+        {
+            "method_name": "AddSite",
+            "hiptest_name": "Create Site - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "feeder": "grouptreetestfeeder",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg",
+            "siteName": "grouptreetestsite",
+            "latitude": "89.99",
+            "longitude": "55.44"
+        },
+        {
+            "method_name": "AddSite",
+            "hiptest_name": "Create Site - Duplicate Location",
+            "skip": true,
+            "expect_pass": false,
+            "feeder": "grouptreetestfeeder",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg",
+            "siteName": "grouptreetestsite2",
+            "latitude": "89.99",
+            "longitude": "55.44"
+        },
+        {
+            "method_name": "AddSite",
+            "hiptest_name": "Create Site - Invalid Location",
+            "skip": true,
+            "expect_pass": false,
+            "feeder": "grouptreetestfeeder",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg",
+            "siteName": "grouptreetestsite3",
+            "latitude": "-91",
+            "longitude": "91"
+        },
+        {
+            "method_name": "AddSite",
+            "hiptest_name": "Create Node - Duplicate Name",
+            "skip": true,
+            "expect_pass": false,
+            "feeder": "grouptreetestfeeder",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg",
+            "siteName": "grouptreetestsite",
+            "latitude": "88",
+            "longitude": "55"
+        },
+        {
+            "method_name": "AddSite",
+            "hiptest_name": "Create Node - Empty Name",
+            "skip": true,
+            "expect_pass": false,
+            "feeder": "grouptreetestfeeder",
+            "substation": "grouptreetestsub",
+            "region": "grouptreetestreg",
+            "siteName": " ",
+            "latitude": "8",
+            "longitude": "5"
+        },
+        {
+            "method_name": "AddDeviceToTree",
+            "hiptest_name": "Add Device - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/reg_sub_feeder_site_ToAddDevice.json",
+            "device_detail_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/add_device_d1_unregistered.json",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/newly_created_reg_sub_feeder_names.json",
+            "device_name": ["at-ssn19"]
+        },
+        {
+            "method_name": "AddDeviceToTree",
+            "hiptest_name": "Add Device - Positive",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/reg_sub_feeder_site_ToAddDevice.json",
+            "device_detail_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/add_device_d1.json",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "configureDevice",
+            "hiptest_name": "Apply Profile",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/newly_created_reg_sub_feeder_site_names.json",
+            "device_name": ["at-ssn19"],
+            "config": "createfault",
+            "waitforconfiguration": false
+        },
+        {
+            "method_name": "VerifyDNPChanges",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/newly_created_reg_sub_feeder_site_names.json",
+            "device_name": ["at-ssn19"],
+            "polltime" : 100
+        },
+        {
+            "method_name": "SearchandSelectGroupTree",
+            "hiptest_name": "Search Group Tree - Autocomplete",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/newly_created_reg_sub_feeder_names.json",
+            "searchFeeder": "EmptyFeeder"
+        },
+        {
+            "method_name": "JumpFromDashToGroupTree",
+            "hiptest_name": "Jump from Top 10 Faults Panel to Expand Group Tree Node",
+            "skip": true,
+            "expect_pass": true
+        },
+        {
+            "method_name": "HideGroupTree",
+            "hiptest_name": "Hide Group Tree",
+            "skip": true,
+            "expect_pass": true
+        },
+        {
+            "method_name": "RefreshGroupTree",
+            "hiptest_name": "Refresh Group Tree",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/newly_created_reg_sub_feeder_site_names.json",
+            "selectedNodeName": "grouptreetestsite",
+            "typeofNode": "Site"
+        },
+        {
+            "method_name": "VerifyOrganizationDetails",
+            "hiptest_name": "View Organization Details",
+            "skip": true,
+            "expect_pass": true
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "Delete Device- managed devices",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/newly_created_reg_sub_feeder_site_names.json",
+            "device_name": ["at-ssn19"]
+        },
+        {
+            "method_name": "SearchBarTreeView",
+            "hiptest_name": "Search Group Tree - Node expands and collapses",
+            "skip": true,
+            "expect_pass": true,
+            "searchKeyword": "grouptree"
+        },
+        {
+            "method_name": "SearchBarTreeView",
+            "hiptest_name": "Search Group Tree - Non-existent node",
+            "skip": true,
+            "expect_pass": false,
+            "searchKeyword": "PPPP77"
+        },
+        {
+            "method_name": "EditNode",
+            "hiptest_name": "Edit Node without Saving",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_region.json",
+            "node_type": "Region",
+            "title": "grouptreetestreg45",
+            "save": false
+        },
+        {
+            "method_name": "EditNode",
+            "hiptest_name": "Edit Node",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_region.json",
+            "node_type": "Region",
+            "title": "grouptreetestreg45",
+            "save": true
+        },
+        {
+            "method_name": "EditNode",
+            "hiptest_name": "Edit Node without Saving",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_substation.json",
+            "node_type": "Substation",
+            "title": "grouptreetestsub45",
+            "save": false
+        },
+        {
+            "method_name": "EditNode",
+            "hiptest_name": "Edit Node",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_substation.json",
+            "node_type": "Substation",
+            "title": "grouptreetestsub45",
+            "save": true
+        },
+        {
+            "method_name": "EditNode",
+            "hiptest_name": "Edit Node without Saving",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_feeder.json",
+            "node_type": "Feeder",
+            "title": "grouptreetestfeeder45",
+            "save": false
+        },
+        {
+            "method_name": "EditNode",
+            "hiptest_name": "Edit Node",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_feeder.json",
+            "node_type": "Feeder",
+            "title": "grouptreetestfeeder45",
+            "save": true
+        },
+        {
+            "method_name": "EditNode",
+            "hiptest_name": "Edit Node without Saving",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_site.json",
+            "node_type": "Site",
+            "site_details": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_site_data.json",
+            "save": false
+        },
+        {
+            "method_name": "EditNode",
+            "hiptest_name": "Edit Node",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_site.json",
+            "node_type": "Site",
+            "site_details": "/home/naveen/git/qa-selenium/selenium_GAS_1.6/fp/naveen_Sep_15_2017__15_46_35/Group Tree/edit_site_name_and_data.json",
+            "save": true
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "Delete Node",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "grouptreetestreg45"
+        },
+        {
+            "method_name": "SwitchTabsWhileSearching",
+            "hiptest_name": "Switch Tabs to Clear Search Text",
+            "skip": true,
+            "expect_pass": true,
+            "searchKeyword": "hello!"
+        },
+        {
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "createfault"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true
+        }
+    ]
+}
