@@ -443,6 +443,13 @@ def GoToConfigProp():
     time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['settings_config_prop'])
 
+def GoToFWUpgradeSettings():
+    Global.driver.refresh()
+    time.sleep(2)
+    GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['settings_fw'])
+
 def GoToEmailAlert():
     time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['dash_person_dropdown'])
@@ -1033,10 +1040,10 @@ def SelectDevice(serial):
 
     try:
         device = GetDevice(serial)
-		#checkbox = GetElement(device, By.XPATH, '/td[1]/input')
+        #checkbox = GetElement(device, By.XPATH, '/td[1]/input')
 
         checkbox = GetElement(device, By.TAG_NAME, 'input')
-		#printFP('checkbox %s ' % checkbox)
+        #printFP('checkbox %s ' % checkbox)
         time.sleep(1)
         SetCheckBox(checkbox, 'true')
         #checkbox.click()
@@ -1464,6 +1471,59 @@ def FilteredDataFromTable(columnname, pagename):
 
     printFP(columnnamevalueslist)
     return columnnamevalueslist
+
+
+def FilteredDataFromTableMapping(columnname1, columnname2, pagename):
+
+    if pagename == "line-monitoring":
+        keyword = 'line-monitoring'
+    elif pagename == "device-management" or pagename == "device-management-upgrade":
+        keyword = 'device-management'
+    else:
+        printFP('NoDataAvailable: Unable to find the requested Page')
+        return None
+
+    columnorder = GetTableColumnOrder(keyword)
+
+    column_1_position = columnorder[columnname1]
+
+    column_2_position = columnorder[columnname2]
+
+    # Create a dict
+    valuesmappinglist = {}
+    columnname1value = ''
+    columnname2value = ''
+
+    html = Global.driver.page_source
+
+    FilterElements = soup(html, "lxml")
+
+    # find Page view
+    page = FilterElements.find('div', class_=re.compile(keyword))
+
+    if page.find('table'):
+        tabledata = page.find('table')
+        # Get all rows
+        rows = tabledata.find_all('tr', class_=re.compile('row'))
+        for row in rows:
+            if pagename == 'device-management':
+                n=0
+            else:
+                n=1
+            for td_tag in row:
+                if hasattr(td_tag, 'class'):
+                    if n == column_1_position:
+                        value = td_tag.find('span').text.strip()
+                        columnname1value = value
+                    elif n == column_2_position:
+                        value = td_tag.find('span').text.strip()
+                        columnname2value = value
+                    n = n+1
+                if columnname1value and columnname2value:
+                    valuesmappinglist[columnname1value] = columnname2value
+
+    printFP(valuesmappinglist)
+    return valuesmappinglist
 
 
 def SelectYearMonthAndDateFromCalendar(year, month, date):
@@ -4156,3 +4216,137 @@ def SearchJobLink(device_names):
         return False
     else:
         return True
+
+
+def GetOverrideGPSStatus(region, substation, feeder, site):
+    GoToDevMan()
+    time.sleep(5)
+    GetSiteFromTop(region, substation, feeder, site)
+    siteelement = GetSite(site)
+    RightClickElement(siteelement)
+    time.sleep(1)
+    SelectFromMenu(Global.driver, By.CLASS_NAME, 'pull-left', 'Edit')
+    time.sleep(2)
+    overridegpsswitch = GetElement(Global.driver, By.CLASS_NAME, 'toggle-switch-animate')
+    classname = overridegpsswitch.get_attribute('class')
+    time.sleep(1)
+    if "switch-on" in classname:
+        return True
+    elif "switch-off" in classname:
+        return False
+
+def GetLatAndLonValuesOfSite(region, substation, feeder, site):
+    GoToDevMan()
+    time.sleep(5)
+    GetSiteFromTop(region, substation, feeder, site)
+    siteelement = GetSite(site)
+    RightClickElement(siteelement)
+    time.sleep(1)
+    SelectFromMenu(Global.driver, By.CLASS_NAME, 'pull-left', 'Edit')
+    time.sleep(2)
+    overridegpsswitch = GetElement(Global.driver, By.CLASS_NAME, 'toggle-switch-animate')
+    classname = overridegpsswitch.get_attribute('class')
+    time.sleep(1)
+    if not 'switch-off' in classname:
+        sitelatitude = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Latitude']").get_attribute('value')
+        sitelongitude = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Longitude']").get_attribute('value')
+        return sitelatitude, sitelongitude
+    else:
+        return None, None
+
+def GetCurrentTableDisplayedColumnNames():
+
+    # Create a list
+    tablecolumnnameslist = []
+    html = Global.driver.page_source
+    Elements = soup(html, "lxml")
+    table = Elements.find('table')
+    tablehead = table.find('thead')
+    tablecolumnnames = tablehead.find_all('th', {"class" : "text-center sortable ng-scope"})
+
+    for div_tag in tablecolumnnames:
+        tablecolumnname = div_tag.text.strip().strip('\n')
+        tablecolumnnameslist.append(tablecolumnname)
+
+    return tablecolumnnameslist
+
+
+def GetCurrentTableColumnNamesNotShown():
+
+    # Create a list
+    tablecolumnnameslist = []
+    html = Global.driver.page_source
+    Elements = soup(html, "lxml")
+    table = Elements.find('table')
+    tablehead = table.find('thead')
+    tablecolumnnames = tablehead.find_all('th', class_=re.compile('ng-hide'))
+
+    for div_tag in tablecolumnnames:
+        # Add each hidden column names to the list
+        tablecolumnname = div_tag.text.strip().strip('\n')
+        tablecolumnnameslist.append(tablecolumnname)
+
+    return tablecolumnnameslist
+
+def SelectFromTableColumnFilters(list_of_filters, state=True):
+
+    selectfilters = list(list_of_filters)
+    if state:
+        value = 'true'
+    else:
+        value = 'false'
+
+    time.sleep(2)
+
+    dropdownmenubutton = GetElement(Global.driver, By.XPATH, "//button[contains(@class, 'column-settings-btn')]")
+    time.sleep(2)
+    try:
+        JustClick(dropdownmenubutton)
+    except Exception as e:
+        print e.message
+        return False
+    time.sleep(1)
+
+    # Get all filters name
+    filterstmp = Global.driver.find_element_by_css_selector('.dropdown-menu.column-wrap')
+    time.sleep(1)
+    filters = filterstmp.find_elements_by_css_selector('.checkbox.column-label')
+
+    for filter in filters:
+        filterelement = GetElement(filter, By.CLASS_NAME, 'column-title')
+        time.sleep(1)
+        filterName = filterelement.text
+        if filterName in selectfilters:
+            printFP("Column Filter Name : " + filterName)
+            inputElement = GetElement(filter, By.TAG_NAME, 'input')
+            inputType = inputElement.get_attribute('type')
+            inputType
+            if 'checkbox' in inputType:
+                SetCheckBox(inputElement, value)
+                #JustClick(dropdownmenubutton)
+                TableColumnNamesNotShown = GetCurrentTableColumnNamesNotShown()
+                printFP(TableColumnNamesNotShown)
+                if state and filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Fail - checked filter " + filterName + " is not shown in the table column header"
+                    printFP(testComment)
+                elif state and not filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Pass - checked filter " + filterName + " is shown in the table column header"
+                    printFP(testComment)
+                elif not state and filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Pass - unchecked filter " + filterName + " is not shown in the table column header"
+                    printFP(testComment)
+                elif not state and not filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Fail - unchecked filter " + filterName + " is shown in the table column header"
+                    printFP(testComment)
+            else:
+                printFP('INFO - Do not recognize this input type')
+
+    JustClick(dropdownmenubutton)
+    if state:
+        testComment = 'INFO - Given filters are selected successfully'
+    else:
+        testComment = 'INFO - Given filters are unselected successfully'
+
+    printFP(testComment)
+    return True
+
