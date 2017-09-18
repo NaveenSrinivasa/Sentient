@@ -1,11 +1,11 @@
 {
-    "Profile Name": "changeeverything",
+    "Profile Name": "changeselenium2",
     "cfciData":
     {
-        "cFCI DiDt limit": "300",
+        "cFCI DiDt limit": "140",
         "cFCI LED latch": "true",
         "cFCI loss of source enabled latch": "true",
-        "cFCI normal minimum duration": "80"
+        "cFCI normal minimum duration": "82"
     },
     "logiData":
     {

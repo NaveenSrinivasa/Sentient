@@ -122,153 +122,68 @@ def ScaleConfigureAllDevices(excludedRegions=None):
 
     return Global.PASS, ''
 
-
-def DeviceFilters(input_file_path=None, page=None):
-    if not (input_file_path and page):
-        testComment = 'Test is missing an input parameter value for this test'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    params = ParseJsonInputFile(input_file_path)
-
-    # check if we should be verifying Upgrade Page or Configure page
+def SearchFiltersUpgrade(fw_list=None, fw_status_list=None, network_group_list=None, no_data_available_result=False):
     GoToDevMan()
-    if page == 'Upgrade':
-        GoToDevUpgrade()
+    GoToDevUpgrade()
 
-    # Go to location specified in input_file_path
-    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
-        testComment = "Unable to locate site based on input file"
-        printFP(testComment)
-        return Global.FAIL, testComment
+    rootElement = GetElement(Global.driver, By.XPATH, '//*[@id="node-1"]')
+    if rootElement.get_attribute('collapsed') == 'true':
+        GetRootNode()
 
-    # Both pages have at least these two; Upgrade has SW version as well
-    #FilterNames = ["Network Group"]
-    GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]").click()
-    time.sleep(2)
-    #for i in range(len(FilterNames)):
-    GetElement(Global.driver, By.XPATH, "//span[text()='Network Group']/preceding-sibling::input").click()
-    time.sleep(2)
-    #GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]").click()
-    #time.sleep(2)
-    result = Global.PASS
-    # if the page is Upgrade then it will check the SW filter button
-    if page == 'Upgrade':
-        time.sleep(2)
-        swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
-        time.sleep(2)
-        swFilterButton.click()
-        time.sleep(2)
+    if fw_list:
+        selectFiltersByFirmware(fw_list)
 
-        GetElement(Global.driver, By.ID, 'deselectAll').click()
-        time.sleep(3)
-        GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button").click()
-        time.sleep(3)
-        #Clicking the apply button
-        GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-        time.sleep(5)
+    if fw_status_list:
+        selectFiltersByUpgradeStatus(fw_status_list)
+    
+    if network_group_list:
+        selectFiltersByNetworkGroup(network_group_list)
 
-        if not ('Select' in GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button").text):
-            result = Global.FAIL
-            printFP("INFO - Filter SW does not display the text Select if unselect everything.")
-
-        swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
-        swFilterButton.click()
-        time.sleep(2)
-
-
-        FilterChoices = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='option in options | filter:getFilter(input.searchFilter)']")
-        for n in range(len(FilterChoices)):
-            FilterChoices[n].click()
-            time.sleep(2)
-            filterText = GetElement(FilterChoices[n], By.XPATH, 'a/span[2]/span').text
-            displayedSW = GetElements(Global.driver, By.XPATH, '//td[5]/span')
-            for m in range(len(displayedSW)):
-                if displayedSW[m].text != filterText:
-                    result = Global.FAIL
-                    printFP("INFO - A displayed SW version does not match the filter applied.")
-                time.sleep(5)
-            FilterChoices[n].click()
-            time.sleep(2)
-        swFilterButton.click()
-        time.sleep(2)
-
-
-    # Check Comm Type Filter
-    '''swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button")
-    swFilterButton.click()
-
-    GetElement(Global.driver, By.ID, 'deselectAll').click()
-    GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button").click()
-    if not ('Select' in GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button").text):
-        result = Global.FAIL
-        printFP("INFO - Filter SW does not display the text Select if unselect everything.")
-
-    swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button")
-    swFilterButton.click()
     time.sleep(1)
+    dataTableExists = GetElement(Global.driver, By.XPATH, "//div[@class='device-management page-view ng-scope']/div[1]")
 
-    FilterChoices = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='option in options | filter:getFilter(input.searchFilter)']")
-    for n in range(len(FilterChoices)):
-        FilterChoices[n].click()
-        filterText = GetElement(FilterChoices[n], By.XPATH, 'a/span[2]/span').text
-        displayedSW = GetElements(Global.driver, By.XPATH, '//td[15]/span' if page == 'Upgrade' else '//td[16]/span')
-        for m in range(len(displayedSW)):
-            if displayedSW[m].text != filterText:
-                result = Global.FAIL
-                printFP("INFO - A displayed Communication Type version does not match the filter applied.")
-            time.sleep(5)
-        FilterChoices[n].click()
-
-    swFilterButton.click()'''
-
-    # Check Network Group Filter
-    swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
-    swFilterButton.click()
-    time.sleep(2)
-
-    GetElement(Global.driver, By.ID, 'deselectAll').click()
-    time.sleep(2)
-    GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button").click()
-    time.sleep(2)
-    #Clicking the apply button
-    GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-    time.sleep(5)
-    if not ('Select' in GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button").text):
-        result = Global.FAIL
-        printFP("INFO - Filter SW does not display the text Select if unselect everything.")
-
-    swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
-    swFilterButton.click()
-    time.sleep(2)
-
-
-    FilterChoices = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='option in options | filter:getFilter(input.searchFilter)']")
-    for n in range(len(FilterChoices)):
-        FilterChoices[n].click()
-        time.sleep(2)
-        filterText = GetElement(FilterChoices[n], By.XPATH, 'a/span[2]/span').text
-        displayedSW = GetElements(Global.driver, By.XPATH, '//td[17]/span')
-        for m in range(len(displayedSW)):
-            if (displayedSW[m].text != filterText) or (filterText == '(Blanks)' and displayedSW[m].text == ''):
-                result = Global.FAIL
-                printFP("INFO - A displayed Network Group does not match the filter applied.")
-            time.sleep(5)
-        FilterChoices[n].click()
-        time.sleep(2)
-
-    swFilterButton.click()
-    time.sleep(2)
-
-    # Check if any filter checks failed.
-    if result == Global.FAIL:
-        testComment = 'One or more filters are not working.'
+    if no_data_available_result and 'ng-hide' in dataTableExists.get_attribute('class'):
+        #Test case where there should be a no data available displayed and ng-hide exists in the NoDataAvailable element
+        #if ng-hide exists in the NoDataAvailable element then its hidden.
+        testComment = 'Test shows data but should not show data.'
+        printFP("INFO - " + testComment)
+        return Global.FAIL, testComment
+    elif not('ng-hide' in dataTableExists.get_attribute('class')) and not(no_data_available_result):
+        #Test case 
+        testComment = 'Test shows no data after applying filter and the correct result should display No Data Available.'
+        printFP("INFO - " + testComment)
+        return Global.PASS, testComment
     else:
-        testComment = 'All filters are working.'
+        if fw_list:
+            fw_versions = GetElements(Global.driver, By.XPATH, "//tbody/tr[@ng-repeat='item in $data']/td[5]/span")
+            for i in range(len(fw_versions)):
+                print fw_versions[i].text
+                if fw_versions[i].text not in fw_list:
+                    testComment = 'Test found that a firmware version was not filtered out by filters. Found firmware version %s when filters %s were on.' %(fw_versions[i].text, fw_list)
+                    printFP("INFO - " + testComment)
+                    return Global.FAIL, testComment
 
+        if fw_status_list:
+            fw_statuses = GetElements(Global.driver, By.XPATH, "//tbody/tr[@ng-repeat='item in $data']/td[6]/span")
+            for i in range(len(fw_statuses)):
+                print fw_statuses[i].text
+                if fw_statuses[i].text not in fw_status_list:
+                    testComment = 'Test found that a firmware status was not filtered out by filters. Found firmware status %s when filters %s were on.' %(fw_statuses[i].text, fw_status_list)
+                    printFP("INFO - " + testComment)
+                    return Global.FAIL, testComment
+
+        if network_group_list:
+            network_groups = GetElements(Global.driver, By.XPATH, "//tbody/tr[@ng-repeat='item in $data']/td[7]/span")
+            for i in range(len(network_groups)):
+                print network_groups[i].text
+                if network_groups[i].text not in network_group_list:
+                    testComment = 'Test found that a network group was not filtered out by filters. Found network groups when filters %s were on.' %(network_groups[i].text, network_group_list)
+                    printFP("INFO - " + testComment)
+                    return Global.FAIL, testComment
+
+    testComment = 'Filters are filtering the data correctly.'
     printFP("INFO - " + testComment)
-    return result, 'TEST PASS - ' + testComment if result == Global.PASS else 'TEST FAIL - ' + testComment
-
+    return Global.PASS, testComment
 
 def NavigatePages(input_file_path=None, UpgradePage=False):
     if not (input_file_path):

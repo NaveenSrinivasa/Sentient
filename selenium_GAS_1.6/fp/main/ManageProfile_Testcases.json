@@ -10,200 +10,143 @@
             "password": "password_valid"
         },
         {
-            "method_name": "CreateProfile",
-            "hiptest_name": "Create New Profile",
-            "skip": false,
+            "test_name": "VerifyAEDEnableLatch",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
+            "skip": true,
+            "expect_pass": true
+        },
+        {
+            "test_name": "FloatingPointInProfiles",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
+            "skip": true,
+            "expect_pass": true
+        },
+        {
+            "test_name": "VerifyDefaultManagePage",
+            "hiptest_name": "Default Manage Profile Page",
+            "skip": true,
             "expect_pass": true,
-            "profile_name": "seleniumtest",
+            "existing_profile": false
+        },
+        {
+
+            "test_name": "CreateProfile",
+            "hiptest_name": "Create New Profile - Positive Test Case",
+            "skip": true,
+            "expect_pass": true,
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/seleniumtest.json"
         },
         {
-            "method_name": "CreateProfile",
-            "hiptest_name": "Create New Profile",
-            "skip": false,
+            "test_name": "CreateProfile",
+            "hiptest_name": "Create New Profile with Duplicate Name",
+            "skip": true,
+            "expect_pass": false,
+            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/seleniumtest.json"
+        },
+        {
+            "test_name": "CreateProfile",
+            "hiptest_name": "Profile Name - Maximum Allowed Name Length",
+            "skip": true,
+            "expect_pass": false,
+            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/TooLongName.json"
+        },
+        {
+            "test_name": "CreateProfile",
+            "hiptest_name": "Profile Name - Verify that Spaces are allowed in Name",
+            "skip": true,
             "expect_pass": true,
-            "profile_name": "changeeverything",
-            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/changeeverything.json"
+            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/NameWithSpaces.json"
         },
         {
-            "method_name": "ValidateProfileFieldValues",
-            "hiptest_name": "Logout",
-            "skip": false,
+            "test_name": "CreateProfile",
+            "hiptest_name": "Profile Name - Does Not Allow Special Characters",
+            "skip": true,
+            "expect_pass": false,
+            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/InvalidCharacters.json"
+        },
+        {
+            "test_name": "VerifyDefaultManagePage",
+            "hiptest_name": "Default Manage Profile Page",
+            "skip": true,
             "expect_pass": true,
-            "comment": "Validate Boundary Values of each Manage Profile form fields",
-            "input_file_path": "seleniumDir/inputfilesDir/Manage Profiles/DNP3_Point_Map v2.11.0.csv"
+            "existing_profile": true
         },
         {
-            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
-            "comment": "Allows the use of use_global_test_device",
-            "method_name": "UploadMTFTest",
-            "hiptest_name": "Upload MTF with GPS Co-ordinates",
-            "skip": false,
+            "test_name": "VerifyProfileTabs",
+            "hiptest_name": "Verify Profile Tabs - New Profile",
+            "skip": true,
             "expect_pass": true,
-            "mtf_full_path": "seleniumDir/inputfilesDir/device_1.csv",
-            "wait_for_online": true
+            "existing_profile_name": ""
         },
         {
-            "method_name": "configureDevice",
-            "hiptest_name": "Logout",
-            "skip": false,
-            "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/Manage Profiles/d1_reg_sub_names.json",
-            "device_name": ["device_1"],
-            "config": "changeeverything",
-            "actionButton": true
-        },
-        {
-            "method_name": "VerifyDefaultManagePage",
-            "hiptest_name": "Logout",
-            "skip": false,
-            "expect_pass": true
-        },
-        {
-            "method_name": "VerifyDefaultSelectedProfile",
-            "hiptest_name": "Logout",
-            "skip": false,
-            "expect_pass": true
-        },
-        {
-            "method_name": "VerifyProfileTabs",
-            "hiptest_name": "Logout",
-            "skip": false,
+            "test_name": "VerifyProfileTabs",
+            "hiptest_name": "Verify Profile Tabs - Existing Profile",
+            "skip": true,
             "expect_pass": true,
             "existing_profile_name": "seleniumtest"
         },
         {
-            "method_name": "CreateProfile",
-            "hiptest_name": "Create New Profile",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "AccDefault",
-            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
-        },
-        {
-            "method_name": "VerifyProfileTabs",
-            "hiptest_name": "Logout",
-            "skip": false,
-            "expect_pass": true,
-            "existing_profile_name": "AccDefault"
-        },
-        {
-            "method_name": "CreateProfile",
-            "hiptest_name": "Create New Profile",
-            "skip": false,
-            "expect_pass" : false,
-            "profile_name": "AccDefault",
-            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
-        },
-        {
-            "method_name": "CreateProfile",
-            "hiptest_name": "Create New Profile",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
-        },
-        {
-            "method_name": "CreateProfile",
-            "hiptest_name": "Create New Profile",
-            "skip": false,
-            "expect_pass": false,
-            "profile_name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
-        },
-        {
-            "method_name": "CreateProfile",
-            "hiptest_name": "Create New Profile",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "Acc Default Test",
-            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
-        },
-        {
-            "method_name": "CreateProfile",
-            "hiptest_name": "Create New Profile",
-            "skip": false,
-            "expect_pass": false,
-            "profile_name": "Acc@Default@Test",
-            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/profiles/AccDefault.json"
-        },
-        {
-            "method_name": "CloneProfile",
-            "hiptest_name": "Logout",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "AccDefault",
-            "clone_profile_name" : "hello2"
-        },
-        {
-            "method_name": "CloneProfile",
-            "hiptest_name": "Logout",
-            "skip": false,
-            "expect_pass": false,
-            "profile_name": "AccDefault",
-            "clone_profile_name" : "AccDefault"
-        },
-        {
-            "method_name": "SaveProfileWithoutChanges",
-            "hiptest_name": "Logout",
-            "skip": false,
-            "expect_pass": true,
-            "existing_profile_name": "AccDefault"
-        },
-        {
-            "method_name": "DeleteProfile",
-            "hiptest_name": "Delete Profile",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "Acc Default Test"
-        },
-        {
-            "method_name": "DeleteProfile",
-            "hiptest_name": "Delete Profile",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "hello2"
-        },
-        {
-            "method_name": "DeleteProfile",
-            "hiptest_name": "Delete Profile",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "AccDefault"
-        },
-        {
-            "method_name": "DeleteProfile",
-            "hiptest_name": "Delete Profile",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        },
-        {
-            "method_name": "DeleteProfile",
-            "hiptest_name": "Delete Profile",
-            "skip": false,
-            "expect_pass": true,
-            "profile_name": "changeeverything"
-        },
-        {
-            "method_name": "DeleteProfile",
-            "hiptest_name": "Delete Profile",
-            "skip": false,
+            "test_name": "VerifyAEDEnableLatch",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
+            "skip": true,
             "expect_pass": true,
             "profile_name": "seleniumtest"
         },
         {
-            "method_name": "deleteDevice",
-            "hiptest_name": "Delete Device- managed devices",
+            "test_name": "EditProfile",
+            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
+            "skip": true,
+            "expect_pass": false,
+            "existing_profile_name": "seleniumtest",
+            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/nochange.json", 
+            "save_key": "SAVE AS"
+        },
+        {
+            "test_name": "EditProfile",
+            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
+            "skip": true,
+            "expect_pass": false,
+            "existing_profile_name": "seleniumtest",
+            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/nochange.json", 
+            "save_key": "SAVE"
+        },
+        {
+            "test_name": "EditProfile",
+            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
+            "skip": true,
+            "expect_pass": true,
+            "existing_profile_name": "seleniumtest",
+            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/changeeverything.json", 
+            "save_key": "SAVE AS"
+        },
+        {
+            "test_name": "EditProfile",
+            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save Button",
+            "skip": true,
+            "expect_pass": true,
+            "existing_profile_name": "seleniumtest",
+            "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/changeselenium.json", 
+            "save_key": "SAVE"
+        },
+        {
+            "test_name": "FloatingPointInProfiles",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Edit Profile",
+            "skip": true,
+            "expect_pass": true,
+            "profile_name": "changeselenium"
+        },
+        {
+            "test_name": "ValidateProfileFieldValues",
+            "hiptest_name": "Validate Valid Range For Each Field",
             "skip": false,
             "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/Manage Profiles/d1_reg_sub_names.json",
-            "device_name": ["device_1"]
+            "comment": "Validate Boundary Values of each Manage Profile form fields",
+            "input_file_path": "seleniumDir/inputfilesDir/Manage Profiles/DNP3_Point_Map v2.12.4.csv"
         },
         {
             "method_name": "Logout",
             "hiptest_name": "Logout",
-            "skip": false,
+            "skip": true,
             "expect_pass": true
         }
     ]
