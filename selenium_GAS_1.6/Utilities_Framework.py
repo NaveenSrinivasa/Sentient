@@ -22,7 +22,7 @@ def SpawnBrowser(browser, platform):
         print('desired: %s' % desired)
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
-        #driver.session_id = 'beffe830-4d48-4fea-a07f-2f8e9f83c474' # To connect with your desirable session
+        #driver.session_id = '60b560b2-759b-44ec-b9f9-06c00a363374' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
@@ -298,6 +298,7 @@ def BackupScreenshotsAndTestReport(src):
         printFP('Not found given screenshot path directory to back up screenshots : %s' % src)
 
 def FindAndReplace(directory, find, replace, filePattern):
+    print '.',
     if 'Utilities_Framework.py' in filePattern or 'connections.json' in filePattern or 'configurations.json' in filePattern:
         filepath = os.path.join(directory, filePattern)
         #print(filepath)
@@ -326,6 +327,7 @@ def FindAndReplace(directory, find, replace, filePattern):
                         f.write(s)
 
 def InitialDirectorySetup(src):
+    print 'Setting up input files according to user given inputs '
     if os.path.exists(src):
         dirname = os.path.split(src)[1]
         dir_list = glob.glob(src + '_*')
@@ -351,7 +353,6 @@ def InitialDirectorySetup(src):
         s = s.replace('fp/' + dirname, 'fp/' + newdirname)
         with open(filePath, "w") as f:
             f.write(s)
-
         return filePath
     else:
         print('Not found given input path to duplicate input directory : %s' % src)
@@ -360,7 +361,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
     if directory == 'none':
         directory = userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'
     for key, value in userdefinedvariables.items():
-        if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not key == '172.20.3.50':
+        if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not 'internet_explorer_machine' in key:
             FindAndReplace(directory, key, value, "*")
         elif key == 'browser_name':
             for i in range(len(userdefinedvariables['browser_name'])):
@@ -389,6 +390,6 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                 value = tmpvalue
             newvalue = value[:-1]
             FindAndReplace(directory, key, newvalue, "configurations.json")
-        elif key == '172.20.3.50':
+        elif 'internet_explorer_machine' in key:
             directory = userdefinedvariables['seleniumDir']
             FindAndReplace(directory, key, value, "Utilities_Framework.py")

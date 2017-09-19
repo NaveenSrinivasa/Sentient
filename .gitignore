@@ -7,3 +7,4 @@ screenshots
 report/*.csv
 *.csv#
 *.json~
+selenium_GAS_1\.6/report/

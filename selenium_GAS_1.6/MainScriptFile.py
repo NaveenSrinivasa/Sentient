@@ -220,7 +220,7 @@ def TestConfig(config, connections, tests):
 
     threads = []
     for platform in connections['platforms']:
-        print('Platform: %s' %platform)
+        print('\nPlatform: %s' %platform)
         for browser in connections['browsers']:
             print('Browser: %s' %browser)
             if browser == 'internet explorer' and platform == 'linux':
