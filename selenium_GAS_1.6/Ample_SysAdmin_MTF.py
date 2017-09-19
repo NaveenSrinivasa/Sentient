@@ -15,290 +15,194 @@ import subprocess as sp
 import filecmp
 import unicodedata
 
-'''This Method will check number of error lines in MTF file is greater then 50 lines,
-number of error lines shouldn't be restricted to any number!'''
-
-def NumberOfErrorsSupportedForAFailedMTFUpload(input_file_path):
-    if input_file_path == None:
-        testComment = 'Test Fail - Missing a mandatory parameter.'
+def NumberOfErrorsSupportedForAFailedMTFUpload():
+    '''This Method will check number of error lines in MTF file is greater then 50 lines,
+    number of error lines shouldn't be restricted to any number!'''
+    popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
+    lines = GetElement(popup, By.TAG_NAME,'p')
+    lines.click()
+    line_count = 0
+    for line in GetElements(lines, By.TAG_NAME,'br'):
+        line_count += 1
+    if line_count <= 50:
+        testComment = 'Test Fail - Please upload MTF which has more then 50 error message lines'
         printFP(testComment)
         return Global.FAIL, testComment
-
-    printFP("INFO - Going to System Admin Page")
-    GoToSysAdmin()
+    elif line_count > 50:
+        testComment='Test Pass - MTF file upload has more then 50 error message lines'
+        printFP(testComment)
+    lines = GetElement(popup, By.TAG_NAME,'p')
+    lines.click()
     time.sleep(2)
-    printFP("INFO - Uploading the MTF File with more than 50 error devices details")
-    UploadMTF(input_file_path)
-    time.sleep(1)
-    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(1)
-    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "Failed to upload" in returnMessage:
-        GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
-        time.sleep(2)
-        popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
-        lines = GetElement(popup, By.TAG_NAME,'p')
-        lines.click()
-        line_count = 0
-        for line in GetElements(lines, By.TAG_NAME,'br'):
-            line_count += 1
-        if line_count <= 50:
-            testComment = 'Test Fail - Please upload MTF which has more then 50 error message lines'
-            printFP(testComment)
-            return Global.FAIL, testComment
-        elif line_count > 50:
-            testComment='Test Pass - MTF file upload has more then 50 error message lines'
-            printFP(testComment)
-
-        lines = GetElement(popup, By.TAG_NAME,'p')
-        lines.click()
-        time.sleep(2)
-        last_height = Global.driver.execute_script("return document.body.scrollHeight")
-        match = False
-
-        while True:
-            # Scroll down to bottom
-            Global.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            # Wait page to load
-            time.sleep(0.5)
-            # Calculate new scroll height and compare with last scroll height
-            new_height = Global.driver.execute_script("return document.body.scrollHeight")
-            if new_height == last_height:
-                match = True
-                break
-            last_height = new_height
+    last_height = Global.driver.execute_script("return document.body.scrollHeight")
+    match = False
+    while True:
+        # Scroll down to bottom
+        Global.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        # Wait page to load
+        time.sleep(0.5)
+        # Calculate new scroll height and compare with last scroll height
+        new_height = Global.driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            match = True
+            break
+        last_height = new_height
         # Scrolling back to top of the page.
-            Global.driver.execute_script("window.scrollTo(0,0)")
-
-           #Closing the pop up window
-        closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
-        closebutton.click()
-        time.sleep(1)
-
-        if not match:
-            testComment = 'Test Fail - Unable to scroll when MTF file upload has more than 50 error messages'
-            printFP(testComment)
-            return Global.FAIL, testComment
-        else:
-            testComment='Test Pass - Able to scroll when MTF file upload has more then 50 error message lines'
-            printFP(testComment)
-            return Global.PASS, testComment
+        Global.driver.execute_script("window.scrollTo(0,0)")
+    if not match:
+        testComment = 'Test Fail - Unable to scroll when MTF file upload has more than 50 error messages'
+        printFP(testComment)
+        return Global.FAIL, testComment
     else:
-        testComment = 'Test Fail - MTF File Uploaded Successfully'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-'''This method is to Indicate Column heading instead of column number,
-when there are errors in MTF file'''
-
-def MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber(input_file_path):
-    if input_file_path == None:
-        testComment = 'Test Fail - Missing a mandatory parameter.'
-        printFP(testComment)
-        return Global.FAIL, testComment
-    time.sleep(1)
-    printFP("INFO - Going to System Admin Page")
-    GoToSysAdmin()
-    time.sleep(2)
-    Global.driver.refresh()
-    time.sleep(10)
-    printFP("INFO - Uploading the MTF File with Bad value")
-    UploadMTF(input_file_path)
-    time.sleep(2)
-    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(2.5)
-    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "Failed to upload" in returnMessage:
-
-        GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
-        time.sleep(2.5)
-        errorpopup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
-        errormessage = GetElement(errorpopup, By.TAG_NAME,'p')
-        errormessage.click()
-        errormsg = errormessage.text.strip()
-        errormsg = errormsg.replace('"','')
-        errormsg = ''.join(errormsg.split('\n'))
-        errormsg = errormsg.split('Line')
-
-        closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
-        closebutton.click()
-        time.sleep(1)
-
-        #Reading the column header of the MTF file to check whether column which has error has displayed or not
-        with open(input_file_path, 'rb') as f:
-            reader=csv.reader(f)
-            header = reader.next()
-
-            #Checking whether below mentioned coulmn name present in the error message body
-            tmpheaders = [header[6], header[7], header[8],header[9],header[10],header[16], header[20]]
-            n=0
-            for line in errormsg:
-                if n > 0:
-                    if any(x in line for x in tmpheaders):
-                        testComment = 'INFO - Error message in line: %s' % line
-                        printFP(testComment)
-                    else:
-                        testComment = 'Test Fail - Expected Column names are not present in line: %s' % line
-                        printFP(testComment)
-                        return Global.FAIL, testComment
-                n = n + 1
-
-        testComment = 'Test Pass - MTF error messages displayed with the column heading instead of column number'
+        testComment='Test Pass - Able to scroll when MTF file upload has more then 50 error message lines'
         printFP(testComment)
         return Global.PASS, testComment
-    else:
-        testComment = 'Test Fail - MTF Uploaded Successfully'
+
+
+def MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber(input_file_path):
+    '''This method is to Indicate Column heading instead of column number,
+    when there are errors in MTF file'''
+    errorpopup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
+    errormessage = GetElement(errorpopup, By.TAG_NAME,'p')
+    errormessage.click()
+    errormsg = errormessage.text.strip()
+    errormsg = errormsg.replace('"','')
+    errormsg = ''.join(errormsg.split('\n'))
+    errormsg = errormsg.split('Line')
+    #Reading the column header of the MTF file to check whether column which has error has displayed or not
+    with open(input_file_path, 'rb') as f:
+        reader=csv.reader(f)
+        header = reader.next()
+        #Checking whether below mentioned coulmn name present in the error message body
+        tmpheaders = [header[6], header[7], header[8],header[9],header[10],header[16], header[20]]
+        n=0
+        for line in errormsg:
+            if n > 0:
+                if any(x in line for x in tmpheaders):
+                    testComment = 'INFO - Error message in line: %s' % line
+                    printFP(testComment)
+                else:
+                    testComment = 'Test Fail - Expected Column names are not present in line: %s' % line
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+            n = n + 1
+    testComment = 'Test Pass - MTF error messages displayed with the column heading instead of column number'
+    printFP(testComment)
+    return Global.PASS, testComment
+
+
+def ExportErrorLogForFailedMTF(downloadfolder=None):
+    #This method is to export the error messages of MTF file to text file.
+    if downloadfolder == None:
+        testComment = "Test Fail - Missing download folder path"
         printFP(testComment)
         return Global.FAIL, testComment
-
-
-#This method is to export the error messages of MTF file to text file.
-
-def ExportErrorLogForFailedMTF(input_file_path=None, downloadfolder=None, filetype=None):
-    if input_file_path == None or downloadfolder == None or filetype == None:
-        testComment = "Missing a mandatory parameter."
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    printFP("INFO - Going to System Admin Page")
-    GoToSysAdmin()
-    time.sleep(2)
-
-    printFP("INFO - Uploading the MTF File with Bad values to export the error messages")
-    UploadMTF(input_file_path)
-    time.sleep(2)
-    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(2)
-    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "Failed to upload" in returnMessage:
-
-        GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
-        time.sleep(2.5)
-        header = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-header')
-        header.click()
-        errormsgheader = header.text.strip()
-        errormsgheader = errormsgheader.replace('"','').replace(' ','')
-        errormsgheader = ''.join(errormsgheader.split())
-        popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
-        lines = GetElement(popup, By.TAG_NAME,'p')
-        lines.click()
-        errormsg = lines.text.strip()
-        errormsg = errormsg.strip('\n').replace('"','').replace(' ','')
-        errormsg = ''.join(errormsg.split('\n'))
-        errormsg = errormsg.strip()
-        try:
-            downloadbutton=GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[3]/button").click()
-            printFP('INFO - Clicked download button')
-            time.sleep(3)
-        except:
-            testComment = 'Test Fail - Unable to find download button'
-            printFP(testComment)
-            Global.FAIL , testComment
-        # Place where downloaded file exists
-        location = downloadfolder + 'error_messages.txt'
-        #Opening the downloaded file and reading its content
-        with open(location,'r') as f:
-            content = f.read()
-            errormsgfromfile = content.strip()
-            errormsgfromfile = unicode(errormsgfromfile, "utf-8")
-            errormsgfromfile = errormsgfromfile.strip('\n').replace('"','').replace(' ','')
-            errormsgfromfile = ''.join(errormsgfromfile.split())
-            errormsgfromfile = errormsgfromfile.strip().split('Themastertracker')
-
-        #After reading content of downloaded file, deleting the opened file
-        try:
-            os.remove(location)
-        except OSError as e:
-            printFP(e)
-            return Global.FAIL, 'TEST FAIL - ' + e
-
-        closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
-        closebutton.click()
-        time.sleep(1)
-
-        #Validating the content of downloaded file and the content of error message shown on UI
-
-        if len(errormsg) == (len('Themastertracker') + len(errormsgfromfile[1])):
-            testComment = 'Test Pass - Successfully deleted file from download folder and content matched in the downloaded file'
-            printFP(testComment)
-            return Global.PASS, 'TEST PASS ' + testComment
+    errorText = GetElement(Global.driver, By.XPATH, "//p[@ng-bind-html='details']").text
+    #########################################################################################################################
+    #                        PARSER FOR UPLOAD MTF ERROR BOX
+    # Since this is UTF-8, we need to parse the entire thing.
+    # string will hold the parsed string until the new line.
+    # strings will hold all the error lines that Ample has.
+    string = ""
+    strings = []
+    #Using a for loop, you can only parse letter by letter only.
+    for x in errorText:
+        #if you find new line, then put the string into the array and reset string to empty.
+        if x == '\n':
+            #We only want to move strings that contain Line.
+            if 'Line' in string:
+                strings.append(string)
+            #Clear the string regardless if it contains Line or not.
+            string = ""
         else:
-            testComment = 'Test Fail - Both the contents NOT matched'
-            printFP(testComment)
-            return Global.FAIL, testComment
+            #Concatenate the string with each letter.
+            string = string + x
+    #Last line will not be added since there is no new line and it is an EOF (will find better solution to this)
+    if 'Line' in string:
+        strings.append(string)
+    dl_button = GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Download')]")
+    dl_button.click()
+    #Wait for it to finish downloading
+    time.sleep(10)
+    # Place where downloaded file exists
+    location = downloadfolder + 'error_messages.txt'
+    #Opening the downloaded file and reading its content
+    if os.path.exists(location):
+        with open(location,'r') as fp:
+            num_err_file = 0
+            num_err_ample = len(strings)
+            for line in fp:
+                error_line = line.strip().replace("   ", " ").replace("  ", " ")
+                num_err_file += 1
+                #We want to start at 5 because that's where the error messages start in the file.
+                if num_err_file < 5:
+                    continue
+                else:
+                    if error_line in strings:
+                        strings.remove(error_line)
+                    else:
+                        testComment = 'Test could not find this line in downloaded file "{}"' .format(error_line)
+                        printFP("Test Fail - " + testComment)
+                        return Global.FAIL, testComment
+            if (num_err_file - 4) != num_err_ample:
+                testComment = 'The amount of errors on Ample error window does not match the downloaded error log.'
+                printFP("INFO - " + testComment)
+                return Global.FAIL, ''
     else:
-        testComment = 'Test Fail - MTF Uploaded Successfully'
+        testComment = "INFO - Test did not successfully download file. Please verify issue."
         printFP(testComment)
         return Global.FAIL, testComment
+    #After reading content of downloaded file, deleting the opened file
+    try:
+        os.remove(location)
+    except OSError as e:
+        printFP(e)
+        return Global.FAIL, 'TEST FAIL - ' + e
+    time.sleep(1)
+    testComment = 'TEST PASS - GUI error message is matched in the downloaded file'
+    printFP(testComment)
+    return Global.PASS, testComment
 
-'''This method will check non- ascii character for all the fields in MTF file and
-if exists it will throw an error message.'''
 
-def ASCIICharSetValidationForAllFieldsInMTF(input_file_path):
+def ASCIICharSetValidationForAllFieldsInMTF():
+    '''This method will check non- ascii character for all the fields in MTF file and
+    if exists it will throw an error message.'''
+    popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
+    lines = GetElement(popup, By.TAG_NAME,'p')
+    lines.click()
+    time.sleep(1)
+    errormsg = lines.text.strip()
+    errormsg = errormsg.strip('\n').replace('"','').replace(' ','')
+    errormsg = ''.join(errormsg.split('\n'))
+    errormsg = errormsg.strip()
+    #Getting the Non Ascii character from the error message
+    nonascii =  re.sub('[ -~]', '', errormsg)
+    if len(nonascii) > 0:
+        testComment = 'Test Pass- MTF File failed to upload with Non-ASCII characters in the MTF file'
+        printFP(testComment)
+        return Global.PASS , testComment
+    else:
+        testComment = 'Test Fail - MTF File upload successful with Non-ASCII characters in the MTF file'
+        printFP(testComment)
+        return Global.FAIL , testComment
+
+
+def UploadMTFNegativeTestValidation(input_file_path, list_of_errors, validateerror=False, validateargs=None):
+    '''This method will check whether multiple devices are uploaded with same DNP address'''
     if input_file_path == None:
         testComment = "Test Fail - Missing a mandatory parameter."
         printFP(testComment)
         return Global.FAIL, testComment
-
     printFP("INFO - Going to System Admin Page")
     GoToSysAdmin()
     time.sleep(2)
-    printFP("INFO - Uploading the MTF File with Non-Ascii character for columns")
+    printFP('INFO - Uploading the MTF File')
     UploadMTF(input_file_path)
     time.sleep(2)
     ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
     time.sleep(2)
     returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "Failed to upload" in returnMessage:
-        GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
-        time.sleep(2.5)
-        popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
-        lines = GetElement(popup, By.TAG_NAME,'p')
-        lines.click()
-        time.sleep(1)
-        errormsg = lines.text.strip()
-        errormsg = errormsg.strip('\n').replace('"','').replace(' ','')
-        errormsg = ''.join(errormsg.split('\n'))
-        errormsg = errormsg.strip()
-        #Getting the Non Ascii character from the error message
-        nonascii =  re.sub('[ -~]', '', errormsg)
-
-        closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
-        closebutton.click()
-        time.sleep(1)
-
-        if len(nonascii) > 0:
-            testComment = 'Test Pass- MTF File failed to upload with Non-ASCII characters in the MTF file'
-            printFP(testComment)
-            return Global.PASS , testComment
-        else:
-            testComment = 'Test Fail - MTF File upload successful with Non-ASCII characters in the MTF file'
-            printFP(testComment)
-            return Global.FAIL , testComment
-    else:
-        testComment = 'Test Fail - MTF Uploaded Successfully'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-'''This method is to check whether MTF is uploaded with Missing column header,
-as column header is mandatory, if its not exist it will give error message'''
-
-def UploadMTFWithMissingColumnHeader(input_file_path):
-    if input_file_path == None:
-        testComment = "Test Fail - Missing a mandatory parameter."
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    printFP("INFO - Going to System Admin Page")
-    GoToSysAdmin()
-    time.sleep(2)
-    printFP("INFO - Uploading the MTF File With missing column header")
-    UploadMTF(input_file_path)
-    time.sleep(2)
-    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(2)
-    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "Failed to upload" in returnMessage:
+    if "Failed to upload" in returnMessage and not validateerror:
         GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
         time.sleep(2)
         popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
@@ -306,49 +210,6 @@ def UploadMTFWithMissingColumnHeader(input_file_path):
         lines.click()
         time.sleep(1)
         errormsg = lines.text.strip()
-
-        closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
-        closebutton.click()
-        time.sleep(1)
-
-        if 'Column format mismatch.' in errormsg:
-            testComment = 'Test Pass- MTF File failed to upload missing column header in the MTF'
-            printFP(testComment)
-            return Global.PASS , testComment
-        else:
-            testComment = 'Test Fail - MTF File upload successful with missing column header in the MTF file'
-            printFP(testComment)
-            return Global.FAIL , testComment
-    else:
-        testComment = 'Test Fail - MTF Uploaded Successfully'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-'''This method will check whether multiple devices are uploaded with same DNP address'''
-
-def UploadMTFNegativeTestValidation(input_file_path, list_of_errors):
-    if input_file_path == None:
-        testComment = "Test Fail - Missing a mandatory parameter."
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    printFP("INFO - Going to System Admin Page")
-    GoToSysAdmin()
-    time.sleep(2)
-    time.sleep(2)
-    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(2)
-    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "Failed to upload" in returnMessage:
-        GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
-        time.sleep(2)
-        popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
-        lines = GetElement(popup, By.TAG_NAME,'p')
-        lines.click()
-        time.sleep(1)
-        errormsg = lines.text.strip()
-        print errormsg
-
         closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
         closebutton.click()
         time.sleep(1)
@@ -363,18 +224,27 @@ def UploadMTFNegativeTestValidation(input_file_path, list_of_errors):
         testComment = 'Test Pass- list of expected error messages are matched with GUI error messages'
         printFP(testComment)
         return Global.PASS , testComment
+    elif "Failed to upload" in returnMessage and validateerror:
+        GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
+        time.sleep(2)
+        validate_method_name = validateargs['validatemethodname']
+        printFP('External validate method for this negative case: {}' .format(validate_method_name))
+        del validateargs['validatemethodname']
+        args = validateargs
+        result, testComment = globals()[validate_method_name](**args)
+        closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
+        closebutton.click()
+        return result, testComment
     else:
         testComment = 'Test Fail - Invalid MTF Uploaded Successfully'
         printFP(testComment)
         return Global.FAIL, testComment
-
 
 def ImportMTFValidFieldNotes(input_file_path=None):
     if input_file_path == None:
         testComment = 'Missing an input parameter value for this test'
         printFP(testComment)
         return Global.FAIL, testComment
-
     printFP('INFO - Going to System Admin Page')
     GoToSysAdmin()
     time.sleep(2)
@@ -399,7 +269,6 @@ def ImportMTFValidFieldNotes(input_file_path=None):
         time.sleep(2)
         GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]").click()
         time.sleep(2)
-
         fieldnote = GetElement(Global.driver, By.XPATH, "//span[text()='Field Notes']/preceding-sibling::input")
         if (fieldnote.is_selected()):
             printFP('INFO - Field note is already checked...Now unchecking')
@@ -410,13 +279,10 @@ def ImportMTFValidFieldNotes(input_file_path=None):
         time.sleep(2)
         GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]").click()
         time.sleep(2)
-
         #Getting the Field Note value from the MTF File
         printFP('INFO - Reading the Field Note value from the Uploaded MTF File')
         column = pd.read_csv(input_file_path)
         field_notes_from_csv = list(column['Field Notes'])
-        print field_notes_from_csv
-
         #Getting the Field Note value from the table - UI
         printFP('INFO - Getting the Field note value from the UI')
         table = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'deviceList')]")
@@ -432,14 +298,10 @@ def ImportMTFValidFieldNotes(input_file_path=None):
             time.sleep(1)
             Fieldnote_value = fieldnote_lines.text.strip()
             field_note_from_table.append(Fieldnote_value)
-        print field_note_from_table
-
         closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span/span/a")
         closebutton.click()
         time.sleep(1)
-
         #Validating the field notes value both from UI and from the MTF File
-
         if all(str(x) in field_note_from_table for x in field_notes_from_csv):
             testComment = 'TEST Pass -Import MTF with long Field Note value is accepted... '
             printFP(testComment)
@@ -459,7 +321,6 @@ def UploadMTFWithIncorrectNetworkType(mtf_file_path1, mtf_file_path2, wait_for_o
         testComment = "Test Fail - Missing a mandatory parameter."
         printFP(testComment)
         return Global.FAIL, testComment
-
     # Generate a temporary mtf with only 1 device
     if mtf_file_path1 == None:
         mtf_full_path = Global.mtfPath
@@ -503,7 +364,6 @@ def UploadMTFWithIncorrectNetworkType(mtf_file_path1, mtf_file_path2, wait_for_o
         else:
             testComment = 'TEST FAIL - %s did not come online when uploaded cellular device with ssn network type' % device['serial']
             printFP(testComment)
-
     if mtf_file_path2 == None:
         mtf_full_path = Global.mtfPath
     else:
@@ -548,7 +408,6 @@ def UploadMTFWithIncorrectNetworkType(mtf_file_path1, mtf_file_path2, wait_for_o
             testComment = 'TEST FAIL - %s did not come online when uploaded cellular device with ssn network type' % device2['serial']
             printFP(testComment)
             return Global.FAIL, testComment
-
     else:
         testComment = 'Test Fail - MTF Failed to Upload Successfully'
         printFP(testComment)
@@ -556,10 +415,8 @@ def UploadMTFWithIncorrectNetworkType(mtf_file_path1, mtf_file_path2, wait_for_o
 
 def UploadMTFWithDifferentFirmwareVersion(mtf_full_path, wait_for_online=True):
     firmware_version_mapping = {}
-
     if mtf_full_path == None:
         mtf_full_path = Global.mtfPath
-
     with open(mtf_full_path, 'r') as inmtf:
         with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
             time.sleep(1)
@@ -617,56 +474,27 @@ def UploadMTFWithDifferentFirmwareVersion(mtf_full_path, wait_for_online=True):
     return result, testComment
 
 
-def VerifyNumberOfErrorsOnMTFFile(input_file_path):
-    if input_file_path == None:
-        testComment = 'Test Fail - Missing a mandatory parameter.'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    printFP("INFO - Going to System Admin Page")
-    GoToSysAdmin()
+def VerifyNumberOfErrorsOnMTFFile():
+    popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
+    lines = GetElement(popup, By.TAG_NAME,'p')
+    lines.click()
+    errormsg = lines.text.strip()
+    errormsg = errormsg.replace('"','')
+    errormsg = ''.join(errormsg.split('\n'))
+    errormsg = errormsg.split('Line')
+    line_count = 0
+    for line in GetElements(lines, By.TAG_NAME,'br'):
+        line_count += 1
+    #Scrolling the page to see complete error message details
+    lines = GetElement(popup, By.TAG_NAME,'p')
     time.sleep(2)
-    printFP("INFO - Uploading the MTF File with 151 error lines in MTF file")
-    UploadMTF(input_file_path)
-    time.sleep(1)
-    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(1)
-    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "Failed to upload" in returnMessage:
-        GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
-        time.sleep(2)
-        popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
-        lines = GetElement(popup, By.TAG_NAME,'p')
-        lines.click()
-        errormsg = lines.text.strip()
-        errormsg = errormsg.replace('"','')
-        errormsg = ''.join(errormsg.split('\n'))
-        errormsg = errormsg.split('Line')
-        line_count = 0
-        for line in GetElements(lines, By.TAG_NAME,'br'):
-            line_count += 1
-        print line_count
-
-        #Scrolling the page to see complete error message details
-        lines = GetElement(popup, By.TAG_NAME,'p')
-        time.sleep(2)
-        Global.driver.execute_script("window.scrollTo(0,0/6)")
-
-        closebutton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
-        closebutton.click()
-        time.sleep(1)
-        Global.driver.execute_script("window.scrollTo(0,0)")
-
-        if line_count == 151:
-            testComment = 'Test Pass - The number of errors listed is equal to the number of errors we created on the bad MTF file'
-            printFP(testComment)
-            return Global.PASS, testComment
-        else:
-            testComment='Test Fail - The number of errors listed is NOT equal to the number of errors we created on the bad MTF file'
-            printFP(testComment)
-            return Global.FAIL, testComment
+    Global.driver.execute_script("window.scrollTo(0,0/6)")
+    if line_count == 151:
+        testComment = 'Test Pass - The number of errors listed is equal to the number of errors we created on the bad MTF file'
+        printFP(testComment)
+        return Global.PASS, testComment
     else:
-        testComment = 'Test Fail - MTF File Uploaded Successfully'
+        testComment='Test Fail - The number of errors listed is NOT equal to the number of errors we created on the bad MTF file'
         printFP(testComment)
         return Global.FAIL, testComment
 
@@ -980,7 +808,6 @@ def ImportMTFValidDeviceStateinDeviceStateColumn(mtf_full_path=None, wait_for_on
         printFP(message)
         printFP(testComment)
         return Global.FAIL, testComment
-
     if wait_for_online:
         GoToDevMan()
         time.sleep(3)
@@ -996,7 +823,6 @@ def ImportMTFValidDeviceStateinDeviceStateColumn(mtf_full_path=None, wait_for_on
     else:
         result = Global.PASS
         testComment = 'TEST PASS - Successfully uploaded MTF file to Ample.'
-
     return result, testComment
 
 
@@ -1099,12 +925,10 @@ def ImportMTFSameSiteFirstWithGPSSecondWithoutGPS(mtf_full_path_1=None, mtf_full
             message = message.replace('\n', '')
         except:
             message = "MTF upload message: %s" % returnMessage
-
         testComment = 'Test Fail - MTF file 1 without GPS is not uploaded successfully when uploaded 2 devices with and without GPS coordinates for the same site one after the other'
         printFP(message)
         printFP(testComment)
         return Global.FAIL, testComment
-
     if wait_for_online:
         GoToDevMan()
         time.sleep(3)
@@ -1117,5 +941,4 @@ def ImportMTFSameSiteFirstWithGPSSecondWithoutGPS(mtf_full_path_1=None, mtf_full
         else:
             testComment = 'TEST FAIL - %s did not come online when uploaded 2 devices with and without GPS coordinates for the same site one after the other' % device['serial']
             result = Global.FAIL
-
     return result, testComment
