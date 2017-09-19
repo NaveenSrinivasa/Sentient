@@ -83,7 +83,6 @@
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/d1_d2_same_sensor_dnp_address.csv",
             "list_of_errors":["Duplicate Sensor (Device) DNP Address"]
-
         },
         {
             "method_name": "UploadMTFTest",
@@ -201,14 +200,13 @@
             "list_of_errors":["Product Name, Software Release, and Platform : The Product Name, Software Release, and Platform combination is invalid or wrongly entered"]
         },
         {
-            "comment": "This test verifies MTF uploaded with differnt sgw and network group on the ample",
+            "comment": "This test verifies MTF uploaded with different sgw and network group on the ample",
             "method_name": "UploadMTFNegativeTestValidation",
             "hiptest_name": "Import MTF - Mismatched Sensor Gateway and Network Group",
             "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/d1_mismatch_sgw_and_networkgroup.csv",
             "list_of_errors":["Network Group Name : Bad value."]
-
         },
         {
             "method_name": "UploadMTFTest",
@@ -226,7 +224,6 @@
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/d1_same_but_diff_sgw_network.csv",
             "list_of_errors":["An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available."]
-
         },
         {
             "method_name": "DeleteRegion",
@@ -238,49 +235,79 @@
         },
         {
             "comment": "This test verifies that the number of errors listed should be equal to the number of errors we created on the bad MTF file",
-            "method_name": "VerifyNumberOfErrorsOnMTFFile",
+            "method_name": "UploadMTFNegativeTestValidation",
             "hiptest_name": "Verify Number of Errors on MTF File",
             "skip": false,
             "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/number_of_error_lines_matched.csv"
+            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/number_of_error_lines_matched.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "VerifyNumberOfErrorsOnMTFFile"
+            }
+        },
+        {
+            "comment": "This test verifies single device with valid network group and sgw and different network grp and sgw",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Upload MTF with Missing Column Header",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/d1_missing_column_header.csv",
+            "list_of_errors":["Column format mismatch"]
         },
         {
             "comment": "This test verifies that user should be able to Export the error messages retrieved on MTF failure",
-            "method_name": "ExportErrorLogForFailedMTF",
+            "method_name": "UploadMTFNegativeTestValidation",
             "hiptest_name": "Export Error Log for Failed MTF",
             "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/export_error_lines.csv",
-            "downloadfolder": "defaultdownloadpath",
-            "filetype": "txt"
-
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "ExportErrorLogForFailedMTF",
+                "downloadfolder": "defaultdownloadpath"
+            }
         },
         {
             "comment": "This test verifies that all errors should be shown in UI for a failed MTF upload without any restriction number of errors",
-            "method_name": "NumberOfErrorsSupportedForAFailedMTFUpload",
+            "method_name": "UploadMTFNegativeTestValidation",
             "hiptest_name": "Number of errors supported for a failed MTF upload (GAS 1.6)",
             "skip": false,
             "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/more_than_50_error_lines.csv"
-
+            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/more_than_50_error_lines.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "NumberOfErrorsSupportedForAFailedMTFUpload"
+            }
         },
         {
             "comment": "This test verifies that MTF errors should display the column heading instead of column number",
-            "method_name": "MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber",
+            "method_name": "UploadMTFNegativeTestValidation",
             "hiptest_name": "MTF error format to indicate column heading instead of column number (GAS 1.6)",
             "skip": false,
             "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/column_heading_instead_of_column_number_in_error.csv"
-
+            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/column_heading_instead_of_column_number_in_error.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber",
+                "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/column_heading_instead_of_column_number_in_error.csv"
+            }
         },
         {
             "comment": "This test verifies that ASCII char set to be validated for all column data in the MTF",
-            "method_name": "ASCIICharSetValidationForAllFieldsInMTF",
+            "method_name": "UploadMTFNegativeTestValidation",
             "hiptest_name": "ASCII char set validation for all fields in MTF (GAS 1.6)",
             "skip": false,
             "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/non_ascii_values.csv"
-
+            "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/non_ascii_values.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "ASCIICharSetValidationForAllFieldsInMTF"
+            }
         },
         {
             "comment": "This test verifies Devices come online when we update network type as 4G for SSN and vice versa ",
@@ -324,7 +351,7 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/System_Admin/Import_MTF/2_devices_same_site_diff_gps_coordinates.csv",
-            "list_of_errors":["Invalid Latitude and Longitude Combination : The Latitude and Longitude Combination has to be same for all the Phases in a Feeder Site'","Invalid Latitude and Longitude Entry for a Site : Latitude and Longitude combination should either be empty for all the phases in a site or should have valid values"]
+            "list_of_errors": ["Invalid Latitude and Longitude Combination : The Latitude and Longitude Combination has to be same for all the Phases in a Feeder Site", "Invalid Latitude and Longitude Entry for a Site : Latitude and Longitude combination should either be empty for all the phases in a site or should have valid values"]
         },
         {
             "method_name": "UploadMTFTest",
