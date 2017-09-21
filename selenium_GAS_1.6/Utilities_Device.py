@@ -13,8 +13,6 @@ def SendSSHCommand(child, cmd):
 def FlashUnitFromSSD(ipAddress, pathToRSAKey, targetVersion, portNumber, networkType):
     #global sshChild
     child, connect = SpawnSSHConnection(ipAddress, pathToRSAKey, portNumber, networkType)
-    print child
-    print connect
     if not connect:
         printFP('Failed to connect')
         return False
@@ -38,7 +36,7 @@ def FlashUnitFromSSD(ipAddress, pathToRSAKey, targetVersion, portNumber, network
     except:
         printFP('Failed to copy image')
         return False
-    SendSSHCommand(child, 'fw_setenv bootcmd "setenv loaddev 2; run fall; run erase_env; reset;"\r')
+    SendSSHCommand(child, 'fw_setenv bootcmd "setenv loaddev 2; run ffactory; env default -f bootcmd; saveenv; reset;"\r')
     time.sleep(5)
     SendSSHCommand(child, 'reboot\r')
     try:
@@ -53,16 +51,12 @@ def TestSetIntoDevice(path_to_xml_file):
     testsetChild.logfile = open('testset.log','w')
     SendSSHCommand(testsetChild, 'testset -F %s\r' %path_to_xml_file)
     SendSSHCommand(testsetChild,'show\r')
-    SendSSHCommand(testsetChild, 'quit\r')
+    # SendSSHCommand(testsetChild, 'quit\r')
     testsetChild.close()
 
 def SpawnSSHConnection(ipAddress, pathToRSAKey, portNumber, networkType):
     sshChild = pexpect.spawn('/bin/bash\r')
     sshChild.logfile = open('ssh.log', 'w')
-    '''try:
-        SendSSHCommand(sshChild, 'ssh-keygen -f ~/.ssh/known_hosts -R [%s]:%s\r' % (ipAddress,portNumber))
-    except Exception as e:
-        print e.message'''
     if networkType == 'SSN':
         SendSSHCommand(sshChild, 'ssh-keygen -f ~/.ssh/known_hosts -R [%s]:%s\r' % (ipAddress,portNumber))
         SendSSHCommand(sshChild, 'ssh -i %s -p %s root@%s\r' % (pathToRSAKey, portNumber ,ipAddress))

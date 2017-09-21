@@ -23,6 +23,7 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         #driver.session_id = '60b560b2-759b-44ec-b9f9-06c00a363374' # To connect with your desirable session
+
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
         desired['platform'] = platform
@@ -38,8 +39,7 @@ def SpawnBrowser(browser, platform):
         desired['IE_ENSURE_CLEAN_SESSION'] = True
         print('desired: %s' % desired)
         if '11' in browser:
-            # driver = webdriver.Remote(command_executor='http://10.16.56.154:5555/wd/hub', desired_capabilities=desired)
-            driver = webdriver.Remote(command_executor='http://172.20.3.50:5555/wd/hub', desired_capabilities=desired)
+            driver = webdriver.Remote(command_executor='http://internet_explorer_machine_ip:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
             driver = webdriver.Remote(command_executor='http://172.20.3.49:5555/wd/hub', desired_capabilities=desired)
     return driver
@@ -317,7 +317,7 @@ def FindAndReplace(directory, find, replace, filePattern):
             for filename in fnmatch.filter(files, filePattern):
                 filepath = os.path.join(path, filename)
                 #print(filepath)
-                if 'maininputfile' not in filepath and 'Point' not in filepath and 'non_ascii' not in filepath and 'zip' not in filepath and 'tar' not in filepath:
+                if '.py' not in filepath and 'maininputfile' not in filepath and 'Point' not in filepath and 'non_ascii' not in filepath and 'zip' not in filepath and 'tar' not in filepath:
                     with open(filepath) as f:
                         s = f.read()
                     #print('find: %s' %find)
@@ -358,7 +358,7 @@ def InitialDirectorySetup(src):
         print('Not found given input path to duplicate input directory : %s' % src)
 
 def FilePathAndInputDataSetup(userdefinedvariables, directory):
-    if directory == 'none':
+    if 'none' in directory:
         directory = userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'
     for key, value in userdefinedvariables.items():
         if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not 'internet_explorer_machine' in key:
@@ -391,5 +391,5 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
             newvalue = value[:-1]
             FindAndReplace(directory, key, newvalue, "configurations.json")
         elif 'internet_explorer_machine' in key:
-            directory = userdefinedvariables['seleniumDir']
-            FindAndReplace(directory, key, value, "Utilities_Framework.py")
+            iedirectory = userdefinedvariables['seleniumDir']
+            FindAndReplace(iedirectory, key, value, "Utilities_Framework.py")

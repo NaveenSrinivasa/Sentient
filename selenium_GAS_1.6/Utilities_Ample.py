@@ -56,6 +56,7 @@ def GetElement(driver, method, locator):
     driver - either the webdriver or a webelement
     method - By.(XPATH, TAG_NAME, ID, CLASS_NAME, etc)
     locator - a string identifier to find the element using the method."""
+
     element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((method, locator)))
     return element
 
@@ -126,9 +127,11 @@ def JustClick(element):
         return False
 
 def ClearInput(element):
-
-    element.send_keys(Keys.CONTROL + "a")
-    element.send_keys(Keys.DELETE)
+    try:
+        element.send_keys(Keys.CONTROL + "a")
+        element.send_keys(Keys.DELETE)
+    except:
+        printFP("INFO - Test could not clear input.")
 
 def SelectFromMenu(driver, method, locator, target):
     """Given a menu object, it reads the text of all the options in the menu
@@ -138,10 +141,7 @@ def SelectFromMenu(driver, method, locator, target):
     for option in options:
         if option.text == target:
             actions = ActionChains(Global.driver)
-            actions.move_to_element(option)
-            time.sleep(1)
-            actions.click(option)
-            actions.perform()
+            actions.move_to_element(option).click(option).perform()
             time.sleep(1)
             printFP('Selected: %s' % target)
             return True
@@ -4141,6 +4141,7 @@ def SearchJobLink(device_names):
     else:
         return True
 
+
 def GetOverrideGPSStatus(region, substation, feeder, site):
     GoToDevMan()
     time.sleep(5)
@@ -4199,100 +4200,41 @@ def GetCurrentTableColumnNamesNotShown():
 
     return tablecolumnnameslist
 
-def selectFiltersByFirmware(fw_list):
+
+def GetFWSatusMsgFromFWScreen(device_name):
+    GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
+    time.sleep(1)
+    fwstatusmsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body')]/p").text
+    ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
+    return fwstatusmsg
+
+
+def GetFirmwareUpgradeEachPhaseStatus():
+
+    firmwareupgradeeachphasestatus = {}
+    otapstatusframe = GetElement(Global.driver, By.XPATH, "//div[@class='otapStatusModel']")
+    otapstatus = GetElement(otapstatusframe, By.TAG_NAME, 'ul')
+    options = GetElements(otapstatus, By.XPATH, "li[@class='ng-scope']")
+    for option in options:
+        phasename = GetElement(option, By.XPATH, 'div[1]').text
+        phasestatus = GetElement(option, By.XPATH, 'div[2]').get_attribute('class')
+        phasestatus = phasestatus.split(' ')
+        firmwareupgradeeachphasestatus[phasename] = phasestatus[2]
+    printFP(firmwareupgradeeachphasestatus)
+    return firmwareupgradeeachphasestatus
+
+
+def CheckAllJobsPresence():
+    printFP("INFO - Locating Job that contains the devices")
     try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
     except:
-        try:
-            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='softwareVersionsSettings.list']/div/button")
-        except:
-            printFP("INFO - Test could not locate the Firmware Version Filter")
-            return False
+        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
+        return False, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Page'
 
-    filterButton.click()
-    time.sleep(0.5)
-    for i in range(len(fw_list)):
-        try:
-            fw = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_list[i] +"']")
-            fw.click()
-        except:
-            printFP("INFO - Test could not find firmware version %s" %fw_list[i])
+    if len(allJobs) == 0:
+        printFP("INFO - No upgrades were found.")
+        return False, 'TEST FAIL - No Jobs were found.'
 
-    return True
+    return True, ''
 
-def selectFiltersByUpgradeStatus(fw_status_list):
-    try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwUpgradeStatusSelection.list']/div/button")
-    except:
-        printFP("INFO - Test could not locate the Firmware Upgrade Status Filter")
-        return False
-
-    filterButton.click()
-    time.sleep(0.5)
-    for i in range(len(fw_status_list)):
-        try:
-            fwStatus = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_status_list[i] +"']")
-            fwStatus.click()
-        except:
-            printFP("INFO - Test could not find Upgrade Status %s" %fw_status_list[i])
-
-    filterButton.click()
-    return True
-
-def selectFiltersByNetworkGroup(network_group_list):
-    try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
-    except:
-        try:
-            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSettings.list']/div/button")
-        except:
-            printFP("INFO - Test could not locate the Network Group filter")
-            return False
-
-    filterButton.click()
-    time.sleep(0.5)
-    for i in range(len(network_group_list)):
-        try:
-            ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ network_group_list[i] +"']")
-            ng.click()
-        except:
-            printFP("INFO - Test could not find network group %s" %(network_group_list[i]))
-
-    filterButton.click()
-
-def selectFiltersByProfileName(profile_list):
-    try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='profileNameSelection.list']/div/button")
-    except:
-        printFP("INFO - Test could not locate the Network Group filter")
-        return False
-
-    filterButton.click()
-
-    time.sleep(0.5)
-    for i in range(len(profile_list)):
-        try:
-            profile = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ profile_list[i] +"']")
-            profile.click()
-        except:
-            printFP("INFO - Test could not find Profile Name %s" %(profile_list[i]))
-    filterButton.click()
-    return True
-
-def selectFiltersByProfileStatus(profile_status_list):
-    try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='profileStatusSelection.list']/div/button")
-        filterButton.click()
-    except:
-        printFP("INFO - Test could not locate the Network Group filter")
-        return False
-
-    filterButton.click()
-    time.sleep(0.5)
-    for i in range(len(profile_status_list)):
-        try:
-            profileStatus = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ profile_status_list[i] +"']")
-            profileStatus.click()
-        except:
-            printFP("INFO - Test could not find Profile Status %s" %(profile_status_list[i]))
-    return True
