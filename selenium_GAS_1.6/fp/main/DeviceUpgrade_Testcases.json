@@ -12,14 +12,14 @@
         {
             "method_name": "TestSetIntoDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_xml_file": "seleniumDir/inputfilesDir/device_1.xml"
         },
         {
             "method_name": "TestSetIntoDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_xml_file": "seleniumDir/inputfilesDir/device_2.xml"
         },
@@ -28,7 +28,7 @@
             "comment": "Allows the use of use_global_test_device",
             "method_name": "UploadMTFTest",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "mtf_full_path": "seleniumDir/inputfilesDir/device_1.csv",
             "wait_for_online": true
@@ -38,7 +38,7 @@
             "comment": "Allows the use of use_global_test_device",
             "method_name": "UploadMTFTest",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "mtf_full_path": "seleniumDir/inputfilesDir/device_2.csv",
             "wait_for_online": true
@@ -110,8 +110,8 @@
             "skip": false,
             "expect_pass": true,
             "upgrade_settings": {
-                "day": "otap_day",
-                "from_time": "otap_from_time",
+                "day": "Wednesday",
+                "from_time": "12:00AM",
                 "to_time": "otap_to_time",
                 "num_retries": 5
             }
@@ -119,29 +119,29 @@
         {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.3.0-release",
-            "ipaddr": "d1_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d1_vto_port",
             "networktype": "d1_networktype"
         },
         {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.2.1-release",
-            "ipaddr": "d2_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d2_vto_port",
             "networktype": "d2_networktype"
         },
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1", "device_2"],
@@ -151,7 +151,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1", "device_2"],
             "target_version": "2.4.1",
@@ -162,7 +162,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1", "device_2"],
@@ -172,7 +172,7 @@
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1", "device_2"],
@@ -182,7 +182,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1", "device_2"],
             "target_version": "2.4.3",
@@ -193,7 +193,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1", "device_2"],
@@ -203,7 +203,7 @@
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1", "device_2"],
@@ -213,7 +213,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1", "device_2"],
             "target_version": "2.6.1",
@@ -224,7 +224,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1", "device_2"],
@@ -234,29 +234,29 @@
         {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.4.1-release",
-            "ipaddr": "d1_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d1_vto_port",
             "networktype": "d1_networktype"
         },
         {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.4.1-release",
-            "ipaddr": "d2_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d2_vto_port",
             "networktype": "d2_networktype"
         },
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1", "device_2"],
@@ -266,7 +266,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1", "device_2"],
             "target_version": "2.6.1",
@@ -277,7 +277,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1", "device_2"],
@@ -287,29 +287,29 @@
                 {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.4.1-release",
-            "ipaddr": "d1_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d1_vto_port",
             "networktype": "d1_networktype"
         },
         {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.4.1-release",
-            "ipaddr": "d2_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d2_vto_port",
             "networktype": "d2_networktype"
         },
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1", "device_2"],
@@ -319,7 +319,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1", "device_2"],
             "target_version": "2.4.3",
@@ -330,7 +330,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1", "device_2"],
@@ -340,7 +340,7 @@
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1", "device_2"],
@@ -350,7 +350,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1", "device_2"],
             "target_version": "2.6.1",
@@ -361,7 +361,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1", "device_2"],
@@ -371,29 +371,29 @@
         {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.4.3-release",
-            "ipaddr": "d1_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d1_vto_port",
             "networktype": "d1_networktype"
         },
         {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.4.3-release",
-            "ipaddr": "d2_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d2_vto_port",
             "networktype": "d2_networktype"
         },
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1", "device_2"],
@@ -403,7 +403,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1", "device_2"],
             "target_version": "2.6.1",
@@ -414,7 +414,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1", "device_2"],
@@ -424,18 +424,18 @@
         {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.3.0-release",
-            "ipaddr": "d1_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d1_vto_port",
             "networktype": "d1_networktype"
         },
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1"],
@@ -445,7 +445,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1"],
             "target_version": "2.4.3",
@@ -456,7 +456,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1"],
@@ -466,7 +466,7 @@
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1"],
@@ -476,7 +476,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1"],
             "target_version": "2.6.1",
@@ -487,7 +487,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1"],
@@ -497,18 +497,18 @@
                 {
             "method_name": "FlashDevice",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.0.0-release",
-            "ipaddr": "d1_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d1_vto_port",
             "networktype": "d1_networktype"
         },
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1"],
@@ -518,7 +518,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1"],
             "target_version": "2.4.1",
@@ -529,7 +529,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1"],
@@ -539,7 +539,7 @@
         {
             "method_name": "OTAPUpgrade",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name" : ["device_1"],
@@ -549,7 +549,7 @@
         {
             "method_name": "OTAPPollCurrentJobs",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "device_name": ["device_1"],
             "target_version": "2.6.1",
@@ -560,7 +560,7 @@
         {
             "method_name": "OTAPPostCheckVersionStatus",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_names": ["device_1"],
@@ -574,7 +574,7 @@
             "expect_pass": true,
             "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
             "target_version": "2.3.0-release",
-            "ipaddr": "d1_ip_to_ssh",
+            "ipaddr": "127.0.0.1",
             "portNumber": "d1_vto_port",
             "networktype": "d1_networktype"
         },
@@ -639,8 +639,8 @@
         },
         {
             "method_name": "deleteDevice",
-            "hiptest_name": "Delete Device- managed devices",
-            "skip": true,
+            "hiptest_name": "",
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json",
             "device_name": ["device_1"]
@@ -648,14 +648,14 @@
         {
             "method_name": "OTAPEmptyData",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": false,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d1_reg_sub_names.json"
         },
         {
             "method_name": "deleteDevice",
-            "hiptest_name": "Delete Device- managed devices",
-            "skip": true,
+            "hiptest_name": "",
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d2_reg_sub_names.json",
             "device_name": ["device_2"]
@@ -663,14 +663,14 @@
         {
             "method_name": "OTAPEmptyData",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Upgrade/d2_reg_sub_names.json"
         },
         {
             "method_name": "Logout",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true
         }
     ]

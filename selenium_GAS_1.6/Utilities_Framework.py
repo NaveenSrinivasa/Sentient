@@ -39,7 +39,7 @@ def SpawnBrowser(browser, platform):
         desired['IE_ENSURE_CLEAN_SESSION'] = True
         print('desired: %s' % desired)
         if '11' in browser:
-            driver = webdriver.Remote(command_executor='http://172.20.3.50:5555/wd/hub', desired_capabilities=desired)
+            driver = webdriver.Remote(command_executor='http://internet_explorer_machine_ip:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
             driver = webdriver.Remote(command_executor='http://172.20.3.49:5555/wd/hub', desired_capabilities=desired)
     return driver
@@ -317,7 +317,7 @@ def FindAndReplace(directory, find, replace, filePattern):
             for filename in fnmatch.filter(files, filePattern):
                 filepath = os.path.join(path, filename)
                 #print(filepath)
-                if 'maininputfile' not in filepath and 'Point' not in filepath and 'non_ascii' not in filepath and 'zip' not in filepath and 'tar' not in filepath:
+                if '.py' not in filepath and 'maininputfile' not in filepath and 'Point' not in filepath and 'non_ascii' not in filepath and 'zip' not in filepath and 'tar' not in filepath:
                     with open(filepath) as f:
                         s = f.read()
                     #print('find: %s' %find)

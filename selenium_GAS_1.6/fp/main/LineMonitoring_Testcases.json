@@ -492,9 +492,7 @@
             "expect_pass": true,
             "comment": "Verify Waveform table properties and its value",
             "input_file_path": "seleniumDir/inputfilesDir/Line Monitoring/lm_device_reg_sub_feeder_site_names.json",
-            "tab_name": "lm_wv_tab_name",
             "field_name": "lm_wv_field_name",
-            "field_value" : "lm_wv_field_value"
         },
         {
             "method_name": "ValidateMultipleWaveforms",

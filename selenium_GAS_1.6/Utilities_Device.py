@@ -55,9 +55,7 @@ def TestSetIntoDevice(path_to_xml_file):
     testsetChild.close()
 
 def SpawnSSHConnection(ipAddress, pathToRSAKey, portNumber, networkType):
-    sshChild = pexpect.spawn('/usr/bin/ssh entsw@10.8.1.40')
-    sshChild.expect('password:', timeout=120)
-    sshChild.sendline('ampacity') # Send the characters pass123 and "enter"
+    sshChild = pexpect.spawn('/bin/bash\r')
     sshChild.logfile = open('ssh.log', 'w')
     if networkType == 'SSN':
         SendSSHCommand(sshChild, 'ssh-keygen -f ~/.ssh/known_hosts -R [%s]:%s\r' % (ipAddress,portNumber))

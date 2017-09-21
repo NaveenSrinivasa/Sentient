@@ -19,7 +19,7 @@
         "username_valid": "ampleadmin",
         "guidance" : "Ample Login - Password",
         "password_valid": "yourpass",
-        "guidance" : "Browser name on which user wants to execute the scripts - options: chrome, Internet Explorer 10 and Internet Explorer 11",
+        "guidance" : "Browser name on which user wants to execute the scripts - options: chrome, internet explorer 10 and internet explorer 11",
         "browser_name": ["chrome"],
         "guidance" : "Platform on which user wants to run the scripts - options:WINDOWS,linux",
         "platform_name": ["linux"],
