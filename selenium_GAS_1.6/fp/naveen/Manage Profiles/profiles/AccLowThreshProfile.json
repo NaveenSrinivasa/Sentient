@@ -1,8 +1,0 @@
-{
-    "cFCI_Events":
-    {
-        "cFCI master enable latch":1,
-        "cFCI threshold enabled latch":1,
-        "cFCI threshold limit":20
-    }
-}

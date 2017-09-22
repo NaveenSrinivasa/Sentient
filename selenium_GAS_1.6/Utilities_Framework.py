@@ -23,7 +23,7 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         print('session_id : %s' %session_id)
-        driver.session_id = 'd7e90404-2fed-4f3c-811e-3c74dcd61873' # To connect with your desirable session
+        driver.session_id = '0b580732-6795-4385-97bd-af3f914fa102' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()

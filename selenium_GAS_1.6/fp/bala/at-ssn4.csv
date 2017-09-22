@@ -1,2 +1,0 @@
-Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Latitude,Longitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
-Chroma,Great America,Santa Clara,Sentient,B,at-ssn4,MM3,2.5.0-rc3,corgi,,,00:13:50:03:00:4D:9E:81,fd02:dead:beef:2:213:5003:4d:9e81,960,note1,20000,host42_sgw1,0-00001-05,,SSN,ssn_group1 ,

@@ -1,9 +1,0 @@
-{
-    "cfciData":
-    {
-        "cFCI master enable latch": "true",
-        "cFCI threshold enabled latch": "true",
-        "cFCI threshold limit": "20"
-    }
-
-}

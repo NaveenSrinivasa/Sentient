@@ -1,2 +1,0 @@
-Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
-SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite1,C,cll24,MM3,2.2.1,whippet,41.7577,-74.9857,thisiscll24,10.48.0.76,2875,note1,20000,host46_sgw2,0-00001-05,,4G,seleniumtest_group2,
