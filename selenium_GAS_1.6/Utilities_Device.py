@@ -36,7 +36,7 @@ def FlashUnitFromSSD(ipAddress, pathToRSAKey, targetVersion, portNumber, network
     except:
         printFP('Failed to copy image')
         return False
-    SendSSHCommand(child, 'fw_setenv bootcmd "setenv loaddev 2; run fall; run erase_env; reset;"\r')
+    SendSSHCommand(child, 'fw_setenv bootcmd "setenv loaddev 2; run ffactory; env default -f bootcmd; saveenv; reset;"\r')
     time.sleep(5)
     SendSSHCommand(child, 'reboot\r')
     try:
@@ -51,7 +51,7 @@ def TestSetIntoDevice(path_to_xml_file):
     testsetChild.logfile = open('testset.log','w')
     SendSSHCommand(testsetChild, 'testset -F %s\r' %path_to_xml_file)
     SendSSHCommand(testsetChild,'show\r')
-    SendSSHCommand(testsetChild, 'quit\r')
+    # SendSSHCommand(testsetChild, 'quit\r')
     testsetChild.close()
 
 def SpawnSSHConnection(ipAddress, pathToRSAKey, portNumber, networkType):

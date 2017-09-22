@@ -1968,7 +1968,8 @@ def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, act
         try:
             for i in range(len(device_name)):
                 SelectDevice(device_name[i])
-            ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_button'])
+            upgradebutton = GetElement(Global.driver, By.XPATH, "//button[text()='Firmware Upgrade']")
+            JustClick(upgradebutton)
         except:
             printFP("INFO - Test could not click upgrade button.")
             return Global.FAIL, 'TEST FAIL - Test could not start upgrade for selected devices.'

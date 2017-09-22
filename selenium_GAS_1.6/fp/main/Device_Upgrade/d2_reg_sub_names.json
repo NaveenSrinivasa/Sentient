@@ -1,6 +1,6 @@
 {
-    "Region": "BalaTestReg1",
-    "Substation": "BalaTestSub1",
+    "Region": "SelTestReg1",
+    "Substation": "SelTestSub1",
     "Feeder": "",
     "Site": ""
 }

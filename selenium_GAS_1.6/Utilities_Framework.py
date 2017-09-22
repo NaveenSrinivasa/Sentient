@@ -358,7 +358,7 @@ def InitialDirectorySetup(src):
         print('Not found given input path to duplicate input directory : %s' % src)
 
 def FilePathAndInputDataSetup(userdefinedvariables, directory):
-    if directory == 'none':
+    if 'none' in directory:
         directory = userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'
     for key, value in userdefinedvariables.items():
         if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not 'internet_explorer_machine' in key:
@@ -391,5 +391,5 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
             newvalue = value[:-1]
             FindAndReplace(directory, key, newvalue, "configurations.json")
         elif 'internet_explorer_machine' in key:
-            directory = userdefinedvariables['seleniumDir']
-            FindAndReplace(directory, key, value, "Utilities_Framework.py")
+            iedirectory = userdefinedvariables['seleniumDir']
+            FindAndReplace(iedirectory, key, value, "Utilities_Framework.py")
