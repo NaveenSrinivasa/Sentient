@@ -444,11 +444,11 @@ def GoToConfigProp():
     ClickButton(Global.driver, By.XPATH, xpaths['settings_config_prop'])
 
 def GoToFWUpgradeSettings():
-    Global.driver.refresh()
-    time.sleep(2)
-    GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
+    
     time.sleep(1)
-    ClickButton(Global.driver, By.XPATH, xpaths['settings_fw'])
+    ClickButton(Global.driver, By.XPATH, xpaths['dash_gear'])
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_button'])
 
 def GoToEmailAlert():
     time.sleep(1)
@@ -1040,6 +1040,7 @@ def SelectDevice(serial):
 
     try:
         device = GetDevice(serial)
+        #print device
         #checkbox = GetElement(device, By.XPATH, '/td[1]/input')
 
         checkbox = GetElement(device, By.TAG_NAME, 'input')
@@ -1385,6 +1386,8 @@ def NoDataAvailable(pagename):
         keyword = 'line-monitoring'
     elif pagename == "device-management" or pagename == "device-management-upgrade":
         keyword = 'device-management'
+    elif pagename == "currentJobs":
+        keyword = 'currentJobs'
     else:
         printFP('NoDataAvailable: Unable to find the requested Page')
         return None
@@ -4254,7 +4257,6 @@ def GetLatAndLonValuesOfSite(region, substation, feeder, site):
     else:
         return None, None
 
-
 def GetCurrentTableDisplayedColumnNames():
 
     # Create a list
@@ -4351,4 +4353,140 @@ def SelectFromTableColumnFilters(list_of_filters, state=True):
     printFP(testComment)
     return True
 
->>>>>>> c7bad6e... Firmware Upgrade test cases 15/09/2017
+def selectFiltersByFirmware(fw_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+    except:
+        try:
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+        except:
+            printFP("INFO - Test could not locate the Firmware Version Filter")
+            return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(fw_list)):
+        try:
+            fw = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_list[i] +"']")
+            fw.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)
+        except:
+            printFP("INFO - Test could not find firmware version %s" %fw_list[i])
+
+    return True
+
+def selectFiltersByUpgradeStatus(fw_status_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwUpgradeStatusSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Firmware Upgrade Status Filter")
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(fw_status_list)):
+        try:
+            fwStatus = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_status_list[i] +"']")
+            fwStatus.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)
+        except:
+            printFP("INFO - Test could not find Upgrade Status %s" %fw_status_list[i])
+
+    return True
+
+def selectFiltersByNetworkGroup(network_group_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
+    except:
+        try:
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSettings.list']/div/button")
+        except:
+            printFP("INFO - Test could not locate the Network Group filter")
+            return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(network_group_list)):
+        try:
+            ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ network_group_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)
+        except:
+            printFP("INFO - Test could not find network group %s" %(network_group_list[i]))
+
+    return True
+
+def selectFiltersBySerialNumber(serial_number):
+    try:
+        searchButton = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+    except:
+        try:
+            searchButton = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+        except:
+            printFP("INFO - Test could not locate the Serial number input box")
+            return False
+
+    ClearInput(searchButton)
+    searchButton.send_keys(serial_number)
+    GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+    time.sleep(4)
+    return True
+
+def UpgradeSettingsTestForTime(time_settings):
+    time_settings['from_time'] = ParseTime(time_settings['from_time'])
+    if time_settings['from_time'] is None:
+        testComment = 'Do not recognize this time format'
+        printFP(testComment)
+        return Global.FAIL, testComment
+    # set end time
+    time_settings['to_time'] = ParseTime(time_settings['to_time'])
+    if time_settings['to_time'] is None:
+        testComment = 'Do not recognize this time format'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    GoToDevMan()
+    GoToDevUpgrade()
+    return ChangetimeSettings(time_settings)
+
+def ChangetimeSettings(time_settings):
+    # Select day
+    if ValidDay(time_settings['day']):
+        ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_days'])
+        menuElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_days_menu'])
+        SelectFromMenu(menuElement, By.TAG_NAME, 'li', time_settings['day'])
+        everydayCheckbox = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_everyday_checkbox'])
+        SetCheckBox(everydayCheckbox, "False")
+    else:
+        everydayCheckbox = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_everyday_checkbox'])
+        SetCheckbox(everydayCheckbox, "true")
+
+    # Select time
+    fromElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_from'])
+    toElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_to'])
+    ConfigureTime(fromElement, time_settings['from_time'])
+    ConfigureTime(toElement, time_settings['to_time'])
+
+    # Submit
+    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_save'])
+    time.sleep(1)
+    try:
+        msg = GetText(Global.driver, By.XPATH, xpaths['settings_upgrade_setting_errmsg'])
+        if 'Start time must be earlier than end time.' in msg:
+            ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
+            printFP(msg)
+            return Global.PASS, msg
+    except:
+        pass
+    return Global.PASS, ''

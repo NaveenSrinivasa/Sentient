@@ -25,11 +25,11 @@ from Ample_AlertNotifications import *
 from Ample_Disturbances import *
 from Ample_NegativeTests import *
 from Ample_ConfigureProperties import *
-from Ample_SysAdmin_MTF_0 import *
-from Ample_SysAdmin_MTF_1 import *
+from Ample_SysAdmin_MTF import *
 from testdebug import *
 from Ample_DevMan_ManageDevices import *
 from Ample_LinMon_LogI import *
+from Ample_OTAP import *
 
 
 
@@ -176,7 +176,6 @@ def RunTests(tests, platform, browser, config, url, count, test_runner):
             #  and calls the test directly.
             # Both modes can be mixed in one file.
             if 'Module' in test:
-                #printFP(test['Module'])
                 running_msg = 'Running Module : {}'.format(test['Module'])
                 left_border = '~ '*6
                 right_border = ' ~'*6
@@ -204,8 +203,8 @@ def RunTests(tests, platform, browser, config, url, count, test_runner):
         report.write('Total PASS: %d\n' % Global.totalPass)
         report.write('Total FAIL: %d\n\n' % Global.totalFail)
         report.write('--------------------------------------\n\n')
-    Global.driver.close()
-    Global.driver.quit()
+    #Global.driver.close()
+    #Global.driver.quit()
 
 
 def TestConfig(config, connections, tests):
@@ -294,7 +293,7 @@ if __name__ == '__main__':
             # kick off the test
 
         TestConfig(parsed_config['Config'], parsed_connections['Connections'], parsed_json['Tests'])
-        FindAndReplace(usrdef['seleniumDir'], usrdef['internet_explorer_machine_ip'], 'internet_explorer_machine_ip', "Utilities_Framework.py")
+        #FindAndReplace(usrdef['seleniumDir'], usrdef['internet_explorer_machine_ip'], 'internet_explorer_machine_ip', "Utilities_Framework.py")
         if parsed_config['Email']['enabled']:
             EmailAttachment(parsed_config['Email']['attachments'], parsed_config['Email']['recipients'], parsed_config['Email']['subject_line'])
     else:

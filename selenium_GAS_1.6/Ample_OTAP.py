@@ -601,8 +601,8 @@ def OrganizationNodeLevelDisplayAndServerSidePagination(input_file_path, mtf_ful
         printFP(testComment)
         return Global.FAIL, testComment
 
-def DeviceFiltersForUpgradePage(mtf_full_path, page='Upgrade'):
-    '''if mtf_full_path == None:
+def DeviceFiltersForUpgradePage(mtf_full_path, fw_list, fw_status_list, network_group_list, serial_number, page='Upgrade'):
+    if mtf_full_path == None:
        mtf_full_path = Global.mtfPath
     with open(mtf_full_path, 'r') as inmtf:
        with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
@@ -624,71 +624,148 @@ def DeviceFiltersForUpgradePage(mtf_full_path, page='Upgrade'):
     ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
     time.sleep(20)
     returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "The file has been uploaded successfully." in returnMessage:'''
-    GoToDevMan()   
-    if page == 'Upgrade':
-        GoToDevUpgrade()
-        time.sleep(2)
-        swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
-        time.sleep(1)
-        swFilterButton.click()
-        time.sleep(2)
-
-        GetElement(Global.driver, By.ID, 'deselectAll').click()
-        time.sleep(3)
-        GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button").click()
-        time.sleep(3)
-
-        #Clicking the apply button
-        GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-        time.sleep(5)
-
-        if not ('Select' in GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button").text):
-            result = Global.FAIL
-            printFP("INFO - Filter SW does not display the text Select when user selects Show All filter from the dropdown")
-        printFP("INFO - Filter SW displayed the text Select when user selects Show All filter from the dropdown")
-
-        swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
-        swFilterButton.click()
-        time.sleep(2)
-        FilterChoices = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='option in options | filter:getFilter(input.searchFilter)']")
-        for n in range(len(FilterChoices)):
-        	#FilterChoices = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='option in options | filter:getFilter(input.searchFilter)']")
-            FilterChoices[n].click()
-            if n>0:
-            	swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button").click()
-            	FilterChoices[n-1].click()
+    if "The file has been uploaded successfully." in returnMessage:
+        GoToDevMan()   
+        if page == 'Upgrade':
+            GoToDevUpgrade()
             time.sleep(2)
+            GetRootNode()
+            time.sleep(1)
+
+            #Selecting show all from the FW version dropdown and it should display Select
+            swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+            time.sleep(1)
+            swFilterButton.click()
+            time.sleep(2)
+
+            GetElement(Global.driver, By.ID, 'deselectAll').click()
+            time.sleep(3)
+            GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button").click()
+            time.sleep(3)
+
+            #Clicking the apply button
             GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
             time.sleep(5)
-            FilterChoices = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='option in options | filter:getFilter(input.searchFilter)']").click()
-            filterText = GetElement(FilterChoices[n], By.XPATH, 'a/span[2]/span').text
-            print filterText
+            #Validating select is displayed or not when show all is selected
+            if not ('Select' in GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button").text):
+                result = Global.FAIL
+                printFP("INFO - Filter SW does not display the text Select when user selects Show All filter from the dropdown")
+            printFP("INFO - Filter SW displayed the text Select when user selects Show All filter from the dropdown")
+
+            #Selecting some FW version from the dropdown
+            selectFiltersByFirmware(fw_list)
+            lis_fw = ', '.join(fw_list)
+
+            #Checking whether selected version has data or not
             nodata = NoDataAvailable('device-management-upgrade')
             if nodata == "No Data Available":
-            	testComment = 'INFO - No data for selected FW version'
+                testComment = 'TEST FAIL - No data for selected FW version, select FW version which is available and try searching...'
                 printFP(testComment)
+                return Global.FAIL, testComment
             else:
-          	    displayedSW = GetElements(Global.driver, By.XPATH, '//td[5]/span')
-	            print displayedSW
+                displayedSW = GetElements(Global.driver, By.XPATH, '//td[5]/span')
+                for m in range(len(displayedSW)):
+                    if displayedSW[m].text != lis_fw:
+                        testComment = "TEST FAIL - A displayed SW version does not match the filter applied."
+                        printFP(testComment)
+                        result = Global.FAIL
+                    testComment = 'TEST PASS - A displayed SW version  matched the filter applied.'
+                    printFP(testComment)
+                    result = Global.PASS
 
-	            for m in range(len(displayedSW)):
-	                if displayedSW[m].text != filterText:
-	                    result = Global.FAIL
-	                    printFP("INFO - A displayed SW version does not match the filter applied.")
-	                    testComment = 'All filters are working.'
-	                    printFP(testComment)
-	                    return Global.FAIL, testComment
-	                    time.sleep(5)
-	            testComment = 'All filters are working.'
-	            printFP(testComment)
-	            return Global.PASS, testComment
+            #Selecting some FW Upgrade Status from the dropdown
+            selectFiltersByUpgradeStatus(fw_status_list)
+            status_list = ', '.join(fw_status_list)
 
-	    #swFilterButton.click()
-	    #time.sleep(2)
-	    testComment = 'All filters are working.'
-	    printFP(testComment)
-	    return Global.PASS, testComment
+
+            #Checking whether selected FWversion Status has data or not
+            nodata = NoDataAvailable('device-management-upgrade')
+            if nodata == "No Data Available":
+                testComment = 'TEST FAIL - No data for selected FW status, select FW Upgrade Status which is available and try searching...'
+                printFP(testComment)
+                return Global.FAIL, testComment
+            
+            if fw_status_list:
+                fw_statuses = GetElements(Global.driver, By.XPATH, "//tbody/tr[@ng-repeat='item in $data']/td[6]/span")
+                for i in range(len(fw_statuses)):
+                    print fw_statuses[i].text
+                    if fw_statuses[i].text=='' and not('(BLANKS)' in status_list):
+                        testComment = 'TEST FAIL - Displayed FW Version Status not matched'
+                        printFP(testComment)
+                        result = Global.FAIL
+                    elif fw_statuses[i].text in status_list:
+                        testComment = 'TEST PASS - Displayed FW Version Status matched'
+                        printFP(testComment)
+                        result = Global.PASS
+                    else:
+                        if fw_statuses[i].text not in status_list:
+                            testComment = 'TEST FAIL - Displayed FW Version Status NOT matched'
+                            printFP(testComment)
+                            result = Global.FAIL
+
+
+            #Selecting Network Group from the dropdown
+            selectFiltersByNetworkGroup(network_group_list)
+            nw_list = ', '.join(network_group_list)
+            print nw_list
+
+            if nodata == "No Data Available":
+                testComment = 'TEST FAIL - No data for selected FW version, select FW version which is available and try searching...'
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+
+            #Checking whether selected Network Group has data or not
+            nodata = NoDataAvailable('device-management-upgrade')
+            if nodata == "No Data Available":
+                testComment = 'TEST FAIL - No data for selected FW version, select FW version which is available and try searching...'
+                printFP(testComment)
+                return Global.FAIL, testComment
+            else:
+                displayedNG = GetElements(Global.driver, By.XPATH, '//td[7]/span')
+                for m in range(len(displayedNG)):
+                    if displayedNG[m].text != nw_list:
+                        testComment = "TEST FAIL - A displayed Network Group name does not match the filter applied."
+                        printFP(testComment)
+                        result = Global.FAIL
+                    testComment = 'TEST PASS - A displayed Network Group name  matched the filter applied.'
+                    printFP(testComment)
+                    result = Global.PASS
+
+            #Entering Device name in serial number input box
+            selectFiltersBySerialNumber(serial_number)
+            print serial_number
+
+            #Checking whether selected Network Group has data or not
+            nodata = NoDataAvailable('device-management-upgrade')
+            if nodata == "No Data Available":
+                testComment = 'TEST FAIL - No data for selected FW version, select FW version which is available and try searching...'
+                printFP(testComment)
+                return Global.FAIL, testComment
+            else:
+                displayedDeviceName = GetElements(Global.driver, By.XPATH, '//td[2]/span')
+                for m in range(len(displayedDeviceName)):
+                    if displayedDeviceName[m].text != serial_number:
+                        testComment = "TEST FAIL - A displayed serial number does not match the filter applied."
+                        printFP(testComment)
+                        result = Global.FAIL
+                    testComment = 'TEST PASS - A displayed serial number matched the filter applied.'
+                    printFP(testComment)
+                    result = Global.PASS
+
+            if result == Global.PASS:
+                testComment = 'TEST PASS - Device Filters are working..'
+                printFP(testComment)
+                return Global.PASS, testComment
+            else:
+                testComment = 'TEST FAIL -Some Device Filters not working..'
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+
+    testComment = 'Test Fail - MTF File failed to Upload..'
+    printFP(testComment)
+    return Global.FAIL, testComment
 
 def FirmwareUpgradeList(mtf_full_path, input_file_path):
     if mtf_full_path == None:
@@ -787,6 +864,493 @@ def FirmwareUpgradeButtonDisabledWithoutDevicesSelected(mtf_full_path):
     	testComment = 'TEST FAIL - MTF File failed to upload..'
     	printFP(testComment)
     	return Global.FAIL, testComment
+
+def SetUpgradeRetries():
+    printFP('INFO - Going to Firmware Upgrade Settings')
+    GoToFWUpgradeSettings()
+    printFP('INFO - Reached Firmware Upgrade Settings screen')
+    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_num_retries'])
+    menuElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_num_retries_menu'])
+    num_of_retry = GetElement(menuElement, By.XPATH, 'li[1]').click()
+    time.sleep(1)
+    retry_selected = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_num_retries']).text
+    
+    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_save'])
+    time.sleep(2)
+
+    GoToFWUpgradeSettings()
+
+    retries_displayed_in_ui = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_num_retries']).text
+    GetElement(Global.driver, By.XPATH, "//a[contains(@class,'remove-circle close-icon')]").click()
+    time.sleep(1)
+
+    if retries_displayed_in_ui == retry_selected:
+        testComment = 'TEST PASS - Number of retries matched with saved retry number'
+        printFP(testComment)
+        return Global.PASS, testComment
+    else:
+        testComment = 'TEST FAIL - Number of retries did not matched with saved retry number'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+def SearchForSerialNumber(mtf_full_path):
+    if mtf_full_path == None:
+       mtf_full_path = Global.mtfPath
+    with open(mtf_full_path, 'r') as inmtf:
+       with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+            time.sleep(1)
+            header = inmtf.readline()
+            outmtf.write(header)
+            for line in inmtf:
+                outmtf.write(line)
+                devInfo = line.strip('\n').split(',')
+                #If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+                try:
+                    device = CreateDeviceDictionary(devInfo)
+                except:
+                    pass
+    GoToSysAdmin()
+    time.sleep(2)
+    UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
+    time.sleep(2)
+    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
+    time.sleep(20)
+    device_name = device['serial']
+    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
+    if "The file has been uploaded successfully." in returnMessage:
+        GoToDevman()
+        printFP('INFO - Going to Firmware Upgrade page')
+        GoToDevUpgrade()
+        printFP('INFO - Reached Firmware Upgrade page')
+        GetRootNode()
+
+        printFP('INFO - Inputting Serial number in search tab')
+        serial_number = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+        ClearInput(serial_number)
+        serial_number.send_keys(device_name)
+
+        GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+        time.sleep(4)
+
+        displayed_Serial_number = GetElement(Global.driver, By.XPATH, '//td[2]/span').text
+        if device_name == displayed_Serial_number:
+            testComment = 'TEST PASS - Entered/Searched device name is displayed in the UI'
+            printFP(testComment)
+            return Global.PASS, testComment
+        else:
+            testComment = 'TEST FAIL - Entered/Searched device name is NOT displayed in the UI'
+            printFP(testComment)
+            return Global.FAIL, testComment
+    else:
+        testComment = 'TEST FAIL - MTF File failed to upload'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+def ConfigureFwUpgradeSettingsStartTimeLaterThanEndTime(time_or_day):
+    printFP('INFO - Going to Firmware Upgrade Settings')
+    GoToFWUpgradeSettings()
+    printFP('INFO - Reached Firmware Upgrade Settings screen')
+
+    frm_hr = GetElement(Global.driver, By.XPATH, "(//input[@ng-model='hours'])[1]")
+    ClearInput(frm_hr)
+    frm_time = "5"
+    frm_hr.send_keys(frm_time)
+
+    frm_sec = GetElement(Global.driver, By.XPATH, "(//input[@ng-model='minutes'])[1]")
+    ClearInput(frm_sec)
+    sec_time = "50"
+    frm_sec.send_keys(sec_time)
+
+    tog = GetElement(Global.driver, By.XPATH, "(//button[contains(@ng-click,'toggleMeridian')])[1]")
+    if 'AM' in tog.text:
+        print 'AM time'
+    else:
+        JustClick(tog)
+
+    to_hr = GetElement(Global.driver, By.XPATH, "(//input[@ng-model='hours'])[2]")
+    ClearInput(to_hr)
+    to_time = "5"
+    to_hr.send_keys(to_time)
+
+    to_sec = GetElement(Global.driver, By.XPATH, "(//input[@ng-model='minutes'])[2]")
+    ClearInput(to_sec)
+    sec = "45"
+    to_sec.send_keys(sec)
+
+    tog1 = GetElement(Global.driver, By.XPATH, "(//button[contains(@ng-click,'toggleMeridian')])[2]")
+    if 'AM' in tog1.text:
+        print 'AM time'
+    else:
+        JustClick(tog1)
+
+    save_button = GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Save')]").click()
+    time.sleep(3)
+    msg = GetText(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[2]/div[2]/div/div/span", visible=True)
+    print msg
+    close_button = GetElement(Global.driver, By.XPATH, "//a[contains(@class,'remove-circle close-icon')]").click()
+    time.sleep(1)
+
+    '''if time_or_day == 'Time':
+        #Dates = ["Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        #i = datetime.datetime.today().weekday()
+       
+        #print Dates[datetime.datetime.today().weekday()]
+
+        time_settings = {
+            "day": datetime.datetime.today().weekday(),
+            "from_time":"10:58PM",
+            "to_time":"10:55PM"
+        }
+    try:
+        res = UpgradeSettingsTestForTime(time_settings)
+        print res
+    except:
+        testComment = 'Setting Failed.'
+        printFP(testComment)
+        return Global.FAIL, testComment
+    testComment = 'Expected error msg'
+    printFP(testComment)
+    return Global.PASS, testComment'''
+
+    if "Start time must be earlier than end time." in msg:
+        testComment = 'TEST PASS - Expected error msg is displayed when Start time is greater then the end time..'
+        printFP(testComment)
+        return Global.PASS, testComment
+    else:
+        testComment = 'TEST FAIL - Expected error msg is NOT displayed when Start time is greater then the end time..'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+def UpgradeMultipleDeviceswithDifferentSoftwareVersions(mtf_file_path1, mtf_file_path2, wait_for_online1=True, wait_for_online2=True):
+    if mtf_file_path1 == None and mtf_file_path2 == None:
+        testComment = "Test Fail - Missing a mandatory parameter."
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    # Generate a temporary mtf with only 1 device
+    if mtf_file_path1 == None:
+        mtf_full_path = Global.mtfPath
+    else:
+        mtf_full_path = mtf_file_path1
+    with open(mtf_full_path, 'r') as inmtf:
+        with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+            time.sleep(1)
+            header = inmtf.readline()
+            outmtf.write(header)
+            for line in inmtf:
+                outmtf.write(line)
+                devInfo = line.strip('\n').split(',')
+                #If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+                try:
+                    device = CreateDeviceDictionary(devInfo)
+                except:
+                    pass
+    GoToSysAdmin()
+    time.sleep(2)
+    UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
+    time.sleep(1)
+    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
+    if "The file has been uploaded successfully." in returnMessage:
+        printFP("INFO - MTF upload message: %s" % returnMessage)
+    else:
+        testComment = "MTF upload message: %s" % returnMessage
+        printFP(testComment)
+        return Global.FAIL, 'TEST FAIL - ' + testComment
+    if wait_for_online1:
+        GoToDevMan()
+        time.sleep(3)
+        Global.driver.refresh()
+        time.sleep(10)
+        GetSiteFromTop(device['region'], device['substation'], device['feeder'], device['site'])
+        if IsOnline(device['serial']):
+            testComment = 'INFO - %s did come online'% device['serial']
+            printFP(testComment)
+        else:
+            testComment = 'TEST FAIL - %s did not come online' % device['serial']
+            printFP(testComment)
+            return Global.FAIL, testComment
+
+    if mtf_file_path2 == None:
+        mtf_full_path = Global.mtfPath
+    else:
+        mtf_full_path = mtf_file_path2
+    with open(mtf_full_path, 'r') as inmtf:
+        with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+            time.sleep(1)
+            header = inmtf.readline()
+            outmtf.write(header)
+            for line in inmtf:
+                outmtf.write(line)
+                devInfo = line.strip('\n').split(',')
+                #If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+                try:
+                    device2 = CreateDeviceDictionary(devInfo)
+                except:
+                    pass
+    GoToSysAdmin()
+    time.sleep(2)
+    UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
+    time.sleep(1)
+    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
+    if "The file has been uploaded successfully." in returnMessage:
+        printFP("INFO - MTF upload message: %s" % returnMessage)
+    else:
+        testComment = "MTF upload message: %s" % returnMessage
+        printFP(testComment)
+        return Global.FAIL, 'TEST FAIL - ' + testComment
+    if wait_for_online2:
+        GoToDevMan()
+        time.sleep(3)
+        Global.driver.refresh()
+        time.sleep(10)
+        GetSiteFromTop(device2['region'], device2['substation'], device2['feeder'], device2['site'])
+        if IsOnline(device2['serial']):
+            testComment = 'INFO - device did come online'
+            printFP(testComment)
+        else:
+            testComment = 'TEST FAIL - %s did not come online' % device2['serial']
+            printFP(testComment)
+            return Global.FAIL, testComment
+
+        GoToDevUpgrade()
+        GetRootNode()
+        time.sleep(1)
+            
+        selectAll = GetElement(Global.driver, By.XPATH, "//input[@ng-model='selection.checkAll']")
+        SetCheckBox(selectAll, 'true')
+        time.sleep(1)
+        upgrade_button = GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Firmware Upgrade')]").click()
+        time.sleep(4)
+        msg = GetText(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[2]/div[2]/div/div/span", visible=True)
+        print msg
+        close_button = GetElement(Global.driver, By.XPATH, "//a[contains(@class,'remove-circle close-icon')]").click()
+        if 'Selection contains different From Software Versions' in msg:
+            testComment = 'TEST PASS - Expected error message is displayed when multiple devices are selected for firmware upgrade with different FW version.'
+            printFP(testComment)
+            return Global.PASS, testComment
+        else:
+            testComment = 'TEST FAIL - Expected error message is NOT displayed when multiple devices are selected for firmware upgrade with different FW version.'
+            printFP(testComment)
+            return Global.FAIL, testComment
+    else:
+        testComment = 'TEST FAIL - Unexpected error...'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+def DeleteDeviceWhileUpgradeInProgress(mtf_file_path, input_file_path,  wait_for_online=True):
+    if mtf_file_path == None:
+        testComment = "Test Fail - Missing a mandatory parameter."
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    # Generate a temporary mtf with only 1 device
+    if mtf_file_path == None:
+        mtf_full_path = Global.mtfPath
+    else:
+        mtf_full_path = mtf_file_path
+    with open(mtf_full_path, 'r') as inmtf:
+        with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+            time.sleep(1)
+            header = inmtf.readline()
+            outmtf.write(header)
+            for line in inmtf:
+                outmtf.write(line)
+                devInfo = line.strip('\n').split(',')
+                #If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+                try:
+                    device = CreateDeviceDictionary(devInfo)
+                except:
+                    pass
+    GoToSysAdmin()
+    time.sleep(2)
+    UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
+    time.sleep(1)
+    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
+    if "The file has been uploaded successfully." in returnMessage:
+        printFP("INFO - MTF upload message: %s" % returnMessage)
+    else:
+        testComment = "MTF upload message: %s" % returnMessage
+        printFP(testComment)
+        return Global.FAIL, 'TEST FAIL - ' + testComment
+    if wait_for_online:
+        GoToDevMan()
+        time.sleep(3)
+        Global.driver.refresh()
+        time.sleep(2)
+        GetSiteFromTop(device['region'], device['substation'], device['feeder'], device['site'])
+        if IsOnline(device['serial']):
+            testComment = 'INFO - %s did come online'% device['serial']
+            printFP(testComment)
+            
+            serial_name = device['serial']
+            serial_name_list = [serial_name]
+            print serial_name_list
+            GetRootNode()
+            chk = False
+            ver = "2.6.0"
+            res = OTAPUpgrade(input_file_path, serial_name_list, ver, chk, 1200)
+            print res
+            if 1 in res:
+                testComment = 'INFO - Firmware Upgrade started for selected device.'
+                printFP(testComment)
+                result = Global.PASS
+            else:
+                testComment = 'TEST FAIL - Firmware Upgrade NOT started for selected device.'
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+            GoToDevman()
+            
+            res1 = deleteDevice(input_file_path, serial_name_list, chk)
+            print res1
+
+            GoToCurrentJobsUpgrade()
+            nodata = NoDataAvailable('currentJobs')
+            print nodata
+
+            if nodata == 'No Data Available':
+                testComment = 'TEST PASS - Selected device is deleted successfully When Firmware upgrade is in progress and job is not shown in Current job page..'
+                printFP(testComment)
+                return Global.PASS, testComment
+
+            tabl = GetElement(Global.driver, By.TAG_NAME, 'table')
+            devtbody = GetElement(tabl, By.TAG_NAME, "tbody")
+            deviceslist = GetElements(devtbody, By.TAG_NAME, 'tr')
+            serial_name_from_table = []
+            for row in deviceslist:
+                serial_num = GetElement(row, By.XPATH, "//td[3]/span").text
+                serial_name_from_table.append(serial_num)
+            print serial_name_from_table
+            
+            if all(str(x) in serial_name_list for x in serial_name_from_table):
+                testComment = 'TEST FAIL - Selected device is NOT deleted successfully When Firmware upgrade is in progress and job is shown in Current job page..'
+                printFP(testComment)
+                return Global.FAIL, testComment
+            testComment = 'TEST PASS - Selected device is deleted successfully When Firmware upgrade is in progress and job is not shown in Current job page..'
+            printFP(testComment)
+            return Global.PASS, testComment
+
+def VerifyNumberOfDevicesSelectedForUpgrade(mtf_file_path, wait_for_online=True):
+    if mtf_file_path == None:
+        testComment = "Test Fail - Missing a mandatory parameter."
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    # Generate a temporary mtf with only 1 device
+    if mtf_file_path == None:
+        mtf_full_path = Global.mtfPath
+    else:
+        mtf_full_path = mtf_file_path
+    with open(mtf_full_path, 'r') as inmtf:
+        with open('/tmp/UploadMTFTest' + mtf_full_path[mtf_full_path.rfind('.'):], 'w+') as outmtf:
+            time.sleep(1)
+            header = inmtf.readline()
+            outmtf.write(header)
+            for line in inmtf:
+                outmtf.write(line)
+                devInfo = line.strip('\n').split(',')
+                #If this doesn't work, then that means that the upload file is bad. Will error out later through upload
+                try:
+                    device = CreateDeviceDictionary(devInfo)
+                except:
+                    pass
+    GoToSysAdmin()
+    time.sleep(2)
+    UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
+    time.sleep(1)
+    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
+    if "The file has been uploaded successfully." in returnMessage:
+        if wait_for_online:
+            GoToDevMan()
+            time.sleep(3)
+            Global.driver.refresh()
+            time.sleep(2)
+            GetSiteFromTop(device['region'], device['substation'], device['feeder'], device['site'])
+            if IsOnline(device['serial']):
+                testComment = 'INFO - %s did come online'% device['serial']
+                printFP(testComment)
+            GoToDevman()
+            GoToDevUpgrade()
+            GetRootNode()
+            selectAll = GetElement(Global.driver, By.XPATH, "//input[@ng-model='selection.checkAll']")
+            SetCheckBox(selectAll, 'true')
+            time.sleep(1)
+
+            device_table = GetElement(Global.driver, By.TAG_NAME, 'table')
+            devtbody = GetElement(device_table, By.TAG_NAME, "tbody")
+            deviceslist = GetElements(devtbody, By.TAG_NAME, 'tr')
+            chk_count = 0
+            for row in deviceslist:
+                chk_box = GetElement(row, By.XPATH, "//td[1]")
+                chk_box.is_selected()
+                chk_count += 1
+            print 'Number of devices ', chk_count
+
+            upgrade_button = GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Firmware Upgrade')]").click()
+            time.sleep(4)
+
+            upgradeTitle = GetElement(Global.driver, By.XPATH, "//span[contains(@class, 'modal-title')]").text
+            printFP("INFO - Upgrade Title: %s" %upgradeTitle)
+            time.sleep(1)
+
+            closeButton = GetElement(Global.driver, By.XPATH, "/html/body/div[4]/div/div/div[1]/span[2]/a")
+            closeButton.click()
+
+            if str(chk_count) + ' Device' in upgradeTitle:
+                testComment = "TEST PASS - Number of Devices Selected Matches the Amount of devices to be Upgraded."
+                printFP(testComment)
+                return Global.PASS, testComment
+            else:
+                testComment = "TEST FAIL -Number of Devices Selected NOT Matches the Amount of devices to be Upgraded."
+                printFP(testComment)
+                return Global.FAIL, testComment
+        testComment = "TEST FAIL -MTF File failed to upload.."
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
