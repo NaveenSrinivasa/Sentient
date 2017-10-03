@@ -10,20 +10,6 @@
             "password": "password_valid"
         },
         {
-            "method_name": "TestSetIntoDevice",
-            "hiptest_name": "",
-            "skip": false,
-            "expect_pass": true,
-            "path_to_xml_file": "seleniumDir/inputfilesDir/device_1.xml"
-        },
-        {
-            "method_name": "TestSetIntoDevice",
-            "hiptest_name": "",
-            "skip": false,
-            "expect_pass": true,
-            "path_to_xml_file": "seleniumDir/inputfilesDir/device_2.xml"
-        },
-        {
             "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
             "comment": "Allows the use of use_global_test_device",
             "method_name": "UploadMTFTest",
