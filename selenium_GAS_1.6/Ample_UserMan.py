@@ -267,7 +267,7 @@ def EditOwnDetailsInUserMan(user_name=None):
         printFP(testComment)
         return Global.FAIL, testComment
 
-def VerifyUserCapabilities(input_file_path=None, testDev=None):
+def ViewOnlyRoleCapabilities(input_file_path=None, testDev=None):
     if not (input_file_path and testDev):
         testComment = 'Test is missing mandatory parameter'
         printFP(testComment)
@@ -280,9 +280,10 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
     feeder = params['Feeder']
     site = params['Site']
 
-    sysadmin = [xpaths['settings_sys_admin'], xpaths['settings_config_prop'], xpaths['settings_man_prof'], xpaths['dev_upgrade_settings_button'], xpaths['settings_user_man']]
-    devman = [xpaths['dev_man_configure_big'], xpaths['dev_man_unregister'], xpaths['dev_man_register'], xpaths['dev_man_delete']]
-    devup = xpaths['dev_upgrade_button']
+    sysadmin = [xpaths['settings_sys_admin'], xpaths['settings_config_prop'], xpaths['settings_man_prof'], xpaths['dev_upgrade_settings_button'], xpaths['settings_user_man'], xpaths['settings_audit_trail'], xpaths['settings_notif_temp']]
+    devman = [xpaths['dev_man_edit'], xpaths['dev_man_add_device'], xpaths['dev_man_unregister'], xpaths['dev_man_register'], xpaths['dev_man_delete']]
+    devconfig = [xpaths['dev_configure_button']]
+    devup = [xpaths['dev_upgrade_button']]
 
     #Attempts to go into Management/Settings locations as a User
     for i in range(len(sysadmin)):
@@ -290,8 +291,7 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
         try:
             link = GetElement(Global.driver, By.XPATH, sysadmin[i])
             if 'disabled' in link.get_attribute('class'):
-                time.sleep(1)
-                Global.driver.refresh()
+                time.sleep(2)
             else:
                 link.click()
                 testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
@@ -304,7 +304,7 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
     #Attempts to perform Administrative actions such as delete/configure/unregister
     GoToDevMan()
     if not GetLocationFromInput(region,substation,feeder,site):
-        testComment = "TEST FAIL - Unable to locate locations based off input file in Configuration Page"
+        testComment = "TEST FAIL - Unable to locate locations based off input file in Manage Device Page"
         printFP(testComment)
         return Global.FAIL, testComment
 
@@ -317,12 +317,32 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
                 Global.driver.refresh()
             else:
                 link.click()
-                testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
+                testComment = 'TEST FAIL - User is able to modify and change elements in Manage Device Page'
                 printFP(testComment)
                 return Global.FAIL, testComment
         except:
             time.sleep(1)
             Global.driver.refresh()
+
+    GoToDevConfig()
+    if not GetLocationFromInput(region,substation,feeder,site):
+        testComment = "Unable to locate locations based off input file in Configuration Page"
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    SelectDevice(testDev)
+    try:
+        link = GetElement(Global.driver, By.XPATH, devconfig)
+        if 'disabled' in link.get_attribute('class'):
+            time.sleep(1)
+            Global.driver.refresh()
+        else:
+            link.click()
+            testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
+            printFP(testComment)
+            return Global.FAIL, testComment
+    except:
+        pass
 
     #Attemps to perform Administrative action such as OTAP upgrade
     GoToDevUpgrade()
@@ -339,7 +359,7 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
             Global.driver.refresh()
         else:
             link.click()
-            testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
+            testComment = 'TEST FAIL - User is able to modify and change elements in Device Firmware Upgrade Page'
             printFP(testComment)
             return Global.FAIL, testComment
     except:

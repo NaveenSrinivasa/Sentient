@@ -12,8 +12,8 @@
             "test_json": "seleniumDir/inputfilesDir/Disturbance_Testcases.json"
         },
         {
-            "Module": "Add User Tests",
-            "skip": true,
+            "Module": "User Management Tests",
+            "skip": false,
             "test_json": "seleniumDir/inputfilesDir/UserManagement_Testcases.json"
         },
         {
@@ -33,7 +33,7 @@
         },
         {
             "Module": "Device Upgrade Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/DeviceUpgrade_Testcases.json"
         },
         {
