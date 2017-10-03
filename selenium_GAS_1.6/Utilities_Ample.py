@@ -1344,20 +1344,22 @@ def NoDataAvailable(pagename):
 
     page = elements.find('div', class_=re.compile(keyword))
     try:
-        tmppage = page.find('div', class_=re.compile('nodata-available'))
-        classname = tmppage['class']
+        nodatatags = page.find_all('div', class_=re.compile('nodata-available'))
     except:
         printFP('NoDataAvailable: Unable to find the text')
         return None
 
-    if not "ng-hide" in classname:
-        nodataavailabletext = 'No Data Available'
-        printFP('NoDataAvailable: %s' %nodataavailabletext)
-        return nodataavailabletext
-    else:
-        nodataavailabletext = 'Data Available'
-        printFP('NoDataAvailable: %s' %nodataavailabletext)
-        return nodataavailabletext
+    for nodatatag in nodatatags:
+        classname = nodatatag['class']
+        if not "ng-hide" in classname:
+            nodataavailabletext = 'No Data Available'
+            printFP('NoDataAvailable: %s' %nodataavailabletext)
+            return nodataavailabletext
+        else:
+            pass
+    nodataavailabletext = 'Data Available'
+    printFP('NoDataAvailable: %s' %nodataavailabletext)
+    return nodataavailabletext
 
 def GetTableColumnOrder(pagename):
 
@@ -4200,7 +4202,6 @@ def GetCurrentTableColumnNamesNotShown():
 
     return tablecolumnnameslist
 
-
 def GetFWSatusMsgFromFWScreen(device_name):
     GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
     time.sleep(1)
@@ -4223,6 +4224,58 @@ def GetFirmwareUpgradeEachPhaseStatus():
     printFP(firmwareupgradeeachphasestatus)
     return firmwareupgradeeachphasestatus
 
+
+def CheckAllJobsPresence():
+    printFP("INFO - Locating Job that contains the devices")
+    try:
+        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
+    except:
+        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
+        return False, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Page'
+
+    if len(allJobs) == 0:
+        printFP("INFO - No upgrades were found.")
+        return False, 'TEST FAIL - No Jobs were found.'
+
+    return True, ''
+
+def GetFWSatusMsgFromFWScreen(device_name):
+    GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
+    time.sleep(1)
+    fwstatusmsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body')]/p").text
+    ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
+    return fwstatusmsg
+
+def GetFirmwareUpgradeEachPhaseStatus():
+
+    firmwareupgradeeachphasestatus = {}
+    otapstatusframe = GetElement(Global.driver, By.XPATH, "//div[@class='otapStatusModel']")
+    otapstatus = GetElement(otapstatusframe, By.TAG_NAME, 'ul')
+    options = GetElements(otapstatus, By.XPATH, "li[@class='ng-scope']")
+    for option in options:
+        phasename = GetElement(option, By.XPATH, 'div[1]').text
+        phasestatus = GetElement(option, By.XPATH, 'div[2]').get_attribute('class')
+        phasestatus = phasestatus.split(' ')
+        firmwareupgradeeachphasestatus[phasename] = phasestatus[2]
+    printFP(firmwareupgradeeachphasestatus)
+    return firmwareupgradeeachphasestatus
+
+def ClickExportButton():
+    try:
+        exportbutton = GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Export')]")
+        exportbutton.click()
+        return exportbutton
+    except:
+        printFP('Failed to click export button')
+        return False
+
+def ClickExportCSVEXCELButton(element, filetype):
+    try:
+        ClickButton(element, By.XPATH, "..//span[text()='" + filetype + "']")
+        return True
+    except:
+        printFP('Failed to click export' + filetype + ' button')
+        return False
 
 def CheckAllJobsPresence():
     printFP("INFO - Locating Job that contains the devices")

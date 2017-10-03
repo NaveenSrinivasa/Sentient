@@ -8,6 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from Utilities_Ample import *
+from Ample_DevMan import *
 
 
 def Add100UsersTest():
@@ -267,7 +268,7 @@ def EditOwnDetailsInUserMan(user_name=None):
         printFP(testComment)
         return Global.FAIL, testComment
 
-def VerifyUserCapabilities(input_file_path=None, testDev=None):
+def ViewOnlyRoleCapabilities(input_file_path=None, testDev=None):
     if not (input_file_path and testDev):
         testComment = 'Test is missing mandatory parameter'
         printFP(testComment)
@@ -275,14 +276,11 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
 
     """Must be logged in as a User"""
     params = ParseJsonInputFile(input_file_path)
-    region = params['Region']
-    substation = params['Substation']
-    feeder = params['Feeder']
-    site = params['Site']
 
-    sysadmin = [xpaths['settings_sys_admin'], xpaths['settings_config_prop'], xpaths['settings_man_prof'], xpaths['dev_upgrade_settings_button'], xpaths['settings_user_man']]
-    devman = [xpaths['dev_man_configure_big'], xpaths['dev_man_unregister'], xpaths['dev_man_register'], xpaths['dev_man_delete']]
-    devup = xpaths['dev_upgrade_button']
+    sysadmin = [xpaths['settings_sys_admin'], xpaths['settings_config_prop'], xpaths['settings_man_prof'], xpaths['dev_upgrade_settings_button'], xpaths['settings_user_man'], xpaths['settings_audit_trail'], xpaths['settings_notif_temp']]
+    devman = [xpaths['dev_man_edit'], xpaths['dev_man_add_device'], xpaths['dev_man_unregister'], xpaths['dev_man_register'], xpaths['dev_man_delete']]
+    devconfig = [xpaths['dev_configure_button']]
+    devup = [xpaths['dev_upgrade_button']]
 
     #Attempts to go into Management/Settings locations as a User
     for i in range(len(sysadmin)):
@@ -290,8 +288,7 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
         try:
             link = GetElement(Global.driver, By.XPATH, sysadmin[i])
             if 'disabled' in link.get_attribute('class'):
-                time.sleep(1)
-                Global.driver.refresh()
+                pass
             else:
                 link.click()
                 testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
@@ -303,8 +300,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
 
     #Attempts to perform Administrative actions such as delete/configure/unregister
     GoToDevMan()
-    if not GetLocationFromInput(region,substation,feeder,site):
-        testComment = "TEST FAIL - Unable to locate locations based off input file in Configuration Page"
+    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+        testComment = "TEST FAIL - Unable to locate locations based off input file in Manage Device Page"
         printFP(testComment)
         return Global.FAIL, testComment
 
@@ -313,20 +310,38 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
         try:
             link = GetElement(Global.driver, By.XPATH, devman[n])
             if 'disabled' in link.get_attribute('class'):
-                time.sleep(1)
-                Global.driver.refresh()
+                pass
             else:
                 link.click()
-                testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
+                testComment = 'TEST FAIL - User is able to modify and change elements in Manage Device Page'
                 printFP(testComment)
                 return Global.FAIL, testComment
         except:
             time.sleep(1)
             Global.driver.refresh()
 
+    GoToDevConfig()
+    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+        testComment = "Unable to locate locations based off input file in Configuration Page"
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    SelectDevice(testDev)
+    try:
+        link = GetElement(Global.driver, By.XPATH, devconfig)
+        if 'disabled' in link.get_attribute('class'):
+            pass
+        else:
+            link.click()
+            testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
+            printFP(testComment)
+            return Global.FAIL, testComment
+    except:
+        pass
+
     #Attemps to perform Administrative action such as OTAP upgrade
     GoToDevUpgrade()
-    if not GetLocationFromInput(region,substation,feeder,site):
+    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
         testComment = "Unable to locate locations based off input file in Upgrade Page"
         printFP(testComment)
         return Global.FAIL, testComment
@@ -335,11 +350,10 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None):
     try:
         link = GetElement(Global.driver, By.XPATH, devup)
         if 'disabled' in link.get_attribute('class'):
-            time.sleep(1)
-            Global.driver.refresh()
+            pass
         else:
             link.click()
-            testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
+            testComment = 'TEST FAIL - User is able to modify and change elements in Device Firmware Upgrade Page'
             printFP(testComment)
             return Global.FAIL, testComment
     except:
@@ -917,3 +931,144 @@ def DeleteUserTest(user_profile_path, deleteuserstatus=False):
             testComment = 'Failed to delete user %s' % params['username']
             printFP('INFO - ' + testComment)
             return Global.FAIL, 'TEST FAIL - '+testComment
+
+
+def ViewOnlyRoleCapabilitiesExportData(input_file_path=None, downloadfolder=None):
+    if input_file_path == None or downloadfolder == None:
+        testComment = "Missing a mandatory parameter"
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    params = ParseJsonInputFile(input_file_path)
+    linemon = [xpaths['line_mon_disturbances'], xpaths['line_mon_waveforms'], xpaths['line_mon_logi']]
+    devman = [xpaths['dev_man_manage_dev'], xpaths['dev_man_config'], xpaths['dev_man_inactive_dev'], xpaths['dev_man_phaseid']]
+
+    GoToDevman()
+    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+        testComment = 'Provided input values are not valid.'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    for i in range(len(devman)):
+        GetElement(Global.driver, By.XPATH, devman[i]).click()
+        nodataavailable = NoDataAvailable('device-management')
+        if not nodataavailable == "No Data Available":
+            exportbutton = ClickExportButton()
+            if not ClickExportCSVEXCELButton(exportbutton, 'CSV'):
+                testComment = 'TEST FAIL - User is not able to access csv export button in Dev Management Pages. Please check the log file.'
+                printFP(testComment)
+                return Global.FAIL, testComment
+            csvlocation = downloadfolder + "export.csv"
+            exportbutton = ClickExportButton()
+            if not ClickExportCSVEXCELButton(exportbutton, 'EXCEL'):
+                testComment = 'TEST FAIL - User is not able to access excel export button in Dev Management Pages. Please check the log file.'
+                printFP(testComment)
+                return Global.FAIL, testComment
+            excellocation = downloadfolder + "export.xls"
+            time.sleep(5) # must keep this sleep for export download time (bigger file will require you to change it)
+            try:
+                os.remove(csvlocation)
+                os.remove(excellocation)
+            except OSError as e:
+                os.remove(downloadfolder + 'export.xlsx')
+                printFP('INFO - ' + e.message)
+
+            testComment = "Successfully deleted exported files from download folder"
+            printFP('INFO - ' + testComment)
+
+    testComment = "Successfully exported files from device management pages with View Only Role Permission"
+    printFP('INFO - ' + testComment)
+
+    GoToLineMonitoring()
+    time.sleep(1)
+
+    for i in range(len(linemon)):
+        GetElement(Global.driver, By.XPATH, linemon[i]).click()
+        nodataavailable = NoDataAvailable('line-monitoring')
+        if not nodataavailable == "No Data Available":
+            exportbutton = ClickExportButton()
+            if not ClickExportCSVEXCELButton(exportbutton, 'CSV'):
+                testComment = 'TEST FAIL - User is not able to access csv export button in Dev Management Pages. Please check the log file.'
+                printFP(testComment)
+                return Global.FAIL, testComment
+            csvlocation = downloadfolder + "export.csv"
+            exportbutton = ClickExportButton()
+            if not ClickExportCSVEXCELButton(exportbutton, 'EXCEL'):
+                testComment = 'TEST FAIL - User is not able to access excel export button in Dev Management Pages. Please check the log file.'
+                printFP(testComment)
+                return Global.FAIL, testComment
+            excellocation = downloadfolder + "export.xls"
+            time.sleep(5) # must keep this sleep for export download time (bigger file will require you to change it)
+            try:
+                os.remove(csvlocation)
+                os.remove(excellocation)
+            except OSError as e:
+                os.remove(downloadfolder + 'export.xlsx')
+                printFP('INFO - ' + e.message)
+
+            testComment = "Successfully deleted exported files from download folder"
+            printFP('INFO - ' + testComment)
+
+    testComment = "Successfully exported files from both device management and line-monitoring pages with View Only Role Permission"
+    printFP('INFO - ' + testComment)
+    return Global.PASS, 'TEST PASS - ' + testComment
+
+
+def ViewOnlyRoleCapabilitiesDownloadWaveforms(input_file_path=None):
+    if not input_file_path:
+        testComment = 'Test is missing mandatory parameter'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    params = ParseJsonInputFile(input_file_path)
+
+    GoToLineMonitoring()
+    GoToLineMonFaultEvents()
+    getsite = GetSiteFromTop(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+    time.sleep(1)
+    if getsite:
+        SelectAllEventStates()
+        time.sleep(1)
+        SelectAllEventTypes()
+        time.sleep(1)
+        SelectAllTriggeredDetectors()
+        time.sleep(2)
+        nodataavailable = NoDataAvailable('line-monitoring')
+        if not nodataavailable == "No Data Available":
+            printFP("Given site has faultevents")
+            siterows = GetElements(Global.driver, By.XPATH, "//span[text()='" + params['Site'] + "']")
+            for row in siterows:
+                try:
+                    parentelement = GetElement(row, By.XPATH, "..")
+                    deviceevent = GetElement(parentelement, By.XPATH, "//span[text()='" + params['Phase'] + "']")
+                except:
+                    pass
+            deviceevent.click()
+            time.sleep(2)
+            downloadbutton = GetElement(Global.driver, By.XPATH, "//button[text()='Download']")
+            if 'disabled' in downloadbutton.get_attribute('class'):
+                GoToLineMonWaveforms()
+                time.sleep(1)
+                downloadbutton = GetElement(Global.driver, By.XPATH, "//button[text()='Download']")
+                if 'disabled' in downloadbutton.get_attribute('class'):
+                    testComment = 'TEST PASS - Unable to download waveforms with View Only User Role permission in both Waveforms and Fault Events screens'
+                    printFP(testComment)
+                    return Global.PASS, testComment
+                else:
+                    link.click()
+                    testComment = 'TEST FAIL - Waveform Download button is not disabled in Line Monitoring Waveforms Page for View Only User Role'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+            else:
+                link.click()
+                testComment = 'TEST FAIL - Waveform Download button is not disabled in Line Monitoring Fault Events Page for View Only User Role'
+                printFP(testComment)
+                return Global.FAIL, testComment
+        else:
+            testComment = "Test Fail - Line Monitoring doesn't have any fault events. Please point to a site which has fault events"
+            printFP(testComment)
+            return Global.FAIL, testComment
+    else:
+        testComment = 'Test Fail - Unable to locate Given site "%s"' %params['Site']
+        printFP(testComment)
+        return Global.FAIL, testComment

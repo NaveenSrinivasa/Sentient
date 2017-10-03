@@ -32,7 +32,6 @@ from Ample_LinMon_LogI import *
 
 
 
-
 def Sleep(sleep_time):
     printFP('sleeping for %d seconds' % sleep_time)
     elapsed = 0
