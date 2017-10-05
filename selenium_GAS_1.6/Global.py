@@ -20,7 +20,7 @@ onDevs = []     # on Ample
 
 # log
 logPath = ''
-loglevel = ''
+info = ''
 startLogPath = ''
 
 gusername = ''

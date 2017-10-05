@@ -6,7 +6,7 @@
             "hiptest_name": "",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {
@@ -336,7 +336,7 @@
             "hiptest_name": "",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {

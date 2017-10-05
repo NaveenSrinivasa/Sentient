@@ -6,7 +6,7 @@
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {
@@ -118,8 +118,8 @@
             "skip": false,
             "expect_pass": true,
             "upgrade_settings": {
-                "day": "otap_day",
-                "from_time": "otap_from_time",
+                "day": "Thursday",
+                "from_time": "12:00AM",
                 "to_time": "otap_to_time",
                 "num_retries": 5
             }

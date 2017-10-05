@@ -5,7 +5,7 @@
             "method_name": "Login",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {

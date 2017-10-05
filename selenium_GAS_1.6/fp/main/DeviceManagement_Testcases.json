@@ -6,7 +6,7 @@
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {
@@ -244,7 +244,7 @@
             "commserver": "sensor_gw1_name",
             "regDev": "device_2",
             "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
-            "sgw_group_name": "networkgroup2_name",
+            "sgw_group_name": "seleniumtest_group2",
             "wait_for_online": true
         },
         {
@@ -275,7 +275,7 @@
             "skip": true,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
-            "downloadfolder": "defaultdownloadpath",
+            "downloadfolder": "/home/stanley/Downloads/",
             "filetype": "CSV"
         },
         {
@@ -287,7 +287,7 @@
             "skip": true,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device Management/d1_reg_name.json",
-            "downloadfolder": "defaultdownloadpath",
+            "downloadfolder": "/home/stanley/Downloads/",
             "filetype": "EXCEL"
         },
         {

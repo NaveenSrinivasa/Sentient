@@ -2,7 +2,7 @@
     "Connections":
     {
         "url": "ampleIP",
-        "browsers": [browser_name],
-        "platforms": [platform_name]
+        "browsers": ["chrome"],
+        "platforms": ["linux"]
     }
 }

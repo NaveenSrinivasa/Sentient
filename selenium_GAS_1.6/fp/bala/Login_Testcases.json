@@ -6,7 +6,7 @@
             "hiptest_name": "Login - Valid Credentials",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {
@@ -28,7 +28,7 @@
             "hiptest_name": "Login - Empty Password",
             "skip": true,
             "expect_pass": false,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": ""
         },
         {
@@ -36,7 +36,7 @@
             "hiptest_name": "Login - Invalid Username",
             "skip": true,
             "expect_pass": false,
-            "username": "username_valid50",
+            "username": "ampleadmin50",
             "password": "password_valid"
         },
         {
@@ -44,7 +44,7 @@
             "hiptest_name": "Login - Invalid Password",
             "skip": true,
             "expect_pass": false,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid@t5"
         },
         {
@@ -60,7 +60,7 @@
             "hiptest_name": "Logout",
             "skip": true,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {

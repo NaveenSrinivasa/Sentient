@@ -6,7 +6,7 @@
             "hiptest_name": "",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {
@@ -266,7 +266,7 @@
             "validateerror": true,
             "validateargs": {
                 "validatemethodname": "ExportErrorLogForFailedMTF",
-                "downloadfolder": "defaultdownloadpath"
+                "downloadfolder": "/home/stanley/Downloads/"
             }
         },
         {

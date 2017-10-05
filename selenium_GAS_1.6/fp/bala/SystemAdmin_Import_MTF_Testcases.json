@@ -6,7 +6,7 @@
             "hiptest_name": "",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {
@@ -215,7 +215,7 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/System Admin/Import_MTF/export_error_lines.csv",
-            "downloadfolder": "defaultdownloadpath",
+            "downloadfolder": "/home/stanley/Downloads/",
             "filetype": "txt"
 
         },
