@@ -1,3 +1,3 @@
 Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
-d1_region,d1_sub,d1_feeder,d1_site,d1_phase,d1_name,d1_type,d1_swversion,d1_platform,40.7577,-73.9857,d1_macaddress,d1_ipaddress,d1_dnpaddr,note1,d1_daport,sensor_gw2_name,0-00001-05,,d1_networktype,networkgroup2_name,
-d1_region,d1_sub,d1_feeder,d1_site,d2_phase,d2_name,d2_type,d2_swversion,d2_platform,41.7577,-74.9857,d2_macaddress,d2_ipaddress,d2_dnpaddr,note1,d2_daport,sensor_gw2_name,0-00001-05,,d2_networktype,networkgroup2_name,
+d1_region,d1_sub,d1_feeder,d1_site,d1_phase,d1_name,d1_type,d1_swversion,d1_platform,40.7577,-73.9857,d1_macaddress,d1_ipaddress,d1_dnpaddr,note1,d1_daport,sensor_gw2_name,0-00001-05,,d1_networktype,seleniumtest_group2,
+d1_region,d1_sub,d1_feeder,d1_site,d2_phase,d2_name,d2_type,d2_swversion,d2_platform,41.7577,-74.9857,d2_macaddress,d2_ipaddress,d2_dnpaddr,note1,d2_daport,sensor_gw2_name,0-00001-05,,d2_networktype,seleniumtest_group2,

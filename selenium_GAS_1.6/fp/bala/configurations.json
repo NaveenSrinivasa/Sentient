@@ -4,7 +4,7 @@
         "#": "Put your configurations here",
         "ample_build": "ample_build_version",
         "sgw_build": "sgw_build_version",
-        "log_level": "loglevel",
+        "log_level": "info",
         "test_report_path": "seleniumDir/report",
         "log_path": "seleniumDir/log/",
         "mtf_file_path": "seleniumDir/inputfilesDir/device_1.csv",
@@ -13,7 +13,7 @@
         "screenshots_path": "seleniumDir/screenshots",
         "hiptest":
                 {
-                  "email": "hiptest_account_email",
+                  "email": "bbaskar@sentient-energy.com",
                   "password": "hiptest_account_password",
                   "project_id": "hiptest_project_id",
                   "test_run_id": "hiptest_test_run_id",
@@ -25,6 +25,6 @@
         "subject_line": "email_subject_line",
         "recipients": [email_recipients],
         "attachments": ["seleniumDir/report/test_report.csv"],
-        "enabled": email_send_testreport
+        "enabled": false
     }
 }

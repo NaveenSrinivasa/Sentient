@@ -44,7 +44,7 @@ def Sleep(sleep_time):
 
 def ConfigureLogging(parsed_config, browser, platform):
     configured_log_level = parsed_config['log_level'].lower()
-    Global.loglevel = configured_log_level
+    Global.info = configured_log_level
     if configured_log_level == 'debug':
         log_level = logging.DEBUG
     elif configured_log_level == 'info':

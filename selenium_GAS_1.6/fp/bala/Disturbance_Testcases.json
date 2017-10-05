@@ -15,7 +15,7 @@
             "hiptest_name": "Logout",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {
@@ -43,7 +43,7 @@
             "expect_pass": true,
             "download_type": "CSV",
             "input_file_path": "seleniumDir/inputfilesDir/Disturbances/disturbance_group_tree_region.json",
-            "download_folder": "defaultdownloadpath"
+            "download_folder": "/home/stanley/Downloads/"
         },
         {
             "method_name": "VerifyDisturbanceCountersDownload",
@@ -52,7 +52,7 @@
             "expect_pass": true,
             "download_type": "CSV",
             "input_file_path": "seleniumDir/inputfilesDir/Disturbances/disturbance_group_tree_substation2.json",
-            "download_folder": "defaultdownloadpath"
+            "download_folder": "/home/stanley/Downloads/"
         },
         {
             "method_name": "VerifyDisturbanceCountersDownload",
@@ -61,7 +61,7 @@
             "expect_pass": true,
             "download_type": "CSV",
             "input_file_path": "seleniumDir/inputfilesDir/Disturbances/disturbance_group_tree_substation1.json",
-            "download_folder": "defaultdownloadpath"
+            "download_folder": "/home/stanley/Downloads/"
         },
         {
             "method_name": "VerifyDisturbanceCountersDownload",
@@ -70,7 +70,7 @@
             "expect_pass": true,
             "download_type": "CSV",
             "input_file_path": "seleniumDir/inputfilesDir/Disturbances/disturbance_group_tree.json",
-            "download_folder": "defaultdownloadpath"
+            "download_folder": "/home/stanley/Downloads/"
         },
         {
             "method_name": "DeleteRegion",

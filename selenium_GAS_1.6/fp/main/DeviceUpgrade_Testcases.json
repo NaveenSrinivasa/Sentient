@@ -6,7 +6,7 @@
             "hiptest_name": "",
             "skip": false,
             "expect_pass": true,
-            "username": "username_valid",
+            "username": "ampleadmin",
             "password": "password_valid"
         },
         {
@@ -96,7 +96,11 @@
             "skip": false,
             "expect_pass": true,
             "upgrade_settings": {
+<<<<<<< HEAD
                 "day": "Wednesday",
+=======
+                "day": "Thursday",
+>>>>>>> Minor changes to System Admin
                 "from_time": "12:00AM",
                 "to_time": "otap_to_time",
                 "num_retries": 5

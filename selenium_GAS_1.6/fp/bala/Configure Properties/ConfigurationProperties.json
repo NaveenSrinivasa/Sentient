@@ -1,6 +1,6 @@
 {
 	"comPropertyGeneralData": {
-		"comm.server.names": ["networkgroup1_name:networkgroup1_port; networkgroup2_name:networkgroup2_port"],
+		"comm.server.names": ["networkgroup1_name:networkgroup1_port; seleniumtest_group2:networkgroup2_port"],
 		"default.device.poll.interval.minutes": ["1","65535"],
 		"default.down.per.minute.intermittent": ["1", "65535"],
 		"default.feeder.fault.grouping.time.in.minutes": ["1","65535"],

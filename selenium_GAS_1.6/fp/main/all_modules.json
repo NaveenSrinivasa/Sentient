@@ -23,7 +23,7 @@
         },
         {
             "Module": "System Admin Tests",
-            "skip": true,
+            "skip": false,
             "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Testcases.json"
         },
         {

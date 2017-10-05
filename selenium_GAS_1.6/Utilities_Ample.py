@@ -20,7 +20,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup as soup
 from Utilities_Framework import *
 
-
 def WaitForXTime(min = 5):
     i = 0
     while i < min:
@@ -1228,15 +1227,15 @@ def printFP(message):
       4 - error
       5 - critical"""
     print message
-    if Global.loglevel == 'debug':
+    if Global.info == 'debug':
         logging.debug(message)
-    elif Global.loglevel == 'info':
+    elif Global.info == 'info':
         logging.info(message)
-    elif Global.loglevel == 'warning':
+    elif Global.info == 'warning':
         logging.warning(message)
-    elif Global.loglevel == 'error':
+    elif Global.info == 'error':
         logging.error(message)
-    elif Global.loglevel == 'critical':
+    elif Global.info == 'critical':
         logging.critical(message)
     else:
         pass
@@ -4051,12 +4050,9 @@ def OpenAddNetworkGroupForSGW(comm_server_name):
 
 def OpenNetworkGroupList(comm_server_name):
     tablebody = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_comm_table'])
-    print tablebody
     commserverrow = None
     rows = GetElements(tablebody, By.TAG_NAME, 'tr')
-    print rows
     for row in rows:
-        print row
         if GetElement(row, By.XPATH, 'td[2]/span').text == comm_server_name:
             commserverrow = row
             if 'group-open' in commserverrow.get_attribute('class'):

@@ -301,7 +301,7 @@ def FindAndReplace(directory, find, replace, filePattern):
     print '.',
     if 'Utilities_Framework.py' in filePattern or 'connections.json' in filePattern or 'configurations.json' in filePattern:
         filepath = os.path.join(directory, filePattern)
-        #print(filepath)
+        print(filepath)
         time.sleep(2)
         with open(filepath) as f:
             s = f.read()
@@ -322,9 +322,12 @@ def FindAndReplace(directory, find, replace, filePattern):
                         s = f.read()
                     #print('find: %s' %find)
                     #print('replace: %s' %replace)
-                    s = s.replace(find, replace)
-                    with open(filepath, "w") as f:
-                        f.write(s)
+                    try:
+                        s = s.replace(find, replace)
+                        with open(filepath, "w") as f:
+                            f.write(s)
+                    except:
+                        pass
 
 def InitialDirectorySetup(src):
     print 'Setting up input files according to user given inputs '
@@ -371,7 +374,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                     tmpvalue = value + '"' + userdefinedvariables['browser_name'][i] + '",'
                 value = tmpvalue
             newvalue = value[:-1]
-            FindAndReplace(directory, key, newvalue, "connections.json")
+            FindAndReplace(directory, key, newvalue, "fp/main/connections.json")
         elif key == 'platform_name':
             for i in range(len(userdefinedvariables['platform_name'])):
                 if i==0:
@@ -380,7 +383,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                     tmpvalue = value + '"' + userdefinedvariables['platform_name'][i] + '",'
                 value = tmpvalue
             newvalue = value[:-1]
-            FindAndReplace(directory, key, newvalue, "connections.json")
+            FindAndReplace(directory, key, newvalue, "fp/main/connections.json")
         elif key == 'email_recipients':
             for i in range(len(userdefinedvariables['email_recipients'])):
                 if i==0:
@@ -389,7 +392,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                     tmpvalue = value + '"' + userdefinedvariables['email_recipients'][i] + '",'
                 value = tmpvalue
             newvalue = value[:-1]
-            FindAndReplace(directory, key, newvalue, "configurations.json")
+            FindAndReplace(directory, key, newvalue, "fp/main/configurations.json")
         elif 'internet_explorer_machine' in key:
             iedirectory = userdefinedvariables['seleniumDir']
             FindAndReplace(iedirectory, key, value, "Utilities_Framework.py")
