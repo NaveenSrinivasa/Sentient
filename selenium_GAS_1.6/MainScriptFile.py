@@ -29,8 +29,6 @@ from Ample_SysAdmin_MTF import *
 from testdebug import *
 from Ample_DevMan_ManageDevices import *
 from Ample_LinMon_LogI import *
-from Ample_UserRoleDefinitions import*
-
 
 
 

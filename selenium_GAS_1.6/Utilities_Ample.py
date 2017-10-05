@@ -1349,20 +1349,22 @@ def NoDataAvailable(pagename):
 
     page = elements.find('div', class_=re.compile(keyword))
     try:
-        tmppage = page.find('div', class_=re.compile('nodata-available'))
-        classname = tmppage['class']
+        nodatatags = page.find_all('div', class_=re.compile('nodata-available'))
     except:
         printFP('NoDataAvailable: Unable to find the text')
         return None
 
-    if not "ng-hide" in classname:
-        nodataavailabletext = 'No Data Available'
-        printFP('NoDataAvailable: %s' %nodataavailabletext)
-        return nodataavailabletext
-    else:
-        nodataavailabletext = 'Data Available'
-        printFP('NoDataAvailable: %s' %nodataavailabletext)
-        return nodataavailabletext
+    for nodatatag in nodatatags:
+        classname = nodatatag['class']
+        if not "ng-hide" in classname:
+            nodataavailabletext = 'No Data Available'
+            printFP('NoDataAvailable: %s' %nodataavailabletext)
+            return nodataavailabletext
+        else:
+            pass
+    nodataavailabletext = 'Data Available'
+    printFP('NoDataAvailable: %s' %nodataavailabletext)
+    return nodataavailabletext
 
 def GetTableColumnOrder(pagename):
 
@@ -4227,3 +4229,21 @@ def GetFirmwareUpgradeEachPhaseStatus():
         firmwareupgradeeachphasestatus[phasename] = phasestatus[2]
     printFP(firmwareupgradeeachphasestatus)
     return firmwareupgradeeachphasestatus
+
+def ClickExportButton():
+    try:
+        exportbutton = GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Export')]")
+        exportbutton.click()
+        return exportbutton
+    except:
+        printFP('Failed to click export button')
+        return False
+
+def ClickExportCSVEXCELButton(element, filetype):
+    try:
+        parentelement = GetElement(element, By.XPATH, "..")
+        ClickButton(parentelement, By.XPATH, "//span[text()='" + filetype + "']")
+        return True
+    except:
+        printFP('Failed to click export' + filetype + ' button')
+        return False
