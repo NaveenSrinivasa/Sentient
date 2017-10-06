@@ -2245,58 +2245,53 @@ def OTAPAbort(input_file_path=None, device_name=None):
     GoToDevMan()
 
     GoToCurrentJobsUpgrade()
-    printFP("INFO - Locating Job that contains the devices")
-    try:
-        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
-    except:
-        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
-        return Global.FAIL, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Upgrade Page'
-
-    if len(allJobs) == 0:
-        printFP("INFO - No upgrades were found.")
-        return Global.FAIL, 'TEST FAIL - No upgrades were found.'
-    DeviceRow = GetDevice(device_name)
-    # Get otap status
-    printFP("INFO - Information on Device %s" % device_name)
-    jobStatus = GetText(DeviceRow, By.XPATH, "td[6]/span")
-    otapStatus = GetText(DeviceRow, By.XPATH, "td[7]/span/span/a")
-    printFP('INFO - Job Status: %s  OTAP Status: %s' % (jobStatus, otapStatus))
-    if jobStatus == 'IN_PROGRESS' and otapStatus == 'ABORTED':
-        try:
-            SelectDevice(device_name)
-            AbortButton = GetElement(Global.driver, By.XPATH, "//button[text()='Abort']")
-            if 'disabled' in AbortButton.get_attribute('class'):
-                printFP("INFO - Test is unable to abort because abort button is disabled.")
-                return Global.FAIL, 'TEST FAIL - Test is unable to abort because abort button is disabled.'
-            else:
-                AbortButton.click()
-                printFP("INFO - Test initiated abort using abort button.")
-        except:
-            testComment = '%s not found in current upgrade jobs page.' % device_name
-            printFP(testComment)
-            return Global.FAIL, testComment
-    else:
-        testComment = 'Unable to Abort for the device %s. INFO - Job Status: %s  OTAP Status: %s' % (device_name, jobStatus, otapStatus)
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    GoToDevMan()
-    GoToDevUpgrade()
-
-    SelectDevice(device_name)
-    try:
-        upgradeButton = WebDriverWait(Global.driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpaths['dev_upgrade_button'])))
-        upgradeButton.click()
-        if 'disabled' in upgradeButton.get_attribute('class'):
-            printFP('Upgrade Button is unavailable for device %s that is aborting.'% device_name)
+    jobspresence, testComment = CheckAllJobsPresence()
+    if jobspresence:
+        DeviceRow = GetDevice(device_name)
+        # Get otap status
+        printFP("INFO - Information on Device %s" % device_name)
+        jobStatus = GetText(DeviceRow, By.XPATH, "td[6]/span")
+        otapStatus = GetText(DeviceRow, By.XPATH, "td[7]/span/span/a")
+        printFP('INFO - Job Status: %s  OTAP Status: %s' % (jobStatus, otapStatus))
+        if jobStatus == 'IN_PROGRESS' and otapStatus == 'ABORTED':
+            try:
+                SelectDevice(device_name)
+                AbortButton = GetElement(Global.driver, By.XPATH, "//button[text()='Abort']")
+                if 'disabled' in AbortButton.get_attribute('class'):
+                    printFP("INFO - Test is unable to abort because abort button is disabled.")
+                    return Global.FAIL, 'TEST FAIL - Test is unable to abort because abort button is disabled.'
+                else:
+                    AbortButton.click()
+                    printFP("INFO - Test initiated abort using abort button.")
+            except:
+                testComment = '%s not found in current upgrade jobs page.' % device_name
+                printFP(testComment)
+                return Global.FAIL, testComment
         else:
-            testComment = 'Upgrade button is still available for Device performing Abort'
+            testComment = 'Unable to Abort for the device %s. INFO - Job Status: %s  OTAP Status: %s' % (device_name, jobStatus, otapStatus)
             printFP(testComment)
             return Global.FAIL, testComment
-    except:
-        printFP('Upgrade Button is unavailable for device %s that is aborting.'% device_name)
 
-    return Global.PASS, 'TEST PASS - Test has begun aborting successfully.'
+        GoToDevMan()
+        GoToDevUpgrade()
+
+        SelectDevice(device_name)
+        try:
+            upgradeButton = WebDriverWait(Global.driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpaths['dev_upgrade_button'])))
+            upgradeButton.click()
+            if 'disabled' in upgradeButton.get_attribute('class'):
+                printFP('Upgrade Button is unavailable for device %s that is aborting.'% device_name)
+            else:
+                testComment = 'Upgrade button is still available for Device performing Abort'
+                printFP(testComment)
+                return Global.FAIL, testComment
+        except:
+            printFP('Upgrade Button is unavailable for device %s that is aborting.'% device_name)
+
+        return Global.PASS, 'TEST PASS - Test has begun aborting successfully.'
+    else:
+        printFP('TEST FAIL - ' + testComment)
+        return Global.FAIL, 'TEST FAIL - ' + testComment
 
 def OTAPRetryUpgrade(input_file_path=None, device_name=None):
     if input_file_path == None or device_name == None:
@@ -2307,42 +2302,37 @@ def OTAPRetryUpgrade(input_file_path=None, device_name=None):
     params = ParseJsonInputFile(input_file_path)
     GoToDevMan()
     GoToCurrentJobsUpgrade()
-    printFP("INFO - Locating Job that contains the devices")
-    try:
-        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
-    except:
-        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
-        return Global.FAIL, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Upgrade Page'
+    jobspresence, testComment = CheckAllJobsPresence()
+    if jobspresence:
+        DeviceRow = GetDevice(device_name)
+        # Get otap status
+        printFP("INFO - Information on Device %s" % device_name)
+        jobStatus = GetText(DeviceRow, By.XPATH, "td[6]/span")
+        otapStatus = GetText(DeviceRow, By.XPATH, "td[7]/span/span/a")
+        printFP('INFO - Job Status: %s  OTAP Status: %s' % (jobStatus, otapStatus))
+        if jobStatus == 'COMPLETED' and otapStatus == 'ABORTED':
+            try:
+                SelectDevice(device_name)
+                RetryButton = GetElement(Global.driver, By.XPATH, "//button[text()='Retry']")
+                if 'disabled' in RetryButton.get_attribute('class'):
+                    printFP("INFO - Test is unable to Retry because Retry button is disabled.")
+                    return Global.FAIL, 'TEST FAIL - Test is unable to Retry because Retry button is disabled.'
+                else:
+                    RetryButton.click()
+                    printFP("INFO - Test initiated Retry operation using Retry button.")
+            except:
+                testComment = '%s not found in current upgrade jobs page.' % device_name
+                printFP(testComment)
+                return Global.FAIL, testComment
+        else:
+            testComment = 'Unable to Abort for the device %s. INFO - Job Status: %s  OTAP Status: %s' % (device_name, jobStatus, otapStatus)
+            printFP('INFO - ' + testComment)
+            return Global.FAIL, 'TEST FAIL - ' + testComment
 
-    if len(allJobs) == 0:
-        printFP("INFO - No upgrades were found.")
-        return Global.FAIL, 'TEST FAIL - No upgrades were found.'
-    DeviceRow = GetDevice(device_name)
-    # Get otap status
-    printFP("INFO - Information on Device %s" % device_name)
-    jobStatus = GetText(DeviceRow, By.XPATH, "td[6]/span")
-    otapStatus = GetText(DeviceRow, By.XPATH, "td[7]/span/span/a")
-    printFP('INFO - Job Status: %s  OTAP Status: %s' % (jobStatus, otapStatus))
-    if jobStatus == 'COMPLETED' and otapStatus == 'ABORTED':
-        try:
-            SelectDevice(device_name)
-            RetryButton = GetElement(Global.driver, By.XPATH, "//button[text()='Retry']")
-            if 'disabled' in RetryButton.get_attribute('class'):
-                printFP("INFO - Test is unable to Retry because Retry button is disabled.")
-                return Global.FAIL, 'TEST FAIL - Test is unable to Retry because Retry button is disabled.'
-            else:
-                RetryButton.click()
-                printFP("INFO - Test initiated Retry operation using Retry button.")
-        except:
-            testComment = '%s not found in current upgrade jobs page.' % device_name
-            printFP(testComment)
-            return Global.FAIL, testComment
+        return Global.PASS, 'TEST PASS - Test successfully retried an upgrade on a device.'
     else:
-        testComment = 'Unable to Abort for the device %s. INFO - Job Status: %s  OTAP Status: %s' % (device_name, jobStatus, otapStatus)
         printFP('INFO - ' + testComment)
         return Global.FAIL, 'TEST FAIL - ' + testComment
-
-    return Global.PASS, 'TEST PASS - Test successfully retried an upgrade on a device.'
 
 def OTAPEmptyData(input_file_path=None):
     if input_file_path == None:

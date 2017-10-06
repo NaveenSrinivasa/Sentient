@@ -141,12 +141,7 @@ def SelectFromMenu(driver, method, locator, target):
     for option in options:
         if option.text == target:
             actions = ActionChains(Global.driver)
-            time.sleep(2)
-            actions.move_to_element(option)
-            time.sleep(2)
-            actions.click(option)
-            time.sleep(1)
-            actions.perform()
+            actions.move_to_element(option).click(option).perform()
             time.sleep(1)
             printFP('Selected: %s' % target)
             return True
@@ -4246,3 +4241,17 @@ def ClickExportCSVEXCELButton(element, filetype):
     except:
         printFP('Failed to click export' + filetype + ' button')
         return False
+
+def CheckAllJobsPresence():
+    printFP("INFO - Locating Job that contains the devices")
+    try:
+        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
+    except:
+        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
+        return False, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Page'
+
+    if len(allJobs) == 0:
+        printFP("INFO - No upgrades were found.")
+        return False, 'TEST FAIL - No Jobs were found.'
+
+    return True, ''
