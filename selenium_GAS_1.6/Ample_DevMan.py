@@ -8,8 +8,7 @@ from Utilities_Device import *
 from Ample_SysAdmin import *
 from Ample_ManageProfile import *
 from Ample_LineMon import *
-
-
+from Ample_Login import *
 
 
 def GoToDevman():
@@ -2482,3 +2481,217 @@ def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, act
             return Global.FAIL, testComment
 
     return Global.PASS, 'TEST PASS - Test started an upgrade for selected devices'
+
+def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, go_to, refresh_page, logout, username, password, profile_status_list, profile_name_list, device_status_list, fw_version_list, nw_grp_list, comm_type_list, device_state_list, serial_number_list):
+
+    allfilters = {"device_status_list": device_status_list, "fw_version_list": fw_version_list, "nw_grp_list": nw_grp_list, "comm_type_list": comm_type_list, "device_state_list": device_state_list, "serial_number_list": serial_number_list, "profile_status_list": profile_status_list, "profile_name_list": profile_name_list}
+    params = ParseJsonInputFile(input_file_path)
+    site = params['Site']
+    
+    GoToDevMan()
+    GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+    if tabname == 'Configurations':
+        GoToDevConfig()
+        current_test_page = GoToDevConfig
+    elif tabname == 'Firmware Upgrade':
+        GoToDevUpgrade()
+        current_test_page = GoToDevUpgrade
+    elif tabname == 'Inactive Device Report':
+        GoToDevInactDevRep()
+        current_test_page = GoToDevInactDevRep
+    elif tabname == 'Manage Devices':
+        GoToDevMan()
+        current_test_page = GoToDevMan
+
+    if go_to == 'rootnode':
+        GetRootNode()
+    elif go_to == 'region':
+        GetRegionFromTop(params['Region'])
+        params['Substation'], params['Feeder'], params['Site'] = '', '', ''
+    elif go_to == 'substation':
+        GetSubstationFromTop(params['Region'], params['Substation'])
+        params['Feeder'], params['Site'] = '', ''
+    elif go_to == 'feeder':
+        GetFeederFromTop(params['Region'], params['Substation'], params['Feeder'])
+        params['Site'] = ''
+
+    if not selectfilters:
+        for item in list(allfilters):
+            allfilters[item] = []
+            allfilters[item] = ['Show All']
+    try:
+        selectFiltersByDeviceStatusManageDevice(allfilters['device_status_list'])
+    except:
+        pass
+    try:
+        selectFiltersByCommunicationTypeManageDevice(allfilters['comm_type_list'])
+    except:
+        pass
+    try:
+        selectFiltersByDeviceStateManageDevice(allfilters['device_state_list'])
+    except:
+        pass
+    try:
+        selectFiltersByFWVersionManageDeviceScreen(allfilters['fw_version_list'])
+    except:
+        pass
+    try:
+        selectFiltersByNetworkGroupManageDeviceScreen(allfilters['nw_grp_list'], tabname)
+    except:
+        pass
+    try:
+        selectFiltersBySerialNumber(allfilters['serial_number_list'])
+    except:
+        pass
+    try:
+        selectFiltersByProfileName(allfilters['profile_name_list'])
+    except:
+        pass
+    try:
+        selectFiltersByProfileStatus(allfilters['profile_status_list'])
+    except:
+        pass
+
+    GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+    time.sleep(4)
+
+    results = []
+
+    if not selectfilters:
+        nodataavailable = NoDataAvailable('device-management')
+        if nodataavailable == "No Data Available":
+            testComment = 'TEST FAIL - Found "No Data Available" when selected "ShowAll" in all filters and applied'
+            printFP(testComment)
+            results.append(Global.FAIL)
+        else:
+            testComment = 'TEST PASS - Data displayed when selected "ShowAll" in all filters and applied '
+            printFP(testComment)
+            results.append(Global.PASS)
+    elif selectfilters:
+        ui_data_dict = {}
+        if device_status_list:
+            device_status_list_from_ui = FilteredDataFromTable('Device Status', 'device-management')
+            ui_data_dict["device_status_list_from_ui"] = device_status_list_from_ui
+        else:
+            ui_data_dict["device_status_list_from_ui"] = []
+        if fw_version_list:
+            fw_version_list_from_ui = FilteredDataFromTable('FW Version', 'device-management')
+            ui_data_dict["fw_version_list_from_ui"] = fw_version_list_from_ui
+        else:
+            ui_data_dict["fw_version_list_from_ui"] = []
+        if nw_grp_list:
+            nw_grp_list_from_ui = FilteredDataFromTable('Network Group', 'device-management')
+            ui_data_dict["nw_grp_list_from_ui"] = nw_grp_list_from_ui
+        else:
+            ui_data_dict["nw_grp_list_from_ui"] = []
+        if comm_type_list:
+            comm_type_list_from_ui = FilteredDataFromTable('Communication Type', 'device-management')
+            ui_data_dict["comm_type_list_from_ui"] = comm_type_list_from_ui
+        else:
+            ui_data_dict["comm_type_list_from_ui"] = []
+        if device_status_list:
+            device_state_list_from_ui = FilteredDataFromTable('Device State', 'device-management')
+            ui_data_dict["device_state_list_from_ui"] = device_state_list_from_ui
+        else:
+            ui_data_dict["device_state_list_from_ui"] = []
+        if serial_number_list: 
+            serial_number_list_from_ui = FilteredDataFromTable('Serial Number', 'device-management')
+            ui_data_dict["serial_number_list_from_ui"] = serial_number_list_from_ui
+        else:
+            ui_data_dict["serial_number_list_from_ui"] = []
+        if profile_name_list:
+            profile_name_list_from_ui = FilteredDataFromTable('Profile Name', 'device-management')
+            ui_data_dict["profile_name_list_from_ui"] = profile_name_list_from_ui
+        else:
+            ui_data_dict["profile_name_list_from_ui"] = []
+        if profile_status_list:
+            profile_status_list_from_ui = FilteredDataFromTable('Profile Status', 'device-management')
+            ui_data_dict["profile_status_list_from_ui"] = profile_status_list_from_ui
+        else:
+            ui_data_dict["profile_status_list_from_ui"] = []
+
+        i=0        
+        for filtercheck in list(allfilters):
+            if filtercheck:
+                tmpnameforuilist = list(allfilters)[i] + '_from_ui'
+                if all(str(x) in allfilters[filtercheck] for x in ui_data_dict[tmpnameforuilist]):
+                    testComment = 'TEST PASS - displayed {} matched with the filters applied.' .format(filtercheck)
+                    printFP(testComment)
+                    results.append(Global.PASS)
+                else:
+                    testComment = 'TEST FAIL - displayed {} are not matched with the filters applied.' .format(filtercheck)
+                    printFP(testComment)
+                    results.append(Global.FAIL)
+            i = i+1
+
+    if not navigate_by == '' or refresh_page or logout:
+        if navigate_by == 'node':
+            GetSite(site)
+            time.sleep(1)
+            if go_to == 'rootnode':
+                GetRootNode()
+            else:
+                GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+        elif navigate_by == 'tab':
+            GoToLineMon()
+            time.sleep(3)
+            GoToDevMan()
+            current_test_page()     
+            time.sleep(2)
+        elif refresh_page:
+            Global.driver.refresh()
+            time.sleep(5)
+        elif logout:
+            Logout()
+            time.sleep(3)
+            Login(username, password)
+            time.sleep(3)
+            GoToDevMan()
+            current_test_page()
+            
+            GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+        
+        filters_xpath = ["communicationTypeSettings.list", "statusSettings.list", "softwareVersionsSettings.list", "stateSettings.list", "networkGroupsSettings.list", "networkGroupSelection.list", "profileStatusSelection.list", "profileNameSelection.list"]
+        currentfiltervalues = []
+
+        for filterxpath in filters_xpath:
+            value = filterDisplayedValue(filterxpath)
+            if value:
+                if value.strip() == 'Select':
+                    currentfiltervalues.append('Show All')
+                else:
+                    currentfiltervalues.append(value.strip())
+        printFP(currentfiltervalues)
+
+        usergiven_values = allfilters['comm_type_list'] + allfilters['device_status_list'] + allfilters['fw_version_list'] + allfilters['device_state_list'] + allfilters['nw_grp_list'] + allfilters['profile_status_list'] + allfilters['profile_name_list']
+        printFP(usergiven_values)
+
+        
+        if not navigate_by == '':
+            if all(str(x) in usergiven_values for x in currentfiltervalues):
+                testComment = 'TEST PASS - Values matched after navigating to some other node/tab and returning to same node'
+                printFP(testComment)
+                results.append(Global.PASS)
+            else:
+                testComment = 'TEST FAIL - Values did not matched after navigating to some other node/tab and returning to same node'
+                printFP(testComment)
+                results.append(Global.FAIL)
+        elif refresh_page and logout:
+            if not all(str(x) in currentfiltervalues for x in usergiven_values):
+                testComment = 'TEST PASS - Values are not matched after refreshing the page/logout and login'
+                printFP(testComment)
+                results.append(Global.PASS)            
+            else:
+                testComment = 'TEST FAIL - Values are matched after refreshing the page/logout and login'
+                printFP(testComment)
+                results.append(Global.FAIL)
+
+    if Global.FAIL in results:
+        testComment = 'TEST FAIL - Some filters are not working.'
+        printFP(testComment)
+        return Global.FAIL, testComment
+    else:
+        testComment = 'TEST PASS - All filters are working fine.'
+        printFP(testComment)
+        return Global.PASS, testComment
+   

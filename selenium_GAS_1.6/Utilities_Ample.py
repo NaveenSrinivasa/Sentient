@@ -312,6 +312,13 @@ def GoToDevUpgrade():
         return False
     return True
 
+def GoToDevInactDevRep():
+    try:
+        ClickButton(Global.driver, By.XPATH, xpaths['dev_man_inactive'])
+    except:
+        return False
+    return True
+
 def GoToLineMon():
     try:
         GetElement(Global.driver, By.XPATH, xpaths['line_mon']).click()
@@ -1394,20 +1401,21 @@ def NoDataAvailable(pagename):
 
     page = elements.find('div', class_=re.compile(keyword))
     try:
-        tmppage = page.find('div', class_=re.compile('nodata-available'))
-        classname = tmppage['class']
+        tmppages = page.find_all('div', class_=re.compile('nodata-available'))
     except:
         printFP('NoDataAvailable: Unable to find the text')
         return None
 
-    if not "ng-hide" in classname:
-        nodataavailabletext = 'No Data Available'
-        printFP('NoDataAvailable: %s' %nodataavailabletext)
-        return nodataavailabletext
-    else:
-        nodataavailabletext = 'Data Available'
-        printFP('NoDataAvailable: %s' %nodataavailabletext)
-        return nodataavailabletext
+    for tmppage in tmppages:
+        classname = tmppage['class']
+        if not "ng-hide" in classname:
+            nodataavailabletext = 'No Data Available'
+            printFP('NoDataAvailable: %s' %nodataavailabletext)
+            return nodataavailabletext
+    
+    nodataavailabletext = 'Data Available'
+    printFP('NoDataAvailable: %s' %nodataavailabletext)
+    return nodataavailabletext
 
 def GetTableColumnOrder(pagename):
 
@@ -1469,7 +1477,14 @@ def FilteredDataFromTable(columnname, pagename):
                 if hasattr(td_tag, 'class'):
                     if n == columnposition:
                         value = td_tag.find('span').text.strip()
+                        if value == '':
+                            try:
+                                spantag = td_tag.find('span')
+                                value = spantag['tooltip'].upper()
+                            except:
+                                pass
                         columnnamevalueslist.append(value)
+
                     n = n+1
 
     printFP(columnnamevalueslist)
@@ -4358,11 +4373,8 @@ def selectFiltersByFirmware(fw_list):
     try:
         filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
     except:
-        try:
-            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
-        except:
-            printFP("INFO - Test could not locate the Firmware Version Filter")
-            return False
+        printFP("INFO - Test could not locate the Firmware Version Filter.May not be applicable for current test page.")
+        return False
 
     filterButton.click()
     time.sleep(0.5)
@@ -4373,8 +4385,8 @@ def selectFiltersByFirmware(fw_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-            time.sleep(4)
+            '''GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)'''
         except:
             printFP("INFO - Test could not find firmware version %s" %fw_list[i])
 
@@ -4384,7 +4396,7 @@ def selectFiltersByUpgradeStatus(fw_status_list):
     try:
         filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwUpgradeStatusSelection.list']/div/button")
     except:
-        printFP("INFO - Test could not locate the Firmware Upgrade Status Filter")
+        printFP("INFO - Test could not locate the Firmware Upgrade Status Filter.May not be applicable for current test page.")
 
     filterButton.click()
     time.sleep(0.5)
@@ -4395,8 +4407,8 @@ def selectFiltersByUpgradeStatus(fw_status_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-            time.sleep(4)
+            '''GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)'''
         except:
             printFP("INFO - Test could not find Upgrade Status %s" %fw_status_list[i])
 
@@ -4404,13 +4416,10 @@ def selectFiltersByUpgradeStatus(fw_status_list):
 
 def selectFiltersByNetworkGroup(network_group_list):
     try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSettings.list']/div/button")
     except:
-        try:
-            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSettings.list']/div/button")
-        except:
-            printFP("INFO - Test could not locate the Network Group filter")
-            return False
+        printFP("INFO - Test could not locate the Network Group filter.May not be applicable for current test page.")
+        return False
 
     filterButton.click()
     time.sleep(0.5)
@@ -4421,8 +4430,8 @@ def selectFiltersByNetworkGroup(network_group_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-            time.sleep(4)
+            '''GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+            time.sleep(4)'''
         except:
             printFP("INFO - Test could not find network group %s" %(network_group_list[i]))
 
@@ -4435,59 +4444,207 @@ def selectFiltersBySerialNumber(serial_number):
         try:
             searchButton = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
         except:
-            printFP("INFO - Test could not locate the Serial number input box")
+            printFP("INFO - Test could not locate the Serial number input box.May not be applicable for current test page.")
             return False
 
-    ClearInput(searchButton)
-    searchButton.send_keys(serial_number)
-    GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-    time.sleep(4)
+    if not 'Show All' in serial_number:
+        ClearInput(searchButton)
+        searchButton.send_keys(serial_number)
+    
     return True
 
-def UpgradeSettingsTestForTime(time_settings):
-    time_settings['from_time'] = ParseTime(time_settings['from_time'])
-    if time_settings['from_time'] is None:
-        testComment = 'Do not recognize this time format'
-        printFP(testComment)
-        return Global.FAIL, testComment
-    # set end time
-    time_settings['to_time'] = ParseTime(time_settings['to_time'])
-    if time_settings['to_time'] is None:
-        testComment = 'Do not recognize this time format'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    GoToDevMan()
-    GoToDevUpgrade()
-    return ChangetimeSettings(time_settings)
-
-def ChangetimeSettings(time_settings):
-    # Select day
-    if ValidDay(time_settings['day']):
-        ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_days'])
-        menuElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_days_menu'])
-        SelectFromMenu(menuElement, By.TAG_NAME, 'li', time_settings['day'])
-        everydayCheckbox = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_everyday_checkbox'])
-        SetCheckBox(everydayCheckbox, "False")
-    else:
-        everydayCheckbox = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_everyday_checkbox'])
-        SetCheckbox(everydayCheckbox, "true")
-
-    # Select time
-    fromElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_from'])
-    toElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_to'])
-    ConfigureTime(fromElement, time_settings['from_time'])
-    ConfigureTime(toElement, time_settings['to_time'])
-
-    # Submit
-    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_save'])
-    time.sleep(1)
+def selectFiltersByDeviceStatusManageDevice(device_status_list):
     try:
-        msg = GetText(Global.driver, By.XPATH, xpaths['settings_upgrade_setting_errmsg'])
-        if 'Start time must be earlier than end time.' in msg:
-            ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
-            printFP(msg)
-            return Global.PASS, msg
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='statusSettings.list']/div/button")
     except:
-        pass
-    return Global.PASS, ''
+        printFP("INFO - Test could not locate the Device Status filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(device_status_list)):
+        try:
+            if 'Show All' in device_status_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + device_status_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ device_status_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            
+        except:
+            printFP("INFO - Test could not find device status %s" %(device_status_list[i]))
+
+    return True
+
+def selectFiltersByCommunicationTypeManageDevice(comm_type_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Communication Type filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(comm_type_list)):
+        try:
+            if 'Show All' in comm_type_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + comm_type_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ comm_type_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            
+        except:
+            printFP("INFO - Test could not find communication type %s" %(comm_type_list[i]))
+
+    return True
+
+def selectFiltersByDeviceStateManageDevice(device_state_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='stateSettings.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Device State filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(device_state_list)):
+        try:
+            if 'Show All' in device_state_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + device_state_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ device_state_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            
+        except:
+            printFP("INFO - Test could not find device state %s" %(device_state_list[i]))
+
+    return True
+
+def selectFiltersByFWVersionManageDeviceScreen(fw_version_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='softwareVersionsSettings.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the FW Version filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(fw_version_list)):
+        try:
+            if 'Show All' in fw_version_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + fw_version_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_version_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+           
+        except:
+            printFP("INFO - Test could not find fw version %s" %(fw_version_list[i]))
+
+    return True
+
+def selectFiltersByNetworkGroupManageDeviceScreen(nw_grp_list, tabname):
+    try:
+        if tabname == 'Manage Devices':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSelection.list']/div/button")
+        elif tabname == 'Configurations':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the network group filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(nw_grp_list)):
+        try:
+            if 'Show All' in nw_grp_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + nw_grp_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ nw_grp_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+            
+        except:
+            printFP("INFO - Test could not find network group %s" %(nw_grp_list[i]))
+
+    return True
+
+def filterDisplayedValue(filter_text):
+    try:
+        filterText = GetElement(Global.driver, By.XPATH, "//span[@options='"+ filter_text +"']/div/button").text
+    except:
+        printFP("INFO - Test could not get the text of filter.May not be applicable for current test page.")
+        return False
+    return filterText
+
+def selectFiltersByProfileName(profile_name_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='profileNameSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Profile Name filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(profile_name_list)):
+        try:
+            if 'Show All' in profile_name_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + profile_name_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ profile_name_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+           
+        except:
+            printFP("INFO - Test could not find fw version %s" %(profile_name_list[i]))
+
+    return True
+
+def selectFiltersByProfileStatus(profile_status_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='profileStatusSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Profile Name filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(profile_status_list)):
+        try:
+            if 'Show All' in profile_status_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + profile_status_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ profile_status_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+           
+        except:
+            printFP("INFO - Test could not find fw version %s" %(profile_status_list[i]))
+
+    return True
+
+
+
+
+
+
+
+
+
+
