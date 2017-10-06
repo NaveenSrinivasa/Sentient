@@ -4241,8 +4241,7 @@ def ClickExportButton():
 
 def ClickExportCSVEXCELButton(element, filetype):
     try:
-        parentelement = GetElement(element, By.XPATH, "..")
-        ClickButton(parentelement, By.XPATH, "//span[text()='" + filetype + "']")
+        ClickButton(element, By.XPATH, "..//span[text()='" + filetype + "']")
         return True
     except:
         printFP('Failed to click export' + filetype + ' button')
