@@ -34,7 +34,7 @@ def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
                 GetElement(Global.driver, By.ID, tabs[i]).click()
             except:
                 pass
-            time.sleep(5)
+            time.sleep(1)
             keys = params[tabs[i]].keys();
             for key in keys:
                 if not (key == 'allow.time.sync' or key == 'default.device.unsolicited.enable'):
@@ -48,14 +48,13 @@ def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
                     location = GetElement(Global.driver, By.XPATH, "//span[@tooltip='"+key+"']/parent::span[@class='pull-left input-label']/following-sibling::span[@class='input-fields']/div/div")
                     if not params[tabs[i]][key].lower() in location.get_attribute('class'):
                         GetElement(location, By.XPATH, 'span[1]').click()
-            time.sleep(3)
+            time.sleep(1)
         GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Update')]").click()
-        time.sleep(3)
+        time.sleep(1)
         try:
             msg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'alert-danger')]/div/span").text
             printFP('INFO - ' + msg)
             GetElement(Global.driver, By.CLASS_NAME, 'close-icon').click()
-            time.sleep(5)
             return Global.FAIL, 'TEST FAIL - ' + msg
         except:
             GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Close')]").click()
@@ -738,6 +737,8 @@ def VerifySensorGateWayDetails():
         onlineStatus = True
         edit_gateway_flag = True
         add_network_flag = True
+        #Each iteration from 1-11 represents the column of the sensor gateway table inside System Admin
+        #Hence, 1 presents the first, while 11 represents the 11th.
         for i in range(1,12):
             if i == 1:
                 if 'toggle-icon disabled' in GetElement(row, By.XPATH, 'td[1]/i').get_attribute('class'):
