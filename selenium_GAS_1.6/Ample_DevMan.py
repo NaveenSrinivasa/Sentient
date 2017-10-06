@@ -2486,10 +2486,10 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
 
     allfilters = {"device_status_list": device_status_list, "fw_version_list": fw_version_list, "nw_grp_list": nw_grp_list, "comm_type_list": comm_type_list, "device_state_list": device_state_list, "serial_number_list": serial_number_list, "profile_status_list": profile_status_list, "profile_name_list": profile_name_list}
     params = ParseJsonInputFile(input_file_path)
-    site = params['Site']
+    #site = params['Site']
     
     GoToDevMan()
-    GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+    #GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site'])
     if tabname == 'Configurations':
         GoToDevConfig()
         current_test_page = GoToDevConfig
@@ -2505,15 +2505,17 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
 
     if go_to == 'rootnode':
         GetRootNode()
+        params['Region'], params['Substation'], params['Feeder'], params['Site']
+        current_test_node = GetRootNode
     elif go_to == 'region':
         GetRegionFromTop(params['Region'])
-        params['Substation'], params['Feeder'], params['Site'] = '', '', ''
+        current_test_node = GetRegionFromTop
     elif go_to == 'substation':
         GetSubstationFromTop(params['Region'], params['Substation'])
-        params['Feeder'], params['Site'] = '', ''
+        current_test_node = GetSubstationFromTop
     elif go_to == 'feeder':
         GetFeederFromTop(params['Region'], params['Substation'], params['Feeder'])
-        params['Site'] = ''
+        current_test_node = GetFeederFromTop
 
     if not selectfilters:
         for item in list(allfilters):
@@ -2626,12 +2628,17 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
 
     if not navigate_by == '' or refresh_page or logout:
         if navigate_by == 'node':
-            GetSite(site)
+            GetSiteFromTop(params['Region'], params['Substation'], params['Feeder'], params['Site'])
             time.sleep(1)
             if go_to == 'rootnode':
                 GetRootNode()
-            else:
-                GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+            elif go_to == 'region':
+                GetRegionFromTop(params['Region'])
+            elif go_to == 'substation':
+                GetSubstationFromTop(params['Region'], params['Substation'])
+            elif go_to == 'feeder':
+                GetFeederFromTop(params['Region'], params['Substation'], params['Feeder'])
+
         elif navigate_by == 'tab':
             GoToLineMon()
             time.sleep(3)
@@ -2648,8 +2655,14 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
             time.sleep(3)
             GoToDevMan()
             current_test_page()
-            
-            GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+            if go_to == 'rootnode':
+                GetRootNode()
+            elif go_to == 'region':
+                GetRegionFromTop(params['Region'])
+            elif go_to == 'substation':
+                GetSubstationFromTop(params['Region'], params['Substation'])
+            elif go_to == 'feeder':
+                GetFeederFromTop(params['Region'], params['Substation'], params['Feeder'])
         
         filters_xpath = ["communicationTypeSettings.list", "statusSettings.list", "softwareVersionsSettings.list", "stateSettings.list", "networkGroupsSettings.list", "networkGroupSelection.list", "profileStatusSelection.list", "profileNameSelection.list"]
         currentfiltervalues = []
