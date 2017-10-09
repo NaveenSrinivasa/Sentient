@@ -456,8 +456,6 @@ def GoToUpdateProfile():
             return False
 
 def GoToUserMan():
-    Global.driver.refresh()
-    time.sleep(10)
     GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
     GetElement(Global.driver, By.LINK_TEXT, 'User Management').click()
 
@@ -1374,18 +1372,14 @@ def GetTableColumnOrder(pagename):
             name = columnname.text.strip().replace('"','')
             columnnamesorder[name] = n
             n = n+1
+        if pagename == 'user-management-view':
+            columnnamesorder['Actions'] = n
+
+    printFP(columnnamesorder)
     return columnnamesorder
 
 
-def FilteredDataFromTable(columnname, pagename):
-
-    if pagename == "line-monitoring":
-        keyword = 'line-monitoring'
-    elif pagename == "device-management" or pagename == "device-management-upgrade":
-        keyword = 'device-management'
-    else:
-        printFP('NoDataAvailable: Unable to find the requested Page')
-        return None
+def FilteredDataFromTable(columnname, keyword):
 
     columnorder = GetTableColumnOrder(keyword)
 
@@ -1406,7 +1400,7 @@ def FilteredDataFromTable(columnname, pagename):
         # Get all rows
         rows = tabledata.find_all('tr', class_=re.compile('row'))
         for row in rows:
-            if pagename == 'device-management':
+            if keyword == 'device-management' or keyword == 'user-management-view':
                 n=0
             else:
                 n=1
@@ -1421,15 +1415,7 @@ def FilteredDataFromTable(columnname, pagename):
     return columnnamevalueslist
 
 
-def FilteredDataFromTableMapping(columnname1, columnname2, pagename):
-
-    if pagename == "line-monitoring":
-        keyword = 'line-monitoring'
-    elif pagename == "device-management" or pagename == "device-management-upgrade":
-        keyword = 'device-management'
-    else:
-        printFP('NoDataAvailable: Unable to find the requested Page')
-        return None
+def FilteredDataFromTableMapping(columnname1, columnname2, keyword):
 
     columnorder = GetTableColumnOrder(keyword)
 
@@ -1454,7 +1440,7 @@ def FilteredDataFromTableMapping(columnname1, columnname2, pagename):
         # Get all rows
         rows = tabledata.find_all('tr', class_=re.compile('row'))
         for row in rows:
-            if pagename == 'device-management':
+            if keyword == 'device-management' or keyword == 'user-management-view':
                 n=0
             else:
                 n=1
@@ -1465,6 +1451,54 @@ def FilteredDataFromTableMapping(columnname1, columnname2, pagename):
                         columnname1value = value
                     elif n == column_2_position:
                         value = td_tag.find('span').text.strip()
+                        columnname2value = value
+                    n = n+1
+                if columnname1value and columnname2value:
+                    valuesmappinglist[columnname1value] = columnname2value
+
+    printFP(valuesmappinglist)
+    return valuesmappinglist
+
+
+def ActionsStatusMappingFromUserManagementTable(columnname1, checkaction):
+
+    keyword = 'user-management-view'
+    columnname2 = 'Actions'
+    columnorder = GetTableColumnOrder(keyword)
+    column_1_position = columnorder[columnname1]
+    column_2_position = columnorder[columnname2]
+
+    # Create a dict
+    valuesmappinglist = {}
+    columnname1value = ''
+    columnname2value = ''
+
+    html = Global.driver.page_source
+
+    FilterElements = soup(html, "lxml")
+
+    # find Page view
+    page = FilterElements.find('div', class_=re.compile(keyword))
+
+    if page.find('table'):
+        tabledata = page.find('table')
+        # Get all rows
+        rows = tabledata.find_all('tr', class_=re.compile('row'))
+        for row in rows:
+            if keyword in ('device-management', 'user-management-view'):
+                n=0
+            else:
+                n=1
+            for td_tag in row:
+                if hasattr(td_tag, 'class'):
+                    if n == column_1_position:
+                        value = td_tag.find('span').text.strip()
+                        columnname1value = value
+                    elif n == column_2_position and checkaction == 'disableicon':
+                        value = td_tag.find('span', tooltip=re.compile("User"))['class']
+                        columnname2value = value
+                    elif n == column_2_position and checkaction == 'resetpasswordicon':
+                        value = td_tag.find('span', tooltip=re.compile("Password"))['class']
                         columnname2value = value
                     n = n+1
                 if columnname1value and columnname2value:
@@ -4258,3 +4292,16 @@ def TableColumnSettingsButtonAccess():
         time.sleep(1)
         columnsettingsbtn.click()
         return True
+
+
+def CountOfReadOnlyFieldsInTheForm():
+    html = Global.driver.page_source
+    pageElements = soup(html, "lxml")
+    activetab = pageElements.find('div', class_=re.compile('tab-pane' and 'active'))
+    fields = activetab.find_all('fieldset')
+    n = 0
+    for field in fields:
+        inputfield = field.find('input')
+        if inputfield.has_attr('readonly'):
+            n = n+1
+    return n

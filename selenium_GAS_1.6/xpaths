@@ -18,7 +18,7 @@ current_jobs_upgrade_retry /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/di
 current_upgrade_job_list /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[1]/upgrade-jobs/div[3]/ol
 dash_active_fault_table /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/feeder-tableview/table/tbody
 dash_change_pw_update /html/body/div[4]/div/div/div[2]/form/div[4]/div/button
-dash_gear /html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[2]/a
+dash_gear /html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[3]
 dash_person_change_pw /html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[3]/ul/li[3]/a
 dash_person_dropdown /html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[3]/a/span[2]
 dash_person_email_alert /html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[3]/ul/li[2]/a
@@ -206,8 +206,8 @@ user_man_submit /html/body/div[4]/div/div/div[2]/div[5]/button[2]
 user_man_table /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div/table/tbody
 user_man_timezone_button /html/body/div[4]/div/div/div[2]/form/div[6]/div/div/div[1]/span
 user_man_timezone_dropdown /html/body/div[4]/div/div/div[2]/div[3]/div/div[2]/div/div/div/div/form/div[1]/div/div/ul
-user_man_temperatureunit_dropdown /html/body/div[4]/div/div/div[2]/div[3]/div/div[2]/div/div/div/div/form/div[2]/div/div/ul
-user_man_update /html/body/div[4]/div/div/div[2]/form/div[8]/div/button
+user_man_temperatureunit_dropdown /html/body/div[4]/div/div/div[2]/div[3]/div/div[2]/div/div/div/div/form/div[2]/div/div/div[1]/span/span[2]
+user_man_update /html/body/div[4]/div/div/div[2]/div[5]/button[2]
 waveform_download_button /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[4]/div/div[1]/div/div[1]/div[2]/div/div/div[5]/div/div/div/button
 waveform_export_csv_button /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[1]/div[3]/span/div/ul/li[2]/a
 waveform_export_excel_button /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[1]/div[3]/span/div/ul/li[1]/a
