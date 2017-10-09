@@ -2349,7 +2349,7 @@ def OTAPEmptyData(input_file_path=None):
         printFP(testComment)
         return Global.FAIL, testComment
 
-    if 'No' in NoDataAvailable('device-management-upgrade'):
+    if 'No' in NoDataAvailable():
         return Global.PASS, ''
     else:
         testComment = 'Data available still for this empty site; data has not been cleared.'

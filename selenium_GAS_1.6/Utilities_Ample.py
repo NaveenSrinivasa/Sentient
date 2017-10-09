@@ -1327,22 +1327,14 @@ def EmailAttachment(attachments, TOADDRS, subjectLine):
         print(str(e))
         return False
 
-def NoDataAvailable(pagename):
+def NoDataAvailable():
 
     time.sleep(5)
     html = Global.driver.page_source
 
     elements = soup(html, "lxml")
 
-    if pagename == "line-monitoring":
-        keyword = 'line-monitoring'
-    elif pagename == "device-management" or pagename == "device-management-upgrade":
-        keyword = 'device-management'
-    else:
-        printFP('NoDataAvailable: Unable to find the requested Page')
-        return None
-
-    page = elements.find('div', class_=re.compile(keyword))
+    page = elements.find('div', class_=re.compile('content-right'))
     try:
         nodatatags = page.find_all('div', class_=re.compile('nodata-available'))
     except:
@@ -1351,13 +1343,14 @@ def NoDataAvailable(pagename):
 
     for nodatatag in nodatatags:
         classname = nodatatag['class']
-        if not "ng-hide" in classname:
-            nodataavailabletext = 'No Data Available'
+        if "ng-hide" in classname:
+            nodataavailabletext = 'Data Available'
             printFP('NoDataAvailable: %s' %nodataavailabletext)
             return nodataavailabletext
         else:
             pass
-    nodataavailabletext = 'Data Available'
+
+    nodataavailabletext = 'No Data Available'
     printFP('NoDataAvailable: %s' %nodataavailabletext)
     return nodataavailabletext
 
@@ -4255,3 +4248,13 @@ def CheckAllJobsPresence():
         return False, 'TEST FAIL - No Jobs were found.'
 
     return True, ''
+
+def TableColumnSettingsButtonAccess():
+    columnsettingsbtn = GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]")
+    if 'disabled' in columnsettingsbtn.get_attribute('class'):
+        return False
+    else:
+        columnsettingsbtn.click()
+        time.sleep(1)
+        columnsettingsbtn.click()
+        return True

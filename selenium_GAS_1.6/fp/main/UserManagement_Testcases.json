@@ -39,7 +39,7 @@
         {
             "method_name":"AddUserTest",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User_Management/new_user_profile.json"
         },
@@ -222,12 +222,14 @@
             "password": "@mpacity"
         },
         {
-            "method_name": "ViewOnlyRoleCapabilities",
+            "method_name": "VerifyUserCapabilities",
             "hiptest_name": "View Only -  A role with access to view only capability in Ample",
             "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_names.json",
-            "testDev": "device_1"
+            "checkonscreens": ["sysadmin", "devman", "devconfig", "devup"],
+            "testDev": "device_1",
+            "checkexportbutton": false
         },
         {
             "method_name": "ViewOnlyRoleCapabilitiesDownloadWaveforms",
@@ -237,7 +239,7 @@
             "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_feeder_site_names.json"
         },
         {
-            "method_name": "ViewOnlyRoleCapabilitiesExportData",
+            "method_name": "VerifyUserCapabilitiesExportData",
             "hiptest_name": "View Only - Can export data",
             "skip": false,
             "expect_pass": true,
@@ -245,9 +247,61 @@
             "downloadfolder": "defaultdownloadpath"
         },
         {
+            "method_name": "VerifyUserCapabilities",
+            "hiptest_name": "Restrictions on Certain User Roles - View Only",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_feeder_names.json",
+            "checkonscreens": ["sysadmin", "devman", "devconfig", "devup", "linemon", "currentjobs"],
+            "testDev": "device_1",
+            "checkexportbutton": true,
+            "exportargs": {
+                "exporttestmethodname": "VerifyUserCapabilitiesExportData",
+                "downloadfolder": "defaultdownloadpath"
+            }
+        },
+        {
             "method_name": "Logout",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "AccUser",
+            "password": "@mpacity"
+        },
+        {
+            "method_name": "VerifyUserCapabilities",
+            "hiptest_name": "User - Verify User Capabilities",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_names.json",
+            "checkonscreens": ["devman", "devconfig", "devup"],
+            "testDev": "device_1",
+            "checkexportbutton": false
+        },
+        {
+            "method_name": "VerifyUserCapabilities",
+            "hiptest_name": "Restrictions on Certain User Roles - User",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_feeder_names.json",
+            "checkonscreens": ["sysadmin", "devman", "devconfig", "devup", "linemon", "currentjobs"],
+            "testDev": "device_1",
+            "checkexportbutton": true,
+            "exportargs": {
+                "exporttestmethodname": "VerifyUserCapabilitiesExportData",
+                "downloadfolder": "defaultdownloadpath"
+            }
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "",
+            "skip": false,
             "expect_pass": true
         },
         {
@@ -328,7 +382,7 @@
         {
             "method_name": "Logout",
             "hiptest_name": "",
-            "skip": false,
+            "skip": true,
             "expect_pass": true
         },
         {
@@ -421,6 +475,13 @@
             "hiptest_name": "Delete User",
             "skip": false,
             "expect_pass": true,
+            "user_profile_path": "seleniumDir/inputfilesDir/User_Management/new_user_profile.json"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "Delete User",
+            "skip": false,
+            "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User_Management/new_viewonly_profile.json"
         },
         {
@@ -434,7 +495,7 @@
         {
             "method_name": "Logout",
             "hiptest_name": "",
-            "skip": false,
+            "skip": true,
             "expect_pass": true
         }
     ]
