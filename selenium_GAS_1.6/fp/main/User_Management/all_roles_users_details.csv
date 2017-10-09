@@ -1,0 +1,5 @@
+username,firstname,middlename,lastname,email,timezone,temperatureunit,password,confirmpassword,role
+selGlobalAdmin,selGlobalAdmin,selGlobalAdmin,selGlobalAdmin,selGlobalAdmin@sentiet-energy.com,(UTC-08:00) Pacific/Pitcairn,Celsius,@mpacity,@mpacity,Global Administrator
+selAdmin,selAdmin,selAdmin,selAdmin,selAdmin@sentiet-energy.com,(UTC-08:00) Pacific/Pitcairn,Celsius,@mpacity,@mpacity,Administrator
+selUser,selUser,selUser,selUser,selUser@sentiet-energy.com,(UTC-08:00) Pacific/Pitcairn,Celsius,@mpacity,@mpacity,User
+selViewOnly,selViewOnly,selViewOnly,selViewOnly,selViewOnly@sentiet-energy.com,(UTC-08:00) Pacific/Pitcairn,Celsius,@mpacity,@mpacity,View Only

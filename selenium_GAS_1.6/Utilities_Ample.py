@@ -20,6 +20,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup as soup
 from Utilities_Framework import *
 
+
 def WaitForXTime(min = 5):
     i = 0
     while i < min:
@@ -455,8 +456,6 @@ def GoToUpdateProfile():
             return False
 
 def GoToUserMan():
-    Global.driver.refresh()
-    time.sleep(10)
     GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
     GetElement(Global.driver, By.LINK_TEXT, 'User Management').click()
 
@@ -1227,15 +1226,15 @@ def printFP(message):
       4 - error
       5 - critical"""
     print message
-    if Global.info == 'debug':
+    if Global.loglevel == 'debug':
         logging.debug(message)
-    elif Global.info == 'info':
+    elif Global.loglevel == 'info':
         logging.info(message)
-    elif Global.info == 'warning':
+    elif Global.loglevel == 'warning':
         logging.warning(message)
-    elif Global.info == 'error':
+    elif Global.loglevel == 'error':
         logging.error(message)
-    elif Global.info == 'critical':
+    elif Global.loglevel == 'critical':
         logging.critical(message)
     else:
         pass
@@ -1326,22 +1325,14 @@ def EmailAttachment(attachments, TOADDRS, subjectLine):
         print(str(e))
         return False
 
-def NoDataAvailable(pagename):
+def NoDataAvailable():
 
     time.sleep(5)
     html = Global.driver.page_source
 
     elements = soup(html, "lxml")
 
-    if pagename == "line-monitoring":
-        keyword = 'line-monitoring'
-    elif pagename == "device-management" or pagename == "device-management-upgrade":
-        keyword = 'device-management'
-    else:
-        printFP('NoDataAvailable: Unable to find the requested Page')
-        return None
-
-    page = elements.find('div', class_=re.compile(keyword))
+    page = elements.find('div', class_=re.compile('content-right'))
     try:
         nodatatags = page.find_all('div', class_=re.compile('nodata-available'))
     except:
@@ -1350,13 +1341,14 @@ def NoDataAvailable(pagename):
 
     for nodatatag in nodatatags:
         classname = nodatatag['class']
-        if not "ng-hide" in classname:
-            nodataavailabletext = 'No Data Available'
+        if "ng-hide" in classname:
+            nodataavailabletext = 'Data Available'
             printFP('NoDataAvailable: %s' %nodataavailabletext)
             return nodataavailabletext
         else:
             pass
-    nodataavailabletext = 'Data Available'
+
+    nodataavailabletext = 'No Data Available'
     printFP('NoDataAvailable: %s' %nodataavailabletext)
     return nodataavailabletext
 
@@ -1380,18 +1372,14 @@ def GetTableColumnOrder(pagename):
             name = columnname.text.strip().replace('"','')
             columnnamesorder[name] = n
             n = n+1
+        if pagename == 'user-management-view':
+            columnnamesorder['Actions'] = n
+
+    printFP(columnnamesorder)
     return columnnamesorder
 
 
-def FilteredDataFromTable(columnname, pagename):
-
-    if pagename == "line-monitoring":
-        keyword = 'line-monitoring'
-    elif pagename == "device-management" or pagename == "device-management-upgrade":
-        keyword = 'device-management'
-    else:
-        printFP('NoDataAvailable: Unable to find the requested Page')
-        return None
+def FilteredDataFromTable(columnname, keyword):
 
     columnorder = GetTableColumnOrder(keyword)
 
@@ -1412,7 +1400,7 @@ def FilteredDataFromTable(columnname, pagename):
         # Get all rows
         rows = tabledata.find_all('tr', class_=re.compile('row'))
         for row in rows:
-            if pagename == 'device-management':
+            if keyword == 'device-management' or keyword == 'user-management-view':
                 n=0
             else:
                 n=1
@@ -1427,15 +1415,7 @@ def FilteredDataFromTable(columnname, pagename):
     return columnnamevalueslist
 
 
-def FilteredDataFromTableMapping(columnname1, columnname2, pagename):
-
-    if pagename == "line-monitoring":
-        keyword = 'line-monitoring'
-    elif pagename == "device-management" or pagename == "device-management-upgrade":
-        keyword = 'device-management'
-    else:
-        printFP('NoDataAvailable: Unable to find the requested Page')
-        return None
+def FilteredDataFromTableMapping(columnname1, columnname2, keyword):
 
     columnorder = GetTableColumnOrder(keyword)
 
@@ -1460,7 +1440,7 @@ def FilteredDataFromTableMapping(columnname1, columnname2, pagename):
         # Get all rows
         rows = tabledata.find_all('tr', class_=re.compile('row'))
         for row in rows:
-            if pagename == 'device-management':
+            if keyword == 'device-management' or keyword == 'user-management-view':
                 n=0
             else:
                 n=1
@@ -1471,6 +1451,54 @@ def FilteredDataFromTableMapping(columnname1, columnname2, pagename):
                         columnname1value = value
                     elif n == column_2_position:
                         value = td_tag.find('span').text.strip()
+                        columnname2value = value
+                    n = n+1
+                if columnname1value and columnname2value:
+                    valuesmappinglist[columnname1value] = columnname2value
+
+    printFP(valuesmappinglist)
+    return valuesmappinglist
+
+
+def ActionsStatusMappingFromUserManagementTable(columnname1, checkaction):
+
+    keyword = 'user-management-view'
+    columnname2 = 'Actions'
+    columnorder = GetTableColumnOrder(keyword)
+    column_1_position = columnorder[columnname1]
+    column_2_position = columnorder[columnname2]
+
+    # Create a dict
+    valuesmappinglist = {}
+    columnname1value = ''
+    columnname2value = ''
+
+    html = Global.driver.page_source
+
+    FilterElements = soup(html, "lxml")
+
+    # find Page view
+    page = FilterElements.find('div', class_=re.compile(keyword))
+
+    if page.find('table'):
+        tabledata = page.find('table')
+        # Get all rows
+        rows = tabledata.find_all('tr', class_=re.compile('row'))
+        for row in rows:
+            if keyword in ('device-management', 'user-management-view'):
+                n=0
+            else:
+                n=1
+            for td_tag in row:
+                if hasattr(td_tag, 'class'):
+                    if n == column_1_position:
+                        value = td_tag.find('span').text.strip()
+                        columnname1value = value
+                    elif n == column_2_position and checkaction == 'disableicon':
+                        value = td_tag.find('span', tooltip=re.compile("User"))['class']
+                        columnname2value = value
+                    elif n == column_2_position and checkaction == 'resetpasswordicon':
+                        value = td_tag.find('span', tooltip=re.compile("Password"))['class']
                         columnname2value = value
                     n = n+1
                 if columnname1value and columnname2value:
@@ -4050,9 +4078,12 @@ def OpenAddNetworkGroupForSGW(comm_server_name):
 
 def OpenNetworkGroupList(comm_server_name):
     tablebody = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_comm_table'])
+    print tablebody
     commserverrow = None
     rows = GetElements(tablebody, By.TAG_NAME, 'tr')
+    print rows
     for row in rows:
+        print row
         if GetElement(row, By.XPATH, 'td[2]/span').text == comm_server_name:
             commserverrow = row
             if 'group-open' in commserverrow.get_attribute('class'):
@@ -4198,42 +4229,6 @@ def GetCurrentTableColumnNamesNotShown():
 
     return tablecolumnnameslist
 
-def GetFWSatusMsgFromFWScreen(device_name):
-    GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
-    time.sleep(1)
-    fwstatusmsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body')]/p").text
-    ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
-    return fwstatusmsg
-
-
-def GetFirmwareUpgradeEachPhaseStatus():
-
-    firmwareupgradeeachphasestatus = {}
-    otapstatusframe = GetElement(Global.driver, By.XPATH, "//div[@class='otapStatusModel']")
-    otapstatus = GetElement(otapstatusframe, By.TAG_NAME, 'ul')
-    options = GetElements(otapstatus, By.XPATH, "li[@class='ng-scope']")
-    for option in options:
-        phasename = GetElement(option, By.XPATH, 'div[1]').text
-        phasestatus = GetElement(option, By.XPATH, 'div[2]').get_attribute('class')
-        phasestatus = phasestatus.split(' ')
-        firmwareupgradeeachphasestatus[phasename] = phasestatus[2]
-    printFP(firmwareupgradeeachphasestatus)
-    return firmwareupgradeeachphasestatus
-
-
-def CheckAllJobsPresence():
-    printFP("INFO - Locating Job that contains the devices")
-    try:
-        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
-    except:
-        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
-        return False, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Page'
-
-    if len(allJobs) == 0:
-        printFP("INFO - No upgrades were found.")
-        return False, 'TEST FAIL - No Jobs were found.'
-
-    return True, ''
 
 def GetFWSatusMsgFromFWScreen(device_name):
     GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
@@ -4241,6 +4236,7 @@ def GetFWSatusMsgFromFWScreen(device_name):
     fwstatusmsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body')]/p").text
     ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
     return fwstatusmsg
+
 
 def GetFirmwareUpgradeEachPhaseStatus():
 
@@ -4287,3 +4283,25 @@ def CheckAllJobsPresence():
 
     return True, ''
 
+def TableColumnSettingsButtonAccess():
+    columnsettingsbtn = GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]")
+    if 'disabled' in columnsettingsbtn.get_attribute('class'):
+        return False
+    else:
+        columnsettingsbtn.click()
+        time.sleep(1)
+        columnsettingsbtn.click()
+        return True
+
+
+def CountOfReadOnlyFieldsInTheForm():
+    html = Global.driver.page_source
+    pageElements = soup(html, "lxml")
+    activetab = pageElements.find('div', class_=re.compile('tab-pane' and 'active'))
+    fields = activetab.find_all('fieldset')
+    n = 0
+    for field in fields:
+        inputfield = field.find('input')
+        if inputfield.has_attr('readonly'):
+            n = n+1
+    return n
