@@ -1,3 +1,4 @@
+import Global
 import json
 import random
 import os
@@ -268,8 +269,8 @@ def EditOwnDetailsInUserMan(user_name=None):
         printFP(testComment)
         return Global.FAIL, testComment
 
-def ViewOnlyRoleCapabilities(input_file_path=None, testDev=None):
-    if not (input_file_path and testDev):
+def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=None, checkexportbutton=False,  exportargs=None):
+    if not (input_file_path and testDev and checkonscreens):
         testComment = 'Test is missing mandatory parameter'
         printFP(testComment)
         return Global.FAIL, testComment
@@ -281,83 +282,142 @@ def ViewOnlyRoleCapabilities(input_file_path=None, testDev=None):
     devman = [xpaths['dev_man_edit'], xpaths['dev_man_add_device'], xpaths['dev_man_unregister'], xpaths['dev_man_register'], xpaths['dev_man_delete']]
     devconfig = [xpaths['dev_configure_button']]
     devup = [xpaths['dev_upgrade_button']]
+    linemon = [xpaths['line_mon_fault_events'], xpaths['line_mon_disturbances'], xpaths['line_mon_waveforms'], xpaths['line_mon_logi'], xpaths['line_mon_dnp3'],]
+    currentjobs = [xpaths['current_jobs_config'], xpaths['current_jobs_upgrade']]
 
+    if 'sysadmin' in checkonscreens:
     #Attempts to go into Management/Settings locations as a User
-    for i in range(len(sysadmin)):
-        GetElement(Global.driver, By.XPATH, xpaths['settings']).click()
-        try:
-            link = GetElement(Global.driver, By.XPATH, sysadmin[i])
-            if 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
-                printFP(testComment)
-                return Global.FAIL, testComment
-        except:
-            time.sleep(1)
-            Global.driver.refresh()
+        for i in range(len(sysadmin)):
+            GetElement(Global.driver, By.XPATH, xpaths['settings']).click()
+            try:
+                link = GetElement(Global.driver, By.XPATH, sysadmin[i])
+                if 'disabled' in link.get_attribute('class'):
+                    pass
+                else:
+                    link.click()
+                    testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+            except:
+                time.sleep(1)
+                Global.driver.refresh()
+
+    if 'currentjobs' in checkonscreens:
+        for i in range(len(currentjobs)):
+            GetElement(Global.driver, By.XPATH, xpaths['current_jobs_menu']).click()
+            try:
+                link = GetElement(Global.driver, By.XPATH, currentjobs[i])
+                if 'disabled' in link.get_attribute('class'):
+                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    link.click()
+                    pass
+            except:
+                time.sleep(1)
+                Global.driver.refresh()
 
     #Attempts to perform Administrative actions such as delete/configure/unregister
-    GoToDevMan()
-    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
-        testComment = "TEST FAIL - Unable to locate locations based off input file in Manage Device Page"
-        printFP(testComment)
-        return Global.FAIL, testComment
+    if 'devman' in checkonscreens:
+        GoToDevMan()
+        if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+            testComment = "TEST FAIL - Unable to locate locations based off input file in Manage Device Page"
+            printFP(testComment)
+            return Global.FAIL, testComment
 
-    for n in range(len(devman)):
+        for n in range(len(devman)):
+            SelectDevice(testDev)
+            try:
+                link = GetElement(Global.driver, By.XPATH, devman[n])
+                if 'disabled' in link.get_attribute('class'):
+                    pass
+                else:
+                    link.click()
+                    testComment = 'TEST FAIL - User is able to modify and change elements in Manage Device Page'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+            except:
+                time.sleep(1)
+                Global.driver.refresh()
+
+        if not TableColumnSettingsButtonAccess():
+            return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
+
+    if 'devconfig' in checkonscreens:
+        GoToDevConfig()
+        if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+            testComment = "Unable to locate locations based off input file in Configuration Page"
+            printFP(testComment)
+            return Global.FAIL, testComment
+
         SelectDevice(testDev)
         try:
-            link = GetElement(Global.driver, By.XPATH, devman[n])
+            link = GetElement(Global.driver, By.XPATH, devconfig)
             if 'disabled' in link.get_attribute('class'):
                 pass
             else:
                 link.click()
-                testComment = 'TEST FAIL - User is able to modify and change elements in Manage Device Page'
+                testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
                 printFP(testComment)
                 return Global.FAIL, testComment
         except:
-            time.sleep(1)
-            Global.driver.refresh()
-
-    GoToDevConfig()
-    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
-        testComment = "Unable to locate locations based off input file in Configuration Page"
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    SelectDevice(testDev)
-    try:
-        link = GetElement(Global.driver, By.XPATH, devconfig)
-        if 'disabled' in link.get_attribute('class'):
             pass
-        else:
-            link.click()
-            testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
-            printFP(testComment)
-            return Global.FAIL, testComment
-    except:
-        pass
+
+        if not TableColumnSettingsButtonAccess():
+            return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
 
     #Attemps to perform Administrative action such as OTAP upgrade
-    GoToDevUpgrade()
-    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
-        testComment = "Unable to locate locations based off input file in Upgrade Page"
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    SelectDevice(testDev)
-    try:
-        link = GetElement(Global.driver, By.XPATH, devup)
-        if 'disabled' in link.get_attribute('class'):
-            pass
-        else:
-            link.click()
-            testComment = 'TEST FAIL - User is able to modify and change elements in Device Firmware Upgrade Page'
+    if 'devup' in checkonscreens:
+        GoToDevUpgrade()
+        if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+            testComment = "Unable to locate locations based off input file in Upgrade Page"
             printFP(testComment)
             return Global.FAIL, testComment
-    except:
-        pass
+
+        SelectDevice(testDev)
+        try:
+            link = GetElement(Global.driver, By.XPATH, devup)
+            if 'disabled' in link.get_attribute('class'):
+                pass
+            else:
+                link.click()
+                testComment = 'TEST FAIL - User is able to modify and change elements in Device Firmware Upgrade Page'
+                printFP(testComment)
+                return Global.FAIL, testComment
+        except:
+            pass
+
+        if not TableColumnSettingsButtonAccess():
+            return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
+
+    if 'linemon' in checkonscreens:
+        GoToLineMonitoring()
+        for i in range(len(linemon)):
+            try:
+                link = GetElement(Global.driver, By.XPATH, linemon[i])
+                if 'disabled' in link.get_attribute('class'):
+                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    link.click()
+                    pass
+            except:
+                time.sleep(1)
+                Global.driver.refresh()
+
+    if checkexportbutton:
+        new_test_method_name = exportargs['exporttestmethodname']
+        printFP('Testing export button access. Calling external function: {}' .format(new_test_method_name))
+        del exportargs['exporttestmethodname']
+        exportargs['input_file_path'] = input_file_path
+        args = exportargs
+        result, testComment = globals()[new_test_method_name](**args)
+        if result == Global.FAIL:
+            testComment = 'TEST FAIL - User is not able to access excel/csv export button. Please check the log file.'
+            printFP(testComment)
+            return Global.FAIL, testComment
 
     testComment = 'TEST PASS - User level is unable to access certain parts of the GUI and unable to perform any edits.'
     printFP(testComment)
@@ -933,7 +993,7 @@ def DeleteUserTest(user_profile_path, deleteuserstatus=False):
             return Global.FAIL, 'TEST FAIL - '+testComment
 
 
-def ViewOnlyRoleCapabilitiesExportData(input_file_path=None, downloadfolder=None):
+def VerifyUserCapabilitiesExportData(input_file_path=None, downloadfolder=None):
     if input_file_path == None or downloadfolder == None:
         testComment = "Missing a mandatory parameter"
         printFP(testComment)
@@ -951,7 +1011,7 @@ def ViewOnlyRoleCapabilitiesExportData(input_file_path=None, downloadfolder=None
 
     for i in range(len(devman)):
         GetElement(Global.driver, By.XPATH, devman[i]).click()
-        nodataavailable = NoDataAvailable('device-management')
+        nodataavailable = NoDataAvailable()
         if not nodataavailable == "No Data Available":
             exportbutton = ClickExportButton()
             if not ClickExportCSVEXCELButton(exportbutton, 'CSV'):
@@ -984,17 +1044,17 @@ def ViewOnlyRoleCapabilitiesExportData(input_file_path=None, downloadfolder=None
 
     for i in range(len(linemon)):
         GetElement(Global.driver, By.XPATH, linemon[i]).click()
-        nodataavailable = NoDataAvailable('line-monitoring')
+        nodataavailable = NoDataAvailable()
         if not nodataavailable == "No Data Available":
             exportbutton = ClickExportButton()
             if not ClickExportCSVEXCELButton(exportbutton, 'CSV'):
-                testComment = 'TEST FAIL - User is not able to access csv export button in Dev Management Pages. Please check the log file.'
+                testComment = 'TEST FAIL - User is not able to access csv export button in Line Monitoring Pages. Please check the log file.'
                 printFP(testComment)
                 return Global.FAIL, testComment
             csvlocation = downloadfolder + "export.csv"
             exportbutton = ClickExportButton()
             if not ClickExportCSVEXCELButton(exportbutton, 'EXCEL'):
-                testComment = 'TEST FAIL - User is not able to access excel export button in Dev Management Pages. Please check the log file.'
+                testComment = 'TEST FAIL - User is not able to access excel export button in Line Monitoring Pages. Please check the log file.'
                 printFP(testComment)
                 return Global.FAIL, testComment
             excellocation = downloadfolder + "export.xls"
@@ -1033,7 +1093,7 @@ def ViewOnlyRoleCapabilitiesDownloadWaveforms(input_file_path=None):
         time.sleep(1)
         SelectAllTriggeredDetectors()
         time.sleep(2)
-        nodataavailable = NoDataAvailable('line-monitoring')
+        nodataavailable = NoDataAvailable()
         if not nodataavailable == "No Data Available":
             printFP("Given site has faultevents")
             siterows = GetElements(Global.driver, By.XPATH, "//span[text()='" + params['Site'] + "']")

@@ -8,11 +8,11 @@ current_first_job_status /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/
 current_first_otap_status /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/div[2]/table/tbody/tr/td[7]/span
 current_first_sw_version /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/div[2]/table/tbody/tr/td[5]/span
 current_jobs_button_set /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/div[1]/div[2]
-current_jobs_config html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[1]/ul/li[1]/a
+current_jobs_config /html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[1]/ul/li[1]/a
 current_jobs_config_retry_all /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/div[1]/div[2]/button[2]
 current_jobs_menu html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[1]/a
 current_jobs_msg_close /html/body/div[4]/div/div/div[1]/button
-current_jobs_upgrade html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[1]/ul/li[2]/a
+current_jobs_upgrade /html/body/div[1]/div/logged-in-header/div/div/div/div/div/div[3]/ul/li[1]/ul/li[2]/a
 current_jobs_upgrade_abort /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/div[1]/div[2]/button[1]
 current_jobs_upgrade_retry /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/div[1]/div[2]/button[2]
 current_upgrade_job_list /html/body/div[1]/div/div/div/div[2]/div[1]/div[2]/div/div/div[1]/upgrade-jobs/div[3]/ol
