@@ -39,7 +39,6 @@ def RemoveActionsColumnFromUpgradeTable(input_file_path):
         #Getting the entire column names from the table
         columnlist = GetCurrentTableDisplayedColumnNames()
         printFP('Selected columns along with Initial Load column names are : {}' .format(columnlist))
-
         if not 'Actions' in columnlist:
             testComment = 'TEST PASS - Actions Column is not present in the Firmware Upgrade page.'
             printFP(testComment)
@@ -432,11 +431,13 @@ def FirmwareUpgradeList(mtf_full_path, input_file_path, onlinedev, offlinedev):
         return Global.FAIL, testComment
 
     params = ParseJsonInputFile(input_file_path)
+
     result, msg = UploadMTFTest(mtf_full_path, wait_for_online=False)
     if 'TEST PASS' in msg:
         GoToDevman()
         GetRootNode()
         GoToDevUpgrade()
+
         if not GetLocationFromInput('dummyregion', 'dummysub', 'dummyfeeder', 'dummysite'):
             testComment = "Unable to locate locations based off input file in Upgrade Page"
             printFP(testComment)

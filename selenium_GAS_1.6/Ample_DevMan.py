@@ -7,7 +7,7 @@ from Utilities_Ample import *
 from Utilities_Device import *
 from Ample_SysAdmin import *
 from Ample_ManageProfile import *
-from Ample_LineMon import *
+#from Ample_LineMon import *
 from Ample_Login import *
 
 
@@ -1962,13 +1962,11 @@ def OTAPPostCheckVersion(input_file_path=None, device_names=None, target_version
         printFP(testComment)
         return Global.FAIL, testComment
 
-    devicesfwupgradeversion = FilteredDataFromTableMapping('Serial Number', 'FW Version', 'device-management')
-
     for i in range(len(device_names)):
-        device_name = device_names[i]
-        #swVerText = GetElement(row, By.XPATH, 'td[6]/span').text
-        if not target_version in devicesfwupgradeversion[device_name]:
-            testComment = '%s does not match target version %s. Found %s' % (device_name, target_version, devicesfwupgradeversion[device_name])
+        row = GetDevice(device_names[i])
+        swVerText = GetElement(row, By.XPATH, 'td[6]/span').text
+        if not swVerText == target_version:
+            testComment = '%s does not match target version %s' % (device_names, target_version)
             printFP(testComment)
             return Global.FAIL, testComment
 
@@ -1981,19 +1979,11 @@ def OTAPPostCheckVersion(input_file_path=None, device_names=None, target_version
         printFP(testComment)
         return Global.FAIL, testComment
 
-    devicesfwupgradeversion = FilteredDataFromTableMapping('Serial Number', 'FW Version', 'device-management')
-    devicesfwupgradestatus = FilteredDataFromTableMapping('Serial Number', 'FW Upgrade Status', 'device-management')
-
     for i in range(len(device_names)):
-        device_name = device_names[i]
-        #row = GetDevice(device_names[i])
-        #swVerText = GetElement(row, By.XPATH, 'td[5]/span').text
-        if not target_version in devicesfwupgradeversion[device_name]:
-            testComment = '%s does not match target version %s. Found %s' % (device_name, target_version, devicesfwupgradeversion[device_name])
-            printFP(testComment)
-            return Global.FAIL, testComment
-        if not desiredOtapStatus == str(devicesfwupgradestatus[device_name]):
-            testComment = 'Target version matched . but %s does not match desiredOtapStatus %s. Found %s' % (device_name, desiredOtapStatus, devicesfwupgradestatus[device_name])
+        row = GetDevice(device_names[i])
+        swVerText = GetElement(row, By.XPATH, 'td[5]/span').text
+        if not swVerText == target_version:
+            testComment = '%s does not match target version %s' % (device_names, target_version)
             printFP(testComment)
             return Global.FAIL, testComment
 
@@ -2021,7 +2011,7 @@ def OTAPPollCurrentJobs(device_name=None, polltime = 20, target_version =None, d
             allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
         except:
             printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
-            return Global.FAIL, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Upgrade Page'
+            return Global.FAIL, 'TEST FAIL - Exception occured while trying to get jobs in the current jobs Upgrade Page'
 
         if len(allJobs) == 0:
             printFP("INFO - No upgrades were found.")
@@ -2050,20 +2040,11 @@ def OTAPPollCurrentJobs(device_name=None, polltime = 20, target_version =None, d
             status = GetElement(DeviceRow, By.TAG_NAME, 'a')
             status.click()
             time.sleep(1)
-            fwupgradeprocesstitle = GetElement(Global.driver, By.XPATH, "//span[contains(@class, 'modal-title')]").text
-            printFP("INFO - Firmware Upgrade Process Title: %s" %fwupgradeprocesstitle)
-            if str(listOfDevices[n]) in fwupgradeprocesstitle:
-                printFP("INFO - Device name is matched in Firmware Upgrade Process Title")
-            else:
-                printFP("Test Fail - Device name is not matched in Firmware Upgrade Process Title")
-            time.sleep(1)
-            firmwareupgradeeachphasestatus = GetFirmwareUpgradeEachPhaseStatus()
-            try:
-                if any(str(firmwareupgradeeachphasestatus[x]) == 'error' for x in list(firmwareupgradeeachphasestatus)):
-                    phaseerrormessage = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'glyphicon-remove-circle')]/following-sibling::div[contains(@class, 'redFont')]").text
-            except Exception as e:
-                print e.message
-            closeButton = GetElement(Global.driver, By.XPATH, "//a[contains(@class, 'close-icon')]")
+            msgBox = GetElement(Global.driver, By.XPATH, "//div[@class='modal-content']")
+            msg = GetText(msgBox, By.CSS_SELECTOR, 'p.ng-binding')
+            time.sleep(2)
+            printFP('INFO - Detailed OTAP message: %s' % msg)
+            closeButton = GetElement(Global.driver, By.XPATH, "//button[text()='Close']")
             closeButton.click()
             if not CheckIfStaleElement(closeButton):
                 printFP("INFO - Detailed OTAP message box did not close.")
@@ -2072,27 +2053,17 @@ def OTAPPollCurrentJobs(device_name=None, polltime = 20, target_version =None, d
                 pass
             else:
                 if jobStatus == desiredJobStatus and otapStatus == desiredOtapStatus:
-                    printFP("INFO - Firmware Upgrade job for the device %s is finished and matched desired output." % listOfDevices[n])
-                    if not desiredOtapStatus ==  'ABORTED':
-                        if any(firmwareupgradeeachphasestatus[x] in ('inprogress', 'pending') for x in list(firmwareupgradeeachphasestatus)):
-                            printFP("INFO - Firmware Upgrade Phase of the device %s is still inprogress." % listOfDevices[n])
-                            pass
-                        elif any(str(firmwareupgradeeachphasestatus[x]) == 'error' for x in list(firmwareupgradeeachphasestatus)):
-                            result = Global.FAIL
-                            printFP("Test Fail - Job and Otap Status shows success. But one of Firmware Upgrade Phase of the device %s is failed." % listOfDevices[n])
-                        elif all(str(firmwareupgradeeachphasestatus[x]) == 'success' for x in list(firmwareupgradeeachphasestatus)):
-                            result = Global.PASS
-                            printFP("Test Pass - All Phases of firmware Upgrade process for the device %s is successful." % listOfDevices[n])
+                    printFP("INFO - Device %s is finished and matched desired output." % listOfDevices[n])
                 else:
                     result = Global.FAIL
-                    printFP("INFO - Device %s is finished and did not match desired output. Inline Error Message: %s" % (listOfDevices[n], phaseerrormessage))
+                    printFP("INFO - Device %s is finished and did not match desired output." % listOfDevices[n])
                 devicesDone += 1
 
         if devicesDone == len(device_name):
             break
         else:
-            printFP('INFO - Not all devices were complete .. waiting 5 minutes before checking again.')
-            time.sleep(360)
+            printFP('INFO - Not all devices were complete .. waiting 60 seconds before checking again.')
+            time.sleep(60)
             Global.driver.refresh()
 
     # Return of otap job failed
@@ -2111,7 +2082,7 @@ def OTAPPollCurrentJobs(device_name=None, polltime = 20, target_version =None, d
             result = Global.FAIL
             printFP("INFO - Upgraded OTAP version on Ample does not match target version for device %s." %listOfDevices[m])
 
-    return result, ('TEST PASS - OTAP done successfully with no issue.') if result == Global.PASS else ('TEST FAIL - Test did not upgrade properly and encountered issues.')
+    return result, ('TEST PASS - Test upgraded with no issue.') if result == Global.PASS else ('TEST FAIL - Test did not upgrade properly and encountered issues.')
 
 def OTAPAbort(input_file_path=None, device_name=None):
     if input_file_path == None or device_name == None:
@@ -2121,55 +2092,75 @@ def OTAPAbort(input_file_path=None, device_name=None):
 
     params = ParseJsonInputFile(input_file_path)
     GoToDevMan()
+    GoToDevUpgrade()
 
-    GoToCurrentJobsUpgrade()
-    jobspresence, testComment = CheckAllJobsPresence()
-    if jobspresence:
+    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+        testComment = "Unable to locate locations based off input file"
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    while True:
+        SelectDevice(device_name)
         DeviceRow = GetDevice(device_name)
-        # Get otap status
-        printFP("INFO - Information on Device %s" % device_name)
-        jobStatus = GetText(DeviceRow, By.XPATH, "td[6]/span")
-        otapStatus = GetText(DeviceRow, By.XPATH, "td[7]/span/span/a")
-        printFP('INFO - Job Status: %s  OTAP Status: %s' % (jobStatus, otapStatus))
-        if jobStatus == 'IN_PROGRESS' and otapStatus == 'ABORTED':
-            try:
-                SelectDevice(device_name)
-                AbortButton = GetElement(Global.driver, By.XPATH, "//button[text()='Abort']")
-                if 'disabled' in AbortButton.get_attribute('class'):
-                    printFP("INFO - Test is unable to abort because abort button is disabled.")
-                    return Global.FAIL, 'TEST FAIL - Test is unable to abort because abort button is disabled.'
-                else:
-                    AbortButton.click()
-                    printFP("INFO - Test initiated abort using abort button.")
-            except:
-                testComment = '%s not found in current upgrade jobs page.' % device_name
-                printFP(testComment)
-                return Global.FAIL, testComment
+        try:
+            GetElement(DeviceRow, By.XPATH, "//*[contains(text(),'SCHEDULED']")
+            time.sleep(30)
+            Global.driver.refresh()
+        except:
+            break
+
+    try:
+        link = GetElement(DeviceRow, By.XPATH, "//a[text()='Abort']")
+        printFP("INFO - Link To Click has Text: %s" %link.text)
+    except:
+        testComment = 'Abort link does not exist currently for this device. Device possibly already aborting.'
+        printFP('INFO - ' + testComment)
+        return Global.FAIL, 'TEST FAIL - ' + testComment
+
+    link.click()
+    if not CheckIfStaleElement(link):
+        printFP("INFO - Link did not redirect to Current Jobs - Upgrade page")
+    try:
+        SelectDevice(device_name)
+        AbortButton = GetElement(Global.driver, By.XPATH, "//button[text()='Abort']")
+        if 'disabled' in AbortButton.get_attribute('class'):
+            printFP("INFO - Test is unable to abort because abort button is disabled.")
+            return Global.FAIL, 'TEST FAIL - Test is unable to abort because abort button is disabled.'
         else:
-            testComment = 'Unable to Abort for the device %s. INFO - Job Status: %s  OTAP Status: %s' % (device_name, jobStatus, otapStatus)
+            AbortButton.click()
+            printFP("INFO - Test initiated abort using abort button.")
+    except:
+        testComment = '%s not found in current upgrade jobs page.' % device_name
+        printFP(testComment)
+        result = Global.FAIL
+        return result, testComment
+
+    GoToDevMan()
+    GoToDevUpgrade()
+
+    SelectDevice(device_name)
+    try:
+        upgradeButton = WebDriverWait(Global.driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpaths['dev_upgrade_button'])))
+        upgradeButton.click()
+        if 'disabled' in upgradeButton.get_attribute('class'):
+            printFP('Upgrade Button is unavailable for device %s that is aborting.'% device_name)
+        else:
+            testComment = 'Upgrade button is still available for Device performing Abort'
             printFP(testComment)
             return Global.FAIL, testComment
+    except:
+        printFP('Upgrade Button is unavailable for device %s that is aborting.'% device_name)
 
-        GoToDevMan()
-        GoToDevUpgrade()
+    try:
+        DeviceRow = GetDevice(device_name)
+        linkText = GetElement(DeviceRow, By.XPATH, "td[20]/div/span/a").text
+        testComment = "Link to click has text: %s" % linkText
+        printFP(testComment)
+        return Global.FAIL, testComment
+    except:
+        printFP('No links for this device while aborting. %s' %device_name)
 
-        SelectDevice(device_name)
-        try:
-            upgradeButton = WebDriverWait(Global.driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpaths['dev_upgrade_button'])))
-            upgradeButton.click()
-            if 'disabled' in upgradeButton.get_attribute('class'):
-                printFP('Upgrade Button is unavailable for device %s that is aborting.'% device_name)
-            else:
-                testComment = 'Upgrade button is still available for Device performing Abort'
-                printFP(testComment)
-                return Global.FAIL, testComment
-        except:
-            printFP('Upgrade Button is unavailable for device %s that is aborting.'% device_name)
-
-        return Global.PASS, 'TEST PASS - Test has begun aborting successfully.'
-    else:
-        printFP('TEST FAIL - ' + testComment)
-        return Global.FAIL, 'TEST FAIL - ' + testComment
+    return Global.PASS, 'TEST PASS - Test has begun aborting successfully.'
 
 def OTAPRetryUpgrade(input_file_path=None, device_name=None):
     if input_file_path == None or device_name == None:
@@ -2179,38 +2170,60 @@ def OTAPRetryUpgrade(input_file_path=None, device_name=None):
 
     params = ParseJsonInputFile(input_file_path)
     GoToDevMan()
-    GoToCurrentJobsUpgrade()
-    jobspresence, testComment = CheckAllJobsPresence()
-    if jobspresence:
-        DeviceRow = GetDevice(device_name)
-        # Get otap status
-        printFP("INFO - Information on Device %s" % device_name)
-        jobStatus = GetText(DeviceRow, By.XPATH, "td[6]/span")
-        otapStatus = GetText(DeviceRow, By.XPATH, "td[7]/span/span/a")
-        printFP('INFO - Job Status: %s  OTAP Status: %s' % (jobStatus, otapStatus))
-        if jobStatus == 'COMPLETED' and otapStatus == 'ABORTED':
-            try:
-                SelectDevice(device_name)
-                RetryButton = GetElement(Global.driver, By.XPATH, "//button[text()='Retry']")
-                if 'disabled' in RetryButton.get_attribute('class'):
-                    printFP("INFO - Test is unable to Retry because Retry button is disabled.")
-                    return Global.FAIL, 'TEST FAIL - Test is unable to Retry because Retry button is disabled.'
-                else:
-                    RetryButton.click()
-                    printFP("INFO - Test initiated Retry operation using Retry button.")
-            except:
-                testComment = '%s not found in current upgrade jobs page.' % device_name
-                printFP(testComment)
-                return Global.FAIL, testComment
-        else:
-            testComment = 'Unable to Abort for the device %s. INFO - Job Status: %s  OTAP Status: %s' % (device_name, jobStatus, otapStatus)
-            printFP('INFO - ' + testComment)
-            return Global.FAIL, 'TEST FAIL - ' + testComment
+    GoToDevUpgrade()
 
-        return Global.PASS, 'TEST PASS - Test successfully retried an upgrade on a device.'
-    else:
+    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+        testComment = "Unable to locate locations based off input file"
         printFP('INFO - ' + testComment)
         return Global.FAIL, 'TEST FAIL - ' + testComment
+
+    try:
+        SelectDevice(device_name)
+    except:
+        testComment = 'Test could not locate device %s' % device_name
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    DeviceRow = GetDevice(device_name)
+    try:
+        try:
+            retryLink = GetElement(DeviceRow, By.LINK_TEXT, 'Retry')
+            retryLink.click()
+            if not CheckIfStaleElement(DeviceRow):
+                printFP("INFO - Did not change from Device Upgrade Page to Current Jobs Upgrade Page")
+            else:
+                printFP("INFO - Changed from Device Upgrade Page to Current Jobs Upgrade Page")
+        except:
+            testComment = 'Test ran into issues while trying to get and click Retry Link'
+            printFP('INFO - ' + testComment)
+            return Global.FAIL, ('TEST FAIL - ' + testComment)
+
+        try:
+            deviceCheckBox = GetElement(Global.driver, By.XPATH, "//span[text()='"+device_name+"']/../../td[1]/input[1]")
+            if 'disabled' in deviceCheckBox.get_attribute('class'):
+                printFP("INFO - Test is unable to Retry because device checkbox is disabled.")
+                return Global.FAIL, 'TEST FAIL - Test is unable to Retry because device checkbox is disabled.'
+            else:
+                deviceCheckBox.click()
+            RetryButton = GetElement(Global.driver, By.XPATH, "//button[text()='Retry']")
+            if 'disabled' in RetryButton.get_attribute('class'):
+                printFP("INFO - Test is unable to Retry because Retry button is disabled.")
+                return Global.FAIL, 'TEST FAIL - Test is unable to Retry because Retry button is disabled.'
+            else:
+                RetryButton.click()
+                printFP("INFO - Test initiated Retry operation using Retry button.")
+
+        except:
+            testComment = '%s not found in current upgrade jobs page.' % device_name
+            printFP(testComment)
+            result = Global.FAIL
+            return result, testComment
+    except:
+        testComment = 'Test ran into exception while trying to retry to Retry Upgrade'
+        printFP('INFO - ' + testComment)
+        return Global.FAIL, 'TEST FAIL - ' + testComment
+
+    return Global.PASS, 'TEST PASS - Test successfully retried an upgrade on a device.'
 
 def OTAPEmptyData(input_file_path=None):
     if input_file_path == None:
@@ -2363,3 +2376,243 @@ def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, act
             return Global.FAIL, testComment
 
     return Global.PASS, 'TEST PASS - Test started an upgrade for selected devices'
+
+def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, go_to, refresh_page, logout, username, password, profile_status_list, profile_name_list, device_status_list, fw_version_list, nw_grp_list, comm_type_list, device_state_list, serial_number_list, fw_status_list):
+
+    allfilters = {"device_status_list": device_status_list, "fw_version_list": fw_version_list, "nw_grp_list": nw_grp_list, "comm_type_list": comm_type_list, "device_state_list": device_state_list, "serial_number_list": serial_number_list, "profile_status_list": profile_status_list, "profile_name_list": profile_name_list, "fw_status_list": fw_status_list}
+    params = ParseJsonInputFile(input_file_path)
+    
+    GoToDevMan()
+    Global.driver.refresh()
+    time.sleep(5)
+    if tabname == 'Configurations':
+        GoToDevConfig()
+        current_test_page = GoToDevConfig
+    elif tabname == 'Firmware Upgrade':
+        GoToDevUpgrade()
+        current_test_page = GoToDevUpgrade
+    elif tabname == 'Inactive Device Report':
+        GoToDevInactDevRep()
+        current_test_page = GoToDevInactDevRep
+    elif tabname == 'Manage Devices':
+        GoToDevMan()
+        current_test_page = GoToDevMan
+
+    if go_to == 'rootnode':
+        GetRootNode()
+        params['Region'], params['Substation'], params['Feeder'], params['Site']
+        current_test_node = GetRootNode
+    elif go_to == 'region':
+        GetRegionFromTop(params['Region'])
+        current_test_node = GetRegionFromTop
+    elif go_to == 'substation':
+        GetSubstationFromTop(params['Region'], params['Substation'])
+        current_test_node = GetSubstationFromTop
+    elif go_to == 'feeder':
+        GetFeederFromTop(params['Region'], params['Substation'], params['Feeder'])
+        current_test_node = GetFeederFromTop
+
+    if not selectfilters:
+        for item in list(allfilters):
+            allfilters[item] = []
+            allfilters[item] = ['Show All']
+    time.sleep(3)
+    try:
+        selectFiltersByDeviceStatusManageDevice(allfilters['device_status_list'], tabname)
+    except:
+        pass
+    try:
+        selectFiltersByCommunicationTypeManageDevice(allfilters['comm_type_list'])
+    except:
+        pass
+    try:
+        selectFiltersByDeviceStateManageDevice(allfilters['device_state_list'], tabname)
+    except:
+        pass
+    try:
+        selectFiltersByFWVersionManageDeviceScreen(allfilters['fw_version_list'], tabname)
+    except:
+        pass
+    try:
+        selectFiltersByNetworkGroupManageDeviceScreen(allfilters['nw_grp_list'], tabname)
+    except:
+        pass
+    try:
+        selectFiltersBySerialNumber(allfilters['serial_number_list'])
+    except:
+        pass
+    try:
+        selectFiltersByProfileName(allfilters['profile_name_list'])
+    except:
+        pass
+    try:
+        selectFiltersByProfileStatus(allfilters['profile_status_list'])
+    except:
+        pass
+    try:
+        selectFiltersByUpgradeStatus(allfilters['fw_status_list'])
+    except:
+        pass
+
+    GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
+    time.sleep(4)
+
+    results = []
+
+    if not selectfilters:
+        nodataavailable = NoDataAvailable('device-management')
+        if nodataavailable == "No Data Available":
+            testComment = 'TEST FAIL - Found "No Data Available" when selected "ShowAll" in all filters and applied'
+            printFP(testComment)
+            results.append(Global.FAIL)
+        else:
+            testComment = 'TEST PASS - Data displayed when selected "ShowAll" in all filters and applied '
+            printFP(testComment)
+            results.append(Global.PASS)
+    elif selectfilters:
+        ui_data_dict = {}
+        nodataavailable = NoDataAvailable('device-management')
+        if nodataavailable == "No Data Available":
+            testComment = 'TEST FAIL - Found "No Data Available" when applied filters.Enter filters which has data and try again..'
+            printFP(testComment)
+            results.append(Global.FAIL)
+        if device_status_list:
+            device_status_list_from_ui = FilteredDataFromTable('Device Status', 'device-management')
+            ui_data_dict["device_status_list_from_ui"] = device_status_list_from_ui
+        else:
+            ui_data_dict["device_status_list_from_ui"] = []
+        if fw_version_list:
+            fw_version_list_from_ui = FilteredDataFromTable('FW Version', 'device-management')
+            ui_data_dict["fw_version_list_from_ui"] = fw_version_list_from_ui
+        else:
+            ui_data_dict["fw_version_list_from_ui"] = []
+        if nw_grp_list:
+            nw_grp_list_from_ui = FilteredDataFromTable('Network Group', 'device-management')
+            ui_data_dict["nw_grp_list_from_ui"] = nw_grp_list_from_ui
+        else:
+            ui_data_dict["nw_grp_list_from_ui"] = []
+        if comm_type_list:
+            comm_type_list_from_ui = FilteredDataFromTable('Communication Type', 'device-management')
+            ui_data_dict["comm_type_list_from_ui"] = comm_type_list_from_ui
+        else:
+            ui_data_dict["comm_type_list_from_ui"] = []
+        if device_status_list:
+            device_state_list_from_ui = FilteredDataFromTable('Device State', 'device-management')
+            ui_data_dict["device_state_list_from_ui"] = device_state_list_from_ui
+        else:
+            ui_data_dict["device_state_list_from_ui"] = []
+        if serial_number_list: 
+            serial_number_list_from_ui = FilteredDataFromTable('Serial Number', 'device-management')
+            ui_data_dict["serial_number_list_from_ui"] = serial_number_list_from_ui
+        else:
+            ui_data_dict["serial_number_list_from_ui"] = []
+        if profile_name_list:
+            profile_name_list_from_ui = FilteredDataFromTable('Profile Name', 'device-management')
+            ui_data_dict["profile_name_list_from_ui"] = profile_name_list_from_ui
+        else:
+            ui_data_dict["profile_name_list_from_ui"] = []
+        if profile_status_list:
+            profile_status_list_from_ui = FilteredDataFromTable('Profile Status', 'device-management')
+            ui_data_dict["profile_status_list_from_ui"] = profile_status_list_from_ui
+        else:
+            ui_data_dict["profile_status_list_from_ui"] = []
+        if fw_status_list:
+            fw_status_list_from_ui = FilteredDataFromTable('FW Upgrade Status', 'device-management')
+            ui_data_dict["fw_status_list_from_ui"] = fw_status_list_from_ui
+        else:
+            ui_data_dict["fw_status_list_from_ui"] = []
+
+        i=0        
+        for filtercheck in list(allfilters):
+            if filtercheck:
+                tmpnameforuilist = list(allfilters)[i] + '_from_ui'
+                if all(str(x) in allfilters[filtercheck] for x in ui_data_dict[tmpnameforuilist]):
+                    testComment = 'TEST PASS - displayed {} matched with the filters applied.' .format(filtercheck)
+                    printFP(testComment)
+                    results.append(Global.PASS)
+                else:
+                    testComment = 'TEST FAIL - displayed {} are not matched with the filters applied.' .format(filtercheck)
+                    printFP(testComment)
+                    results.append(Global.FAIL)
+            i = i+1
+
+    if not navigate_by == '' or refresh_page or logout:
+        if navigate_by == 'node':
+            GetSiteFromTop(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+            time.sleep(1)
+            if go_to == 'rootnode':
+                GetRootNode()
+            elif go_to == 'region':
+                GetRegionFromTop(params['Region'])
+            elif go_to == 'substation':
+                GetSubstationFromTop(params['Region'], params['Substation'])
+            elif go_to == 'feeder':
+                GetFeederFromTop(params['Region'], params['Substation'], params['Feeder'])
+
+        elif navigate_by == 'tab':
+            GoToLineMon()
+            time.sleep(3)
+            GoToDevMan()
+            current_test_page()     
+            time.sleep(2)
+        elif refresh_page:
+            Global.driver.refresh()
+            time.sleep(5)
+        elif logout:
+            Logout()
+            time.sleep(3)
+            Login(username, password)
+            time.sleep(3)
+            GoToDevMan()
+            current_test_page()
+            if go_to == 'rootnode':
+                GetRootNode()
+            elif go_to == 'region':
+                GetRegionFromTop(params['Region'])
+            elif go_to == 'substation':
+                GetSubstationFromTop(params['Region'], params['Substation'])
+            elif go_to == 'feeder':
+                GetFeederFromTop(params['Region'], params['Substation'], params['Feeder'])
+        
+        filters_xpath = ["communicationTypeSettings.list", "statusSettings.list", "softwareVersionsSettings.list", "stateSettings.list", "networkGroupsSettings.list", "networkGroupSelection.list", "profileStatusSelection.list", "profileNameSelection.list", "fwUpgradeStatusSelection.list", "fwVersionSelection.list", "deviceStatusSelection.list", "deviceStateSelection.list"]
+        currentfiltervalues = []
+        time.sleep(4)
+        for filterxpath in filters_xpath:
+            value = filterDisplayedValue(filterxpath)
+            if value:
+                if value.strip() == 'Select':
+                    currentfiltervalues.append('Show All')
+                else:
+                    currentfiltervalues.append(value.strip())
+        printFP(currentfiltervalues)
+
+        usergiven_values = allfilters['comm_type_list'] + allfilters['device_status_list'] + allfilters['fw_version_list'] + allfilters['device_state_list'] + allfilters['nw_grp_list'] + allfilters['profile_status_list'] + allfilters['profile_name_list'] + allfilters['fw_status_list']
+        printFP(usergiven_values)
+
+        if not navigate_by == '':
+            if all(str(x) in usergiven_values for x in currentfiltervalues):
+                testComment = 'TEST PASS - Values matched after navigating to some other node/tab and returning to same node'
+                printFP(testComment)
+                results.append(Global.PASS)
+            else:
+                testComment = 'TEST FAIL - Values did not matched after navigating to some other node/tab and returning to same node'
+                printFP(testComment)
+                results.append(Global.FAIL)
+        elif refresh_page and logout:
+            if not all(str(x) in currentfiltervalues for x in usergiven_values):
+                testComment = 'TEST PASS - Values are not matched after refreshing the page/logout and login'
+                printFP(testComment)
+                results.append(Global.PASS)            
+            else:
+                testComment = 'TEST FAIL - Values are matched after refreshing the page/logout and login'
+                printFP(testComment)
+                results.append(Global.FAIL)
+
+    if Global.FAIL in results:
+        testComment = 'TEST FAIL - Some filters are not working.'
+        printFP(testComment)
+        return Global.FAIL, testComment
+    else:
+        testComment = 'TEST PASS - All filters are working fine.'
+        printFP(testComment)
+        return Global.PASS, testComment

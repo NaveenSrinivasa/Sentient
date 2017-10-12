@@ -42,7 +42,7 @@ def SpawnBrowser(browser, platform):
             driver = webdriver.Remote(command_executor='http://10.8.1.29:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
             driver = webdriver.Remote(command_executor='http://10.8.1.19:5555/wd/hub', desired_capabilities=desired)
-    
+
     return driver
 
 def CreateSubMTF(mtf_file_path, browsers, platforms):
@@ -323,11 +323,11 @@ def FindAndReplace(directory, find, replace, filePattern):
                         s = s.replace(find, replace)
                     except:
                         pass
+
                     with open(filepath, "w") as f:
                         f.write(s)
 
 def InitialDirectorySetup(src):
-    print 'Setting up input files according to user given inputs '
     if os.path.exists(src):
         dirname = os.path.split(src)[1]
         dir_list = glob.glob(src + '_*')
@@ -353,6 +353,7 @@ def InitialDirectorySetup(src):
         s = s.replace('fp/' + dirname, 'fp/' + newdirname)
         with open(filePath, "w") as f:
             f.write(s)
+
         return filePath
     else:
         print('Not found given input path to duplicate input directory : %s' % src)
@@ -361,7 +362,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
     if directory == 'none':
         directory = userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'
     for key, value in userdefinedvariables.items():
-        if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not 'internet_explorer_machine' in key:
+        if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not key == '172.20.3.50':
             FindAndReplace(directory, key, value, "*")
         elif key == 'browser_name':
             for i in range(len(userdefinedvariables['browser_name'])):
