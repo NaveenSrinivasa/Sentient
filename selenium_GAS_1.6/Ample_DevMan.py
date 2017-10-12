@@ -2482,14 +2482,14 @@ def OTAPUpgrade(input_file_path=None, device_name=None, target_version=None, act
 
     return Global.PASS, 'TEST PASS - Test started an upgrade for selected devices'
 
-def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, go_to, refresh_page, logout, username, password, profile_status_list, profile_name_list, device_status_list, fw_version_list, nw_grp_list, comm_type_list, device_state_list, serial_number_list):
+def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, go_to, refresh_page, logout, username, password, profile_status_list, profile_name_list, device_status_list, fw_version_list, nw_grp_list, comm_type_list, device_state_list, serial_number_list, fw_status_list):
 
-    allfilters = {"device_status_list": device_status_list, "fw_version_list": fw_version_list, "nw_grp_list": nw_grp_list, "comm_type_list": comm_type_list, "device_state_list": device_state_list, "serial_number_list": serial_number_list, "profile_status_list": profile_status_list, "profile_name_list": profile_name_list}
+    allfilters = {"device_status_list": device_status_list, "fw_version_list": fw_version_list, "nw_grp_list": nw_grp_list, "comm_type_list": comm_type_list, "device_state_list": device_state_list, "serial_number_list": serial_number_list, "profile_status_list": profile_status_list, "profile_name_list": profile_name_list, "fw_status_list": fw_status_list}
     params = ParseJsonInputFile(input_file_path)
-    #site = params['Site']
     
     GoToDevMan()
-    #GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site'])
+    Global.driver.refresh()
+    time.sleep(5)
     if tabname == 'Configurations':
         GoToDevConfig()
         current_test_page = GoToDevConfig
@@ -2521,8 +2521,9 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
         for item in list(allfilters):
             allfilters[item] = []
             allfilters[item] = ['Show All']
+    time.sleep(3)
     try:
-        selectFiltersByDeviceStatusManageDevice(allfilters['device_status_list'])
+        selectFiltersByDeviceStatusManageDevice(allfilters['device_status_list'], tabname)
     except:
         pass
     try:
@@ -2530,11 +2531,11 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
     except:
         pass
     try:
-        selectFiltersByDeviceStateManageDevice(allfilters['device_state_list'])
+        selectFiltersByDeviceStateManageDevice(allfilters['device_state_list'], tabname)
     except:
         pass
     try:
-        selectFiltersByFWVersionManageDeviceScreen(allfilters['fw_version_list'])
+        selectFiltersByFWVersionManageDeviceScreen(allfilters['fw_version_list'], tabname)
     except:
         pass
     try:
@@ -2551,6 +2552,10 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
         pass
     try:
         selectFiltersByProfileStatus(allfilters['profile_status_list'])
+    except:
+        pass
+    try:
+        selectFiltersByUpgradeStatus(allfilters['fw_status_list'])
     except:
         pass
 
@@ -2571,6 +2576,11 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
             results.append(Global.PASS)
     elif selectfilters:
         ui_data_dict = {}
+        nodataavailable = NoDataAvailable('device-management')
+        if nodataavailable == "No Data Available":
+            testComment = 'TEST FAIL - Found "No Data Available" when applied filters.Enter filters which has data and try again..'
+            printFP(testComment)
+            results.append(Global.FAIL)
         if device_status_list:
             device_status_list_from_ui = FilteredDataFromTable('Device Status', 'device-management')
             ui_data_dict["device_status_list_from_ui"] = device_status_list_from_ui
@@ -2611,6 +2621,11 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
             ui_data_dict["profile_status_list_from_ui"] = profile_status_list_from_ui
         else:
             ui_data_dict["profile_status_list_from_ui"] = []
+        if fw_status_list:
+            fw_status_list_from_ui = FilteredDataFromTable('FW Upgrade Status', 'device-management')
+            ui_data_dict["fw_status_list_from_ui"] = fw_status_list_from_ui
+        else:
+            ui_data_dict["fw_status_list_from_ui"] = []
 
         i=0        
         for filtercheck in list(allfilters):
@@ -2664,9 +2679,9 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
             elif go_to == 'feeder':
                 GetFeederFromTop(params['Region'], params['Substation'], params['Feeder'])
         
-        filters_xpath = ["communicationTypeSettings.list", "statusSettings.list", "softwareVersionsSettings.list", "stateSettings.list", "networkGroupsSettings.list", "networkGroupSelection.list", "profileStatusSelection.list", "profileNameSelection.list"]
+        filters_xpath = ["communicationTypeSettings.list", "statusSettings.list", "softwareVersionsSettings.list", "stateSettings.list", "networkGroupsSettings.list", "networkGroupSelection.list", "profileStatusSelection.list", "profileNameSelection.list", "fwUpgradeStatusSelection.list", "fwVersionSelection.list", "deviceStatusSelection.list", "deviceStateSelection.list"]
         currentfiltervalues = []
-
+        time.sleep(4)
         for filterxpath in filters_xpath:
             value = filterDisplayedValue(filterxpath)
             if value:
@@ -2676,10 +2691,9 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
                     currentfiltervalues.append(value.strip())
         printFP(currentfiltervalues)
 
-        usergiven_values = allfilters['comm_type_list'] + allfilters['device_status_list'] + allfilters['fw_version_list'] + allfilters['device_state_list'] + allfilters['nw_grp_list'] + allfilters['profile_status_list'] + allfilters['profile_name_list']
+        usergiven_values = allfilters['comm_type_list'] + allfilters['device_status_list'] + allfilters['fw_version_list'] + allfilters['device_state_list'] + allfilters['nw_grp_list'] + allfilters['profile_status_list'] + allfilters['profile_name_list'] + allfilters['fw_status_list']
         printFP(usergiven_values)
 
-        
         if not navigate_by == '':
             if all(str(x) in usergiven_values for x in currentfiltervalues):
                 testComment = 'TEST PASS - Values matched after navigating to some other node/tab and returning to same node'

@@ -4385,8 +4385,6 @@ def selectFiltersByFirmware(fw_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            '''GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-            time.sleep(4)'''
         except:
             printFP("INFO - Test could not find firmware version %s" %fw_list[i])
 
@@ -4402,13 +4400,14 @@ def selectFiltersByUpgradeStatus(fw_status_list):
     time.sleep(0.5)
     for i in range(len(fw_status_list)):
         try:
-            fwStatus = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_status_list[i] +"']")
-            fwStatus.click()
+            if 'Show All' in fw_status_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + fw_status_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_status_list[i] +"']")
+            ng.click()
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            '''GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-            time.sleep(4)'''
         except:
             printFP("INFO - Test could not find Upgrade Status %s" %fw_status_list[i])
 
@@ -4430,8 +4429,6 @@ def selectFiltersByNetworkGroup(network_group_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            '''GetElement(Global.driver, By.XPATH, "//button[text()='Apply']").click()
-            time.sleep(4)'''
         except:
             printFP("INFO - Test could not find network group %s" %(network_group_list[i]))
 
@@ -4450,12 +4447,14 @@ def selectFiltersBySerialNumber(serial_number):
     if not 'Show All' in serial_number:
         ClearInput(searchButton)
         searchButton.send_keys(serial_number)
-    
     return True
 
-def selectFiltersByDeviceStatusManageDevice(device_status_list):
+def selectFiltersByDeviceStatusManageDevice(device_status_list, tabname):
     try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='statusSettings.list']/div/button")
+        if tabname == 'Manage Devices':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='statusSettings.list']/div/button")
+        elif tabname == 'Inactive Device Report':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='deviceStatusSelection.list']/div/button")
     except:
         printFP("INFO - Test could not locate the Device Status filter.May not be applicable for current test page.")
         return False
@@ -4472,10 +4471,8 @@ def selectFiltersByDeviceStatusManageDevice(device_status_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            
         except:
             printFP("INFO - Test could not find device status %s" %(device_status_list[i]))
-
     return True
 
 def selectFiltersByCommunicationTypeManageDevice(comm_type_list):
@@ -4497,15 +4494,17 @@ def selectFiltersByCommunicationTypeManageDevice(comm_type_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            
         except:
             printFP("INFO - Test could not find communication type %s" %(comm_type_list[i]))
-
     return True
 
-def selectFiltersByDeviceStateManageDevice(device_state_list):
+def selectFiltersByDeviceStateManageDevice(device_state_list, tabname):
     try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='stateSettings.list']/div/button")
+        if tabname == 'Manage Devices':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='stateSettings.list']/div/button")
+        elif tabname == 'Inactive Device Report':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='deviceStateSelection.list']/div/button")
+
     except:
         printFP("INFO - Test could not locate the Device State filter.May not be applicable for current test page.")
         return False
@@ -4522,15 +4521,17 @@ def selectFiltersByDeviceStateManageDevice(device_state_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            
         except:
             printFP("INFO - Test could not find device state %s" %(device_state_list[i]))
-
     return True
 
-def selectFiltersByFWVersionManageDeviceScreen(fw_version_list):
+def selectFiltersByFWVersionManageDeviceScreen(fw_version_list, tabname):
     try:
-        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='softwareVersionsSettings.list']/div/button")
+        if tabname == 'Manage Devices':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='softwareVersionsSettings.list']/div/button")
+        elif tabname == 'Firmware Upgrade':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+
     except:
         printFP("INFO - Test could not locate the FW Version filter.May not be applicable for current test page.")
         return False
@@ -4547,17 +4548,15 @@ def selectFiltersByFWVersionManageDeviceScreen(fw_version_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-           
         except:
             printFP("INFO - Test could not find fw version %s" %(fw_version_list[i]))
-
     return True
 
 def selectFiltersByNetworkGroupManageDeviceScreen(nw_grp_list, tabname):
     try:
         if tabname == 'Manage Devices':
-            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSelection.list']/div/button")
-        elif tabname == 'Configurations':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSettings.list']/div/button")
+        elif tabname == 'Configurations' or tabname == 'Firmware Upgrade' or tabname == 'Inactive Device Report':
             filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
     except:
         printFP("INFO - Test could not locate the network group filter.May not be applicable for current test page.")
@@ -4575,10 +4574,8 @@ def selectFiltersByNetworkGroupManageDeviceScreen(nw_grp_list, tabname):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-            
         except:
             printFP("INFO - Test could not find network group %s" %(nw_grp_list[i]))
-
     return True
 
 def filterDisplayedValue(filter_text):
@@ -4608,10 +4605,8 @@ def selectFiltersByProfileName(profile_name_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-           
         except:
             printFP("INFO - Test could not find fw version %s" %(profile_name_list[i]))
-
     return True
 
 def selectFiltersByProfileStatus(profile_status_list):
@@ -4633,10 +4628,8 @@ def selectFiltersByProfileStatus(profile_status_list):
             time.sleep(1)
             filterButton.click()
             time.sleep(1)
-           
         except:
             printFP("INFO - Test could not find fw version %s" %(profile_status_list[i]))
-
     return True
 
 
