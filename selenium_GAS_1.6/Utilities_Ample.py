@@ -20,6 +20,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup as soup
 from Utilities_Framework import *
 
+
 def WaitForXTime(min = 5):
     i = 0
     while i < min:
@@ -140,7 +141,12 @@ def SelectFromMenu(driver, method, locator, target):
     for option in options:
         if option.text == target:
             actions = ActionChains(Global.driver)
-            actions.move_to_element(option).click(option).perform()
+            time.sleep(2)
+            actions.move_to_element(option)
+            time.sleep(2)
+            actions.click(option)
+            time.sleep(1)
+            actions.perform()
             time.sleep(1)
             printFP('Selected: %s' % target)
             return True
@@ -196,14 +202,20 @@ def SetCheckBox(inputElement, value):
     """This function sets the checkbox to value."""
     value= value.replace("\r","")
     if value in ['false','False']:
+        #print('false value %s' % value)
+        #print inputElement
         if inputElement.is_selected():
             print('Unchecking')
+            #inputElement.click()
             time.sleep(1)
             inputElement.click()
             print('Unchecked')
     elif value in ['true','True']:
+        #print('true value %s' % value)
+        #print inputElement
         if not inputElement.is_selected():
             print('Checking')
+            #inputElement.click()
             time.sleep(1)
             inputElement.click()
             print('Checked')
@@ -296,6 +308,13 @@ def GoToDevConfig():
 def GoToDevUpgrade():
     try:
         ClickButton(Global.driver, By.XPATH, xpaths['dev_man_upgrade'])
+    except:
+        return False
+    return True
+
+def GoToDevInactDevRep():
+    try:
+        ClickButton(Global.driver, By.XPATH, xpaths['dev_man_inactive'])
     except:
         return False
     return True
@@ -431,6 +450,13 @@ def GoToConfigProp():
     time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['settings_config_prop'])
 
+def GoToFWUpgradeSettings():
+    
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['dash_gear'])
+    time.sleep(1)
+    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_button'])
+
 def GoToEmailAlert():
     time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['dash_person_dropdown'])
@@ -473,9 +499,11 @@ def GetRootNode():
 
     try:
         node = WebDriverWait(Global.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'ROOTNODE-name')))
+        #print('node2 %s' %node)
         time.sleep(2)
         node.click()
     except:
+        #print('node3 %s' %node)
         return None
     return node
 
@@ -484,7 +512,9 @@ def GetRegion(regionName):
     Return the region element."""
 
     allRegions = Global.driver.find_elements_by_class_name('REGION-name')
+    #printFP('num regions: %d' % len(allRegions))
     for region in allRegions:
+        #printFP(region.text)
         if regionName == region.text:
             printFP('Found %s' % region.text)
             actions = ActionChains(Global.driver)
@@ -501,11 +531,14 @@ def GetSubstation(substationName):
     Return the substation element."""
 
     allSubs = Global.driver.find_elements_by_class_name('SUBSTATION-name')
+    #printFP('num subs: %d' % len(allSubs))
     for sub in allSubs:
+        #printFP(sub.text)
         if substationName == sub.text:
             printFP('Found %s' % sub.text)
             actions = ActionChains(Global.driver)
             actions.move_to_element(sub).click(sub).perform()
+            #sub.click()
             sub = GetElement(sub, By.XPATH, '../..')
             time.sleep(1)
             return sub
@@ -517,6 +550,7 @@ def GetFeeder(feederName):
     Return the feeder element."""
     allFeeders = Global.driver.find_elements_by_class_name('FEEDER-name')
     for feeder in allFeeders:
+        #printFP(feeder.text)
         if feederName == feeder.text:
             printFP('Found %s' % feeder.text)
             ActionChains(Global.driver).move_to_element(feeder).click().perform()
@@ -718,7 +752,11 @@ def GetDevice(serial):
         time.sleep(1)
         for finddevice in devicedetails:
             tmpdevicename = finddevice.text
+            #print ('tmpdevicename: %s' %tmpdevicename)
+            #print ('Given devicename: %s' %serial)
             if serial == tmpdevicename:
+                #parentelementfinddevice = finddevice.find_element_by_xpath("..")
+                #return parentelementfinddevice
                 return device
     return None
 
@@ -739,12 +777,15 @@ def IsOnline(serial, interval = 120, timeout = 1200):
         elapsed += interval
         Global.driver.refresh()
         time.sleep(10)
+        #try:
         device = GetDevice(serial)
         icon = GetElement(device, By.XPATH, 'td[4]/span').get_attribute('class')
         if 'ion-checkmark-circled' in icon:
+            #GetElement(device, By.CLASS_NAME, 'ion-checkmark-circled')
             printFP('Device %s is online' % serial)
             return True
         else:
+        #except:
             printFP('Device %s is not online yet' % serial)
     printFP('Device %s failed to come online within timeout range' % serial)
     return False
@@ -755,6 +796,7 @@ def RightClickElement(element):
     actions = ActionChains(Global.driver)
     actions.move_to_element_with_offset(element, 1, 5).perform()
     time.sleep(2)
+    #actions.move_to_element(element)
     actions.context_click().perform()
 
 def RefreshMenuTree(menuID):
@@ -781,6 +823,7 @@ def CreateRegion(regionName, node):
     node - root node (ie. Sentient)"""
 
     menuID = GetContextMenuID(node)
+    #OpenContextMenu(menuID)
 
     RightClickElement(node)
     time.sleep(1)
@@ -813,6 +856,7 @@ def CreateRegion(regionName, node):
     except:
         pass
 
+    #CloseContextMenu(menuID)
     time.sleep(1)
 
     if RefreshMenuTree(menuID):
@@ -836,6 +880,7 @@ def CreateSubstation(substationName, region):
     region - web element of the region to create the substation from"""
 
     menuID = GetContextMenuID(region)
+    #OpenContextMenu(menuID)
 
     RightClickElement(region)
     time.sleep(1)
@@ -868,6 +913,7 @@ def CreateSubstation(substationName, region):
     except:
         pass
 
+    #CloseContextMenu(menuID)
     time.sleep(1)
 
     if RefreshMenuTree(menuID):
@@ -886,6 +932,7 @@ def CreateFeeder(feederName, substation):
     substation - web element of the substation to create the feeder from"""
 
     menuID = GetContextMenuID(substation)
+    #OpenContextMenu(menuID)
     RightClickElement(substation)
     time.sleep(1)
     SelectFromMenu(substation, By.CLASS_NAME, 'pull-left', 'Add Feeder')
@@ -917,6 +964,7 @@ def CreateFeeder(feederName, substation):
         return None
     except:
         pass
+    #CloseContextMenu(menuID)
     time.sleep(1)
 
     if RefreshMenuTree(menuID):
@@ -938,6 +986,7 @@ def CreateSite(siteName, feeder, latitude, longitude):
     longitude - string representing the longitude of the site"""
 
     menuID = GetContextMenuID(feeder)
+    #OpenContextMenu(menuID)
     RightClickElement(feeder)
     time.sleep(1)
     SelectFromMenu(feeder, By.CLASS_NAME, 'pull-left', 'Add Site')
@@ -971,6 +1020,7 @@ def CreateSite(siteName, feeder, latitude, longitude):
 
     # Submit
     ClickButton(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    #CloseContextMenu(menuID)
     time.sleep(1)
     try:
         errorBox = GetElement(Global.driver, By.CLASS_NAME, 'alert-danger')
@@ -997,9 +1047,14 @@ def SelectDevice(serial):
 
     try:
         device = GetDevice(serial)
+        #print device
+        #checkbox = GetElement(device, By.XPATH, '/td[1]/input')
+
         checkbox = GetElement(device, By.TAG_NAME, 'input')
+        #printFP('checkbox %s ' % checkbox)
         time.sleep(1)
         SetCheckBox(checkbox, 'true')
+        #checkbox.click()
         return device
     except:
         return None
@@ -1189,6 +1244,7 @@ def ApplyProfile(device, profileName, timeout=600):
     # Go check current jobs
     time.sleep(1)
     GoToCurrentJobsConfig()
+    #driver.refresh()
     time.sleep(1)
 
     # Monitor for success
@@ -1227,15 +1283,15 @@ def printFP(message):
       4 - error
       5 - critical"""
     print message
-    if Global.info == 'debug':
+    if Global.loglevel == 'debug':
         logging.debug(message)
-    elif Global.info == 'info':
+    elif Global.loglevel == 'info':
         logging.info(message)
-    elif Global.info == 'warning':
+    elif Global.loglevel == 'warning':
         logging.warning(message)
-    elif Global.info == 'error':
+    elif Global.loglevel == 'error':
         logging.error(message)
-    elif Global.info == 'critical':
+    elif Global.loglevel == 'critical':
         logging.critical(message)
     else:
         pass
@@ -1337,25 +1393,26 @@ def NoDataAvailable(pagename):
         keyword = 'line-monitoring'
     elif pagename == "device-management" or pagename == "device-management-upgrade":
         keyword = 'device-management'
+    elif pagename == "currentJobs":
+        keyword = 'currentJobs'
     else:
         printFP('NoDataAvailable: Unable to find the requested Page')
         return None
 
     page = elements.find('div', class_=re.compile(keyword))
     try:
-        nodatatags = page.find_all('div', class_=re.compile('nodata-available'))
+        tmppages = page.find_all('div', class_=re.compile('nodata-available'))
     except:
         printFP('NoDataAvailable: Unable to find the text')
         return None
 
-    for nodatatag in nodatatags:
-        classname = nodatatag['class']
+    for tmppage in tmppages:
+        classname = tmppage['class']
         if not "ng-hide" in classname:
             nodataavailabletext = 'No Data Available'
             printFP('NoDataAvailable: %s' %nodataavailabletext)
             return nodataavailabletext
-        else:
-            pass
+    
     nodataavailabletext = 'Data Available'
     printFP('NoDataAvailable: %s' %nodataavailabletext)
     return nodataavailabletext
@@ -1420,7 +1477,14 @@ def FilteredDataFromTable(columnname, pagename):
                 if hasattr(td_tag, 'class'):
                     if n == columnposition:
                         value = td_tag.find('span').text.strip()
+                        if value == '':
+                            try:
+                                spantag = td_tag.find('span')
+                                value = spantag['tooltip'].upper()
+                            except:
+                                pass
                         columnnamevalueslist.append(value)
+
                     n = n+1
 
     printFP(columnnamevalueslist)
@@ -1535,6 +1599,7 @@ def SelectYearMonthAndDateFromCalendar(year, month, date):
             if year < focusedyear:
                 while not (year == focusedyear):
                     buttonpullleft = Global.driver.find_element_by_xpath("//i[contains(@class, 'glyphicon-chevron-left')]")
+                    #buttonpullleft = GetElement(column, By.ID, 'glyphicon glyphicon-chevron-left')
                     try:
                         buttonpullleft.click()
                     except:
@@ -1575,6 +1640,7 @@ def SelectMonthAndDateFromCalendar(month, date):
 
     findcurrentmonthandyear = GetDatePickerCurrentTitle()
     currentmonthandyear = findcurrentmonthandyear.text.strip()
+    #print('month_currentmonthandyear %s' %currentmonthandyear)
 
     if not currentmonthandyear.isalnum():
         findcurrentmonthandyear.click()
@@ -1582,9 +1648,11 @@ def SelectMonthAndDateFromCalendar(month, date):
         pass
 
     tables = GetElements(Global.driver, By.TAG_NAME, 'table')
+    #print('month_tables %s:' %tables)
     for table in tables:
         try:
             findcorrectable = table.get_attribute('aria-labelledby')
+            #print('month_findcorrectable %s:' %findcorrectable)
         except Exception as e:
             print e.message
             findcorrectable = None
@@ -1625,6 +1693,7 @@ def SelectDateFromCalendar(date):
 
     findcurrentmonthandyear = GetDatePickerCurrentTitle()
     currentmonthandyear = findcurrentmonthandyear.text.strip()
+    #print('date_currentmonthandyear %s' %currentmonthandyear)
 
     if not currentmonthandyear.isalnum():
 
@@ -1645,6 +1714,7 @@ def SelectDateFromCalendar(date):
                     columns = GetElements(row, By.TAG_NAME, 'td')
                     for column in columns:
                         focuseddate = column.text.strip()
+                        #print focuseddate
                         if n == 0:
                             if focuseddate == "01":
                                 startdate = focuseddate
@@ -1653,12 +1723,17 @@ def SelectDateFromCalendar(date):
                                 startdate = None
                         else:
                             startdate = "01"
+                        #print('startdate = %s' %startdate)
                         if startdate == "01":
                             startdate == "01"
+                            #print('startdate_2: %s' %startdate)
+                            #print('sfocuseddate: %s' %focuseddate)
+                            #print('date: %s' %date)
                             if focuseddate == date:
                                 buttonelement = GetElement(column, By.TAG_NAME, 'button')
                                 try:
                                     isdisabled = buttonelement.get_attribute('disabled')
+                                    #print('isdisabled_1: %s' %isdisabled)
                                 except Exception as e:
                                     print e.message
 
@@ -1689,6 +1764,7 @@ def GetDatePickerCurrentTitle():
             row = GetElement(thead, By.TAG_NAME, 'tr')
             columns = GetElements(row, By.TAG_NAME, 'th')
             currenttitle = GetElement(columns[1], By.TAG_NAME, 'button')
+            #print('currenttitle %s:' %currenttitle.text)
             return currenttitle
         else:
             return None
@@ -1731,6 +1807,7 @@ def FaultEventsRegionTableGetColumnOrder(pagename):
 
     # find Page view
     page = Elements.find('div', class_=re.compile(pagename))
+    #table = page.find('table', class_=re.compile('margin-t-30'))
     table = page.find('table')
 
     if table:
@@ -1759,6 +1836,7 @@ def FaultEventsRegionTableFilteredAllData(pagename, columnname):
 
     # find Page view
     page = FilterElements.find('div', class_=re.compile(pagename))
+    #table = page.find('table', class_=re.compile('margin-t-30'))
     table = page.find('table')
 
     if table:
@@ -1789,6 +1867,7 @@ def FaultEventsFindSubstationWithFaults(pagename, columnname):
 
     # find Page view
     page = FilterElements.find('div', class_=re.compile(pagename))
+    #table = page.find('table', class_=re.compile('margin-t-30'))
     table = page.find('table')
 
     if table:
@@ -1840,6 +1919,7 @@ def FaultEventsGetSubstationFaultEventsCountInRegionTable(pagename, substationna
 
     # find Page view
     page = Elements.find('div', class_=re.compile(pagename))
+    #table = page.find('table', class_=re.compile('margin-t-30'))
     table = page.find('table')
 
     if table:
@@ -2327,6 +2407,7 @@ def FaultEventsGetFeederFaultEventsCountInSubstationTable(pagename, columnname, 
                                 if feedername in value:
                                     columnnamevalueslist.append(value)
                                     count = count+1
+                                    #print('count: %s' %count)
                             n = n+1
                 nextbuttonstatus = FaultEventsCheckButtonStateandClick('Next')
 
@@ -2465,6 +2546,7 @@ def FaultEventsGetFaultEventsCount(pagename, columnname):
                                 value = td_tag.find('span').text.strip()
                                 columnnamevalueslist.append(value)
                                 count = count+1
+                                #print('count: %s' %count)
                             n = n+1
                 nextbuttonstatus = FaultEventsCheckButtonStateandClick('Next')
 
@@ -2535,6 +2617,7 @@ def FaultEventsTableFilteredSpecificData(pagename, columnname, filtervalue):
                                 if value in filtervalue:
                                     columnnamevalueslist.append(value)
                                     count = count+1
+                                    #print('count: %s' %count)
                             n = n+1
                 nextbuttonstatus = FaultEventsCheckButtonStateandClick('Next')
 
@@ -2633,6 +2716,7 @@ def FaultEventsGroupViewTableFilteredSpecificData(pagename, columnname, filterva
                     if n == columnposition:
                         value = td_tag.find('span').text.strip()
                         print value
+                        #print filtervalue
                         if filtervalue in value:
                             columnnamevalueslist.append(value)
                             count = count+1
@@ -2770,6 +2854,7 @@ def UnCheckAllEventTypes():
             rawfiltername = option.text
             filtername = rawfiltername.strip().replace(' ','').replace('"','')
             filtername = ''.join(filtername.split())
+            #printFP('UnCheckAll Event Type: %s' %filtername)
             if filtername and not 'UncheckAll' in filtername:
                 currentbuttonstatus = GetElement(option, By.TAG_NAME, 'span')
                 classname = currentbuttonstatus.get_attribute('class')
@@ -2997,6 +3082,7 @@ def UnCheckAllEventStates():
             rawfiltername = option.text
             filtername = rawfiltername.strip().replace(' ','').replace('"','')
             filtername = ''.join(filtername.split())
+            #printFP('UnCheckAll Event State: %s' %filtername)
             if filtername and not 'UncheckAll' in filtername:
                 currentbuttonstatus = GetElement(option, By.TAG_NAME, 'span')
                 classname = currentbuttonstatus.get_attribute('class')
@@ -3224,6 +3310,7 @@ def UnCheckAllTriggeredDetectors():
             rawfiltername = option.text
             filtername = rawfiltername.strip().replace(' ','').replace('"','')
             filtername = ''.join(filtername.split())
+            #printFP('UnCheckAll Event State: %s' %filtername)
             if filtername and not 'UncheckAll' in filtername:
                 currentbuttonstatus = GetElement(option, By.TAG_NAME, 'span')
                 classname = currentbuttonstatus.get_attribute('class')
@@ -3682,6 +3769,7 @@ def GetHeadersOfLogiCharts(sitename):
         frame = header.find('span')
         nametags = frame.find_all('span', class_=re.compile('ng-binding'))
         for nametag in nametags:
+            #print ('nametag: %s'  %nametag)
             value = nametag.text.strip()
             listofheaders.append(value)
         if sitename in listofheaders:
@@ -3793,6 +3881,7 @@ def GetPhaseStatusOnDnp3ViewChartGraph(chartname, phase):
             for group in currentseries:
                 if group.attrs.get('visibility'):
                     visibility = group['visibility']
+                    #print('visibility: %s' %visibility)
                     if 'hidden' in visibility:
                         return False
                     else:
@@ -3829,6 +3918,7 @@ def CheckAllTimeStampsForSelectedDate():
                             if compare != 0:
                                 return False
                         tmp = value
+                        #print('tmp: %s' %tmp)
                         n = n+1
     return True
 
@@ -3854,6 +3944,8 @@ def GetCurrentTimeStamp():
                 if hasattr(td_tag, 'class'):
                     if n == columnposition:
                         value = td_tag.text.split(" ")
+                        #print value
+                        #print value[0]
                         value = value[0].strip()
                         if value is not None:
                             return value
@@ -3956,6 +4048,7 @@ def Dnp3FilteredDataFromTable(Phase):
                     if n == columnposition:
                         if n<7:
                             value = td_tag.text.strip()
+                            #print('value %s' %value)
                             dnp3tablephasevaluelist.append(value)
                             columnposition = columnposition+2
                         else:
@@ -4050,9 +4143,12 @@ def OpenAddNetworkGroupForSGW(comm_server_name):
 
 def OpenNetworkGroupList(comm_server_name):
     tablebody = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_comm_table'])
+    print tablebody
     commserverrow = None
     rows = GetElements(tablebody, By.TAG_NAME, 'tr')
+    print rows
     for row in rows:
+        print row
         if GetElement(row, By.XPATH, 'td[2]/span').text == comm_server_name:
             commserverrow = row
             if 'group-open' in commserverrow.get_attribute('class'):
@@ -4176,17 +4272,29 @@ def GetLatAndLonValuesOfSite(region, substation, feeder, site):
     else:
         return None, None
 
+def GetCurrentTableDisplayedColumnNames():
+
+    # Create a list
+    tablecolumnnameslist = []
+    html = Global.driver.page_source
+    Elements = soup(html, "lxml")
+    table = Elements.find('table')
+    tablehead = table.find('thead')
+    tablecolumnnames = tablehead.find_all('th', {"class" : "text-center sortable ng-scope"})
+
+    for div_tag in tablecolumnnames:
+        tablecolumnname = div_tag.text.strip().strip('\n')
+        tablecolumnnameslist.append(tablecolumnname)
+
+    return tablecolumnnameslist
+
 
 def GetCurrentTableColumnNamesNotShown():
 
     # Create a list
     tablecolumnnameslist = []
-
     html = Global.driver.page_source
-
     Elements = soup(html, "lxml")
-
-    # Get all dnp3 points table hidden column names
     table = Elements.find('table')
     tablehead = table.find('thead')
     tablecolumnnames = tablehead.find_all('th', class_=re.compile('ng-hide'))
@@ -4198,92 +4306,329 @@ def GetCurrentTableColumnNamesNotShown():
 
     return tablecolumnnameslist
 
-def GetFWSatusMsgFromFWScreen(device_name):
-    GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
-    time.sleep(1)
-    fwstatusmsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body')]/p").text
-    ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
-    return fwstatusmsg
+def SelectFromTableColumnFilters(list_of_filters, state=True):
 
+    selectfilters = list(list_of_filters)
+    if state:
+        value = 'true'
+    else:
+        value = 'false'
 
-def GetFirmwareUpgradeEachPhaseStatus():
+    time.sleep(2)
 
-    firmwareupgradeeachphasestatus = {}
-    otapstatusframe = GetElement(Global.driver, By.XPATH, "//div[@class='otapStatusModel']")
-    otapstatus = GetElement(otapstatusframe, By.TAG_NAME, 'ul')
-    options = GetElements(otapstatus, By.XPATH, "li[@class='ng-scope']")
-    for option in options:
-        phasename = GetElement(option, By.XPATH, 'div[1]').text
-        phasestatus = GetElement(option, By.XPATH, 'div[2]').get_attribute('class')
-        phasestatus = phasestatus.split(' ')
-        firmwareupgradeeachphasestatus[phasename] = phasestatus[2]
-    printFP(firmwareupgradeeachphasestatus)
-    return firmwareupgradeeachphasestatus
-
-
-def CheckAllJobsPresence():
-    printFP("INFO - Locating Job that contains the devices")
+    dropdownmenubutton = GetElement(Global.driver, By.XPATH, "//button[contains(@class, 'column-settings-btn')]")
+    time.sleep(2)
     try:
-        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
-    except:
-        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
-        return False, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Page'
-
-    if len(allJobs) == 0:
-        printFP("INFO - No upgrades were found.")
-        return False, 'TEST FAIL - No Jobs were found.'
-
-    return True, ''
-
-def GetFWSatusMsgFromFWScreen(device_name):
-    GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
+        JustClick(dropdownmenubutton)
+    except Exception as e:
+        print e.message
+        return False
     time.sleep(1)
-    fwstatusmsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body')]/p").text
-    ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
-    return fwstatusmsg
 
-def GetFirmwareUpgradeEachPhaseStatus():
+    # Get all filters name
+    filterstmp = Global.driver.find_element_by_css_selector('.dropdown-menu.column-wrap')
+    time.sleep(1)
+    filters = filterstmp.find_elements_by_css_selector('.checkbox.column-label')
 
-    firmwareupgradeeachphasestatus = {}
-    otapstatusframe = GetElement(Global.driver, By.XPATH, "//div[@class='otapStatusModel']")
-    otapstatus = GetElement(otapstatusframe, By.TAG_NAME, 'ul')
-    options = GetElements(otapstatus, By.XPATH, "li[@class='ng-scope']")
-    for option in options:
-        phasename = GetElement(option, By.XPATH, 'div[1]').text
-        phasestatus = GetElement(option, By.XPATH, 'div[2]').get_attribute('class')
-        phasestatus = phasestatus.split(' ')
-        firmwareupgradeeachphasestatus[phasename] = phasestatus[2]
-    printFP(firmwareupgradeeachphasestatus)
-    return firmwareupgradeeachphasestatus
+    for filter in filters:
+        filterelement = GetElement(filter, By.CLASS_NAME, 'column-title')
+        time.sleep(1)
+        filterName = filterelement.text
+        if filterName in selectfilters:
+            printFP("Column Filter Name : " + filterName)
+            inputElement = GetElement(filter, By.TAG_NAME, 'input')
+            inputType = inputElement.get_attribute('type')
+            inputType
+            if 'checkbox' in inputType:
+                SetCheckBox(inputElement, value)
+                #JustClick(dropdownmenubutton)
+                TableColumnNamesNotShown = GetCurrentTableColumnNamesNotShown()
+                printFP(TableColumnNamesNotShown)
+                if state and filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Fail - checked filter " + filterName + " is not shown in the table column header"
+                    printFP(testComment)
+                elif state and not filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Pass - checked filter " + filterName + " is shown in the table column header"
+                    printFP(testComment)
+                elif not state and filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Pass - unchecked filter " + filterName + " is not shown in the table column header"
+                    printFP(testComment)
+                elif not state and not filterName in TableColumnNamesNotShown:
+                    testComment= "INFO - Fail - unchecked filter " + filterName + " is shown in the table column header"
+                    printFP(testComment)
+            else:
+                printFP('INFO - Do not recognize this input type')
 
-def ClickExportButton():
+    JustClick(dropdownmenubutton)
+    if state:
+        testComment = 'INFO - Given filters are selected successfully'
+    else:
+        testComment = 'INFO - Given filters are unselected successfully'
+
+    printFP(testComment)
+    return True
+
+
+def selectFiltersByFirmware(fw_list):
     try:
-        exportbutton = GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Export')]")
-        exportbutton.click()
-        return exportbutton
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
     except:
-        printFP('Failed to click export button')
+        printFP("INFO - Test could not locate the Firmware Version Filter.May not be applicable for current test page.")
         return False
 
-def ClickExportCSVEXCELButton(element, filetype):
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(fw_list)):
+        try:
+            fw = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_list[i] +"']")
+            fw.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find firmware version %s" %fw_list[i])
+
+    return True
+
+def selectFiltersByUpgradeStatus(fw_status_list):
     try:
-        ClickButton(element, By.XPATH, "..//span[text()='" + filetype + "']")
-        return True
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwUpgradeStatusSelection.list']/div/button")
     except:
-        printFP('Failed to click export' + filetype + ' button')
+        printFP("INFO - Test could not locate the Firmware Upgrade Status Filter.May not be applicable for current test page.")
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(fw_status_list)):
+        try:
+            if 'Show All' in fw_status_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + fw_status_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_status_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find Upgrade Status %s" %fw_status_list[i])
+
+    return True
+
+def selectFiltersByNetworkGroup(network_group_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSettings.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Network Group filter.May not be applicable for current test page.")
         return False
 
-def CheckAllJobsPresence():
-    printFP("INFO - Locating Job that contains the devices")
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(network_group_list)):
+        try:
+            ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ network_group_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find network group %s" %(network_group_list[i]))
+
+    return True
+
+def selectFiltersBySerialNumber(serial_number):
     try:
-        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
+        searchButton = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
     except:
-        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
-        return False, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Page'
+        try:
+            searchButton = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+        except:
+            printFP("INFO - Test could not locate the Serial number input box.May not be applicable for current test page.")
+            return False
 
-    if len(allJobs) == 0:
-        printFP("INFO - No upgrades were found.")
-        return False, 'TEST FAIL - No Jobs were found.'
+    if not 'Show All' in serial_number:
+        ClearInput(searchButton)
+        searchButton.send_keys(serial_number)
+    return True
 
-    return True, ''
+def selectFiltersByDeviceStatusManageDevice(device_status_list, tabname):
+    try:
+        if tabname == 'Manage Devices':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='statusSettings.list']/div/button")
+        elif tabname == 'Inactive Device Report':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='deviceStatusSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Device Status filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(device_status_list)):
+        try:
+            if 'Show All' in device_status_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + device_status_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ device_status_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find device status %s" %(device_status_list[i]))
+    return True
+
+def selectFiltersByCommunicationTypeManageDevice(comm_type_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Communication Type filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(comm_type_list)):
+        try:
+            if 'Show All' in comm_type_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + comm_type_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ comm_type_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find communication type %s" %(comm_type_list[i]))
+    return True
+
+def selectFiltersByDeviceStateManageDevice(device_state_list, tabname):
+    try:
+        if tabname == 'Manage Devices':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='stateSettings.list']/div/button")
+        elif tabname == 'Inactive Device Report':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='deviceStateSelection.list']/div/button")
+
+    except:
+        printFP("INFO - Test could not locate the Device State filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(device_state_list)):
+        try:
+            if 'Show All' in device_state_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + device_state_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ device_state_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find device state %s" %(device_state_list[i]))
+    return True
+
+def selectFiltersByFWVersionManageDeviceScreen(fw_version_list, tabname):
+    try:
+        if tabname == 'Manage Devices':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='softwareVersionsSettings.list']/div/button")
+        elif tabname == 'Firmware Upgrade':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+
+    except:
+        printFP("INFO - Test could not locate the FW Version filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(fw_version_list)):
+        try:
+            if 'Show All' in fw_version_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + fw_version_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ fw_version_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find fw version %s" %(fw_version_list[i]))
+    return True
+
+def selectFiltersByNetworkGroupManageDeviceScreen(nw_grp_list, tabname):
+    try:
+        if tabname == 'Manage Devices':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupsSettings.list']/div/button")
+        elif tabname == 'Configurations' or tabname == 'Firmware Upgrade' or tabname == 'Inactive Device Report':
+            filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the network group filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(nw_grp_list)):
+        try:
+            if 'Show All' in nw_grp_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + nw_grp_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ nw_grp_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find network group %s" %(nw_grp_list[i]))
+    return True
+
+def filterDisplayedValue(filter_text):
+    try:
+        filterText = GetElement(Global.driver, By.XPATH, "//span[@options='"+ filter_text +"']/div/button").text
+    except:
+        printFP("INFO - Test could not get the text of filter.May not be applicable for current test page.")
+        return False
+    return filterText
+
+def selectFiltersByProfileName(profile_name_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='profileNameSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Profile Name filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(profile_name_list)):
+        try:
+            if 'Show All' in profile_name_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + profile_name_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ profile_name_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find fw version %s" %(profile_name_list[i]))
+    return True
+
+def selectFiltersByProfileStatus(profile_status_list):
+    try:
+        filterButton = GetElement(Global.driver, By.XPATH, "//span[@options='profileStatusSelection.list']/div/button")
+    except:
+        printFP("INFO - Test could not locate the Profile Name filter.May not be applicable for current test page.")
+        return False
+
+    filterButton.click()
+    time.sleep(0.5)
+    for i in range(len(profile_status_list)):
+        try:
+            if 'Show All' in profile_status_list[i]:
+                ng = GetElement(Global.driver, By.XPATH, "//a[contains(text(), '" + profile_status_list[i] +"')]")
+            else:
+                ng = GetElement(Global.driver, By.XPATH, "//a[./span/span='"+ profile_status_list[i] +"']")
+            ng.click()
+            time.sleep(1)
+            filterButton.click()
+            time.sleep(1)
+        except:
+            printFP("INFO - Test could not find fw version %s" %(profile_status_list[i]))
+    return True
 
