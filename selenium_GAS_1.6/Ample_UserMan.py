@@ -302,8 +302,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                     printFP(testComment)
                     return Global.FAIL, testComment
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     if 'accounts' in checkonscreens:
     #Attempts to go into Management/Settings locations as a User
@@ -318,8 +318,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                 else:
                     pass
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     if 'currentjobs' in checkonscreens:
         for i in range(len(currentjobs)):
@@ -334,8 +334,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                     link.click()
                     pass
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     #Attempts to perform Administrative actions such as delete/configure/unregister
     if 'devman' in checkonscreens:
@@ -357,8 +357,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                     printFP(testComment)
                     return Global.FAIL, testComment
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -423,8 +423,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                     link.click()
                     pass
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     if checkexportbutton:
         new_test_method_name = exportargs['exporttestmethodname']
@@ -1680,8 +1680,8 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
                     printFP(testComment)
                     return Global.FAIL, testComment
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     if 'configprop' in checkonscreens:
         GetElement(Global.driver, By.XPATH, xpaths['settings']).click()
@@ -1741,8 +1741,8 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
                 else:
                     pass
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     if 'currentjobs' in checkonscreens:
         for i in range(len(currentjobs)):
@@ -1757,8 +1757,8 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
                     link.click()
                     pass
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     #Attempts to perform Administrative actions such as delete/configure/unregister
     if 'devman' in checkonscreens:
@@ -1780,8 +1780,8 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
                     printFP(testComment)
                     return Global.FAIL, testComment
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -1846,8 +1846,8 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
                     link.click()
                     pass
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     if checkexportbutton:
         new_test_method_name = exportargs['exporttestmethodname']
