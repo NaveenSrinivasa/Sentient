@@ -1328,7 +1328,6 @@ def EmailAttachment(attachments, TOADDRS, subjectLine):
 
 def NoDataAvailable():
 
-    time.sleep(5)
     html = Global.driver.page_source
 
     elements = soup(html, "lxml")

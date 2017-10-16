@@ -299,9 +299,28 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                     printFP(testComment)
                     return Global.FAIL, testComment
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
+<<<<<<< HEAD
+=======
+    if 'accounts' in checkonscreens:
+    #Attempts to go into Management/Settings locations as a User
+        for i in range(len(accounts)):
+            GetElement(Global.driver, By.XPATH, xpaths['dash_gear']).click()
+            try:
+                link = GetElement(Global.driver, By.XPATH, accounts[i])
+                if 'disabled' in link.get_attribute('class'):
+                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    pass
+            except:
+                Global.driver.refresh()
+                time.sleep(1)
+
+>>>>>>> f9c0154... SEQA-12 Modified according to first code review
     if 'currentjobs' in checkonscreens:
         for i in range(len(currentjobs)):
             GetElement(Global.driver, By.XPATH, xpaths['current_jobs_menu']).click()
@@ -315,8 +334,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                     link.click()
                     pass
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     #Attempts to perform Administrative actions such as delete/configure/unregister
     if 'devman' in checkonscreens:
@@ -338,8 +357,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                     printFP(testComment)
                     return Global.FAIL, testComment
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -404,8 +423,8 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                     link.click()
                     pass
             except:
-                time.sleep(1)
                 Global.driver.refresh()
+                time.sleep(1)
 
     if checkexportbutton:
         new_test_method_name = exportargs['exporttestmethodname']
