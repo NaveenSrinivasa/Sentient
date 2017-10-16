@@ -302,8 +302,6 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                 Global.driver.refresh()
                 time.sleep(1)
 
-<<<<<<< HEAD
-=======
     if 'accounts' in checkonscreens:
     #Attempts to go into Management/Settings locations as a User
         for i in range(len(accounts)):
@@ -320,7 +318,6 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
                 Global.driver.refresh()
                 time.sleep(1)
 
->>>>>>> f9c0154... SEQA-12 Modified according to first code review
     if 'currentjobs' in checkonscreens:
         for i in range(len(currentjobs)):
             GetElement(Global.driver, By.XPATH, xpaths['current_jobs_menu']).click()
