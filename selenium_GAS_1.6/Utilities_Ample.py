@@ -458,6 +458,7 @@ def GoToUpdateProfile():
 def GoToUserMan():
     GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
     GetElement(Global.driver, By.LINK_TEXT, 'User Management').click()
+    time.sleep(4)
 
 def UploadMTF(fileName):
     fileUpload = GetElement(Global.driver, By.ID, 'mFile')
@@ -4077,12 +4078,9 @@ def OpenAddNetworkGroupForSGW(comm_server_name):
 
 def OpenNetworkGroupList(comm_server_name):
     tablebody = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_comm_table'])
-    print tablebody
     commserverrow = None
     rows = GetElements(tablebody, By.TAG_NAME, 'tr')
-    print rows
     for row in rows:
-        print row
         if GetElement(row, By.XPATH, 'td[2]/span').text == comm_server_name:
             commserverrow = row
             if 'group-open' in commserverrow.get_attribute('class'):
@@ -4284,6 +4282,7 @@ def CheckAllJobsPresence():
 
 def TableColumnSettingsButtonAccess():
     columnsettingsbtn = GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]")
+    time.sleep(1)
     if 'disabled' in columnsettingsbtn.get_attribute('class'):
         return False
     else:
@@ -4304,3 +4303,39 @@ def CountOfReadOnlyFieldsInTheForm():
         if inputfield.has_attr('readonly'):
             n = n+1
     return n
+
+def CheckPageButtonLinkAccessibility(xpathofelement, expectedstatus, xpathtonavigate=None):
+
+    if not xpathtonavigate == None:
+        GetElement(Global.driver, By.XPATH, xpathtonavigate).click()
+
+    if 'disabled' in expectedstatus:
+        try:
+            link = GetElement(Global.driver, By.XPATH, xpathofelement)
+            if 'disabled' in link.get_attribute('class'):
+                pass
+            else:
+                link.click()
+                Global.driver.refresh()
+                time.sleep(1)
+                testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
+                return False, testComment
+        except Exception as e:
+            printFP(e.message)
+            Global.driver.refresh()
+            time.sleep(1)
+            return False, e.message
+
+    elif 'enabled' in expectedstatus:
+        try:
+            link = GetElement(Global.driver, By.XPATH, xpathofelement)
+            if 'disabled' in link.get_attribute('class'):
+                testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
+                return False, testComment
+        except Exception as e:
+            printFP(e.message)
+            Global.driver.refresh()
+            time.sleep(1)
+            return False, e.message
+
+    return True, ''

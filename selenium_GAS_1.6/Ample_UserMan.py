@@ -8,7 +8,6 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from random import randint
 from Utilities_Ample import *
 from Ample_DevMan import *
 from Ample_Login import *
@@ -133,7 +132,6 @@ def TableSortTest(username=None):
         testComment = "TEST FAIL - WebDriverException Occured. May be caused due to being logged in at user level."
         printFP(testComment)
         return Global.FAIL, testComment
-    time.sleep(2)
 
     OrderOfUsers=[]
     OrderOfUsersAfter=[]
@@ -225,7 +223,8 @@ def SelectMultipleUsersTest(usernames=None):
             printFP(testComment)
         try:
             GetElement(Global.driver, By.PARTIAL_LINK_TEXT, 'First').click()
-        except:
+        except Exception as e:
+            printFP(e.message)
             pass
 
     if result == Global.PASS:
@@ -241,7 +240,8 @@ def SelectMultipleUser(usernames):
         time.sleep(2)
         try:
             GetElement(Global.driver, By.PARTIAL_LINK_TEXT, 'First').click()
-        except:
+        except Exception as e:
+            printFP(e.message)
             pass
 
 def EditOwnDetailsInUserMan(user_name=None):
@@ -291,51 +291,25 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
     if 'sysadmin' in checkonscreens:
     #Attempts to go into Management/Settings locations as a User
         for i in range(len(sysadmin)):
-            GetElement(Global.driver, By.XPATH, xpaths['settings']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, sysadmin[i])
-                if 'disabled' in link.get_attribute('class'):
-                    pass
-                else:
-                    link.click()
-                    testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(sysadmin[i], 'disabled', xpaths['settings'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     if 'accounts' in checkonscreens:
     #Attempts to go into Management/Settings locations as a User
         for i in range(len(accounts)):
-            GetElement(Global.driver, By.XPATH, xpaths['dash_gear']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, accounts[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(accounts[i], 'enabled', xpaths['dash_gear'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     if 'currentjobs' in checkonscreens:
         for i in range(len(currentjobs)):
-            GetElement(Global.driver, By.XPATH, xpaths['current_jobs_menu']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, currentjobs[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    link.click()
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(currentjobs[i], 'enabled', xpaths['current_jobs_menu'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     #Attempts to perform Administrative actions such as delete/configure/unregister
     if 'devman' in checkonscreens:
@@ -347,18 +321,10 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
 
         for n in range(len(devman)):
             SelectDevice(testDev)
-            try:
-                link = GetElement(Global.driver, By.XPATH, devman[n])
-                if 'disabled' in link.get_attribute('class'):
-                    pass
-                else:
-                    link.click()
-                    testComment = 'TEST FAIL - User is able to modify and change elements in Manage Device Page'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(devman[n], 'disabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -371,17 +337,11 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
             return Global.FAIL, testComment
 
         SelectDevice(testDev)
-        try:
-            link = GetElement(Global.driver, By.XPATH, devconfig)
-            if 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
+        for n in range(len(devconfig)):
+            result, testComment = CheckPageButtonLinkAccessibility(devconfig[n], 'disabled')
+            if not result:
                 printFP(testComment)
                 return Global.FAIL, testComment
-        except:
-            pass
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -395,17 +355,11 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
             return Global.FAIL, testComment
 
         SelectDevice(testDev)
-        try:
-            link = GetElement(Global.driver, By.XPATH, devup)
-            if 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                testComment = 'TEST FAIL - User is able to modify and change elements in Device Firmware Upgrade Page'
+        for n in range(len(devup)):
+            result, testComment = CheckPageButtonLinkAccessibility(devup[n], 'disabled')
+            if not result:
                 printFP(testComment)
                 return Global.FAIL, testComment
-        except:
-            pass
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -413,18 +367,10 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
     if 'linemon' in checkonscreens:
         GoToLineMonitoring()
         for i in range(len(linemon)):
-            try:
-                link = GetElement(Global.driver, By.XPATH, linemon[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    link.click()
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(linemon[i], 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     if checkexportbutton:
         new_test_method_name = exportargs['exporttestmethodname']
@@ -463,7 +409,8 @@ def GoToNextPageInTable():
         tablefooter = GetElement(usermgnttableview, By.CLASS_NAME, 'table-footer')
         pageoptions = GetElement(tablefooter, By.CLASS_NAME, 'pager-options')
         pageoptionslist = GetElements(pageoptions, By.TAG_NAME, 'div')
-    except:
+    except Exception as e:
+        printFP(e.message)
         return False
 
     for pageoption in pageoptionslist:
@@ -492,7 +439,8 @@ def GoToPrevPageInTable():
         tablefooter = GetElement(usermgnttableview, By.CLASS_NAME, 'table-footer')
         pageoptions = GetElement(tablefooter, By.CLASS_NAME, 'pager-options')
         pageoptionslist = GetElements(pageoptions, By.TAG_NAME, 'div')
-    except:
+    except Exception as e:
+        printFP(e.message)
         return False
 
     for pageoption in pageoptionslist:
@@ -612,7 +560,6 @@ def AddUser(user):
     printFP('INFO - Going to user management')
     GoToUserMan()
     printFP('INFO - Adding a user')
-    time.sleep(4)
     ClickButton(Global.driver, By.XPATH, xpaths['user_man_add'])
     time.sleep(2)
     printFP('INFO - Filling out form')
@@ -689,7 +636,7 @@ def AddUser(user):
     try:
         ClickButton(Global.driver, By.XPATH, xpaths['user_man_submit'])
     except Exception as e:
-        print e.message
+        printFP(e.message)
         printFP('Unable to click Add User Create Button')
         return False
     #Checks for error messages with fields
@@ -700,6 +647,7 @@ def AddUser(user):
                 printFP("INFO - Error in creating User: %s" %errormsg.text)
                 returnval = False
     except:
+        printFP('INFO - There were no errors found')
         pass
 
     #Checks for error message popup
@@ -710,6 +658,7 @@ def AddUser(user):
             printFP("INFO - Error: %s" %msg)
             returnval = False
     except:
+        printFP('INFO - There were no errors found')
         pass
 
     if not returnval:
@@ -721,7 +670,6 @@ def EditUser(user=None):
     printFP('INFO - Going to user management')
     GoToUserMan()
     printFP("Editting User: {}" .format(user['username']))
-    time.sleep(4)
     returnval = True
     rowWithUser = FindUser(user['username'])
     checkBox = GetElement(rowWithUser, By.TAG_NAME, 'input')
@@ -730,7 +678,7 @@ def EditUser(user=None):
     try:
         GetElement(Global.driver, By.XPATH, xpaths['user_man_edit']).click()
     except Exception as e:
-        print e.message
+        printFP(e.message)
         printFP('Unable to click Edit User Create Button')
         return False
     try:
@@ -800,7 +748,7 @@ def EditUser(user=None):
         try:
             ClickButton(Global.driver, By.XPATH, xpaths['user_man_update'])
         except Exception as e:
-            print e.message
+            printFP(e.message)
             printFP('Unable to click Edit User Update Button')
             return False
         #Checks for error messages with fields
@@ -811,6 +759,7 @@ def EditUser(user=None):
                     printFP("INFO - Error in creating User: %s" %errormsg.text)
                     returnval = False
         except:
+            printFP('INFO - There were no errors found')
             pass
 
         #Checks for error message popup
@@ -821,15 +770,18 @@ def EditUser(user=None):
                 printFP("INFO - Error: %s" %msg)
                 returnval = False
         except:
+            printFP('INFO - There were no errors found')
             pass
 
         if not returnval:
             GetElement(Global.driver, By.XPATH, xpaths['user_man_close']).click()
         return True
-    except:
+    except Exception as e:
+        printFP(e.message)
         return False
 
 def DeleteUser(username):
+    GoToUserMan()
     #Finds username and deletes it, false if not able to find username
     if SelectUser(username):
         ClickButton(Global.driver, By.XPATH, xpaths['user_man_delete'])
@@ -856,10 +808,9 @@ def EditUserTest(edit_user_path=None):
     try:
         GoToUserMan()
     except WebDriverException:
-        testComment = "TEST FAIL - WebDriverException Occured. May be caused due to being logged in at user level."
+        testComment = "TEST FAIL - WebDriverException Occurred. May be caused due to being logged in at user level."
         printFP(testComment)
         return Global.FAIL, testComment
-    time.sleep(2)
 
     #Shows all fields in user management table
     ButtonElement = GetElement(Global.driver, By.XPATH, xpaths['user_man_header_btn'])
@@ -870,7 +821,8 @@ def EditUserTest(edit_user_path=None):
     for i in fieldinputs:
         try:
             SetCheckBox(i, "true")
-        except:
+        except Exception as e:
+            printFP(e.message)
             pass
     GetElement(Global.driver, By.XPATH, xpaths['user_man_header_btn']).click()
     time.sleep(1)
@@ -957,7 +909,6 @@ def DeleteUserTest(user_profile_path, deleteuserstatus=False):
     printFP('Deleting user: %s' %deleteuser)
 
     GoToUserMan()
-    time.sleep(3)
     Global.driver.refresh()
     time.sleep(5)
 
@@ -1120,7 +1071,8 @@ def ViewOnlyRoleCapabilitiesDownloadWaveforms(input_file_path=None):
                 try:
                     parentelement = GetElement(row, By.XPATH, "..")
                     deviceevent = GetElement(parentelement, By.XPATH, "//span[text()='" + params['Phase'] + "']")
-                except:
+                except Exception as e:
+                    printFP(e.message)
                     pass
             deviceevent.click()
             time.sleep(2)
@@ -1398,13 +1350,12 @@ def DisableUserAccount(user=None):
     printFP('INFO - Going to user management')
     GoToUserMan()
     printFP("Disabling Account for the user: {}" .format(user['username']))
-    time.sleep(4)
     returnval = True
     rowWithUser = FindUser(user['username'])
     try:
         disablebutton = GetElement(rowWithUser, By.XPATH, "td[contains(@class,'action-column')]/div/span[contains(@tooltip,'Disable')]")
     except Exception as e:
-        print e.message
+        printFP(e.message)
         printFP('Unable to find disable user button')
         return False
     if not 'disabled' in disablebutton.get_attribute('class'):
@@ -1427,6 +1378,7 @@ def DisableUserAccount(user=None):
         GetElement(Global.driver, By.XPATH, "//span[@ng-click='closeModal()']").click()
         return False
     except:
+        printFP('INFO - There were no errors found')
         pass
 
     currentenabledsstatus = FilteredDataFromTableMapping('User Name', 'Enabled', 'user-management-view')
@@ -1441,13 +1393,12 @@ def EnableUserAccount(user=None):
     printFP('INFO - Going to user management')
     GoToUserMan()
     printFP("Enabling Account for the user: {}" .format(user['username']))
-    time.sleep(4)
     returnval = True
     rowWithUser = FindUser(user['username'])
     try:
         enablebutton = GetElement(rowWithUser, By.XPATH, "td[contains(@class,'action-column')]/div/span[contains(@tooltip,'Enable')]")
     except Exception as e:
-        print e.message
+        printFP(e.message)
         printFP('Unable to find enable user button')
         return False
     if not 'disabled' in enablebutton.get_attribute('class'):
@@ -1470,6 +1421,7 @@ def EnableUserAccount(user=None):
         GetElement(Global.driver, By.XPATH, "//span[@ng-click='closeModal()']").click()
         return False
     except:
+        printFP('INFO - There were no errors found')
         pass
 
     currentenabledsstatus = FilteredDataFromTableMapping('User Name', 'Enabled', 'user-management-view')
@@ -1484,13 +1436,12 @@ def ResetPasswordForUserAccount(user=None):
     printFP('INFO - Going to user management')
     GoToUserMan()
     printFP("Reset Password for the user: {}" .format(user['username']))
-    time.sleep(4)
     returnval = True
     rowWithUser = FindUser(user['username'])
     try:
         resetpwdbutton = GetElement(rowWithUser, By.XPATH, "td[contains(@class,'action-column')]/div/span[contains(@tooltip,'Reset')]")
     except Exception as e:
-        print e.message
+        printFP(e.message)
         printFP('Unable to find reset password button')
         return False
     if not 'disabled' in resetpwdbutton.get_attribute('class'):
@@ -1512,39 +1463,21 @@ def ResetPasswordForUserAccount(user=None):
         GetElement(Global.driver, By.XPATH, "//span[@ng-click='closeModal()']").click()
         returnval = False
     except:
+        printFP('INFO - There were no errors found')
         pass
     return True
 
 def CheckDisabledEnabledUserAccountLogin(username, password, currentstatus):
     Logout()
-    time.sleep(1)
-    try:
-        # wait for the page to refresh
-        inputElement = GetElement(Global.driver, By.ID, 'j_username')
-        printFP(Global.driver.title)
-    except:
-        testComment = 'Did not reach login page'
-        printFP(testComment)
-        return False
-
-    # find the username field and enter a username
-    SendKeys(inputElement, username)
-
-    # fine the password field and enter the password
-    inputElement = GetElement(Global.driver, By.ID, 'j_password')
-    SendKeys(inputElement, password)
-
-    inputElement.submit()
+    result, testComment = Login(username, password)
 
     if 'enabled' in currentstatus:
-        if WaitForTitle('dashboard'):
-            printFP('INFO - Reached dashboard')
+        if result == Global.PASS:
             return True
         else:
-            printFP('INFO - Timed out trying to login')
             return False
     elif 'disabled' in currentstatus:
-        if not WaitForTitle('dashboard'):
+        if result == Global.FAIL:
             alertmessage = GetElement(Global.driver, By.XPATH, "//div[contains(@class,'alert-danger')]/div/span").text
             printFP(alertmessage)
             if 'Account has been disabled. Please contact your administrator.' in alertmessage:
@@ -1558,23 +1491,9 @@ def CheckDisabledEnabledUserAccountLogin(username, password, currentstatus):
 
 def CheckResetPasswordUserAccountLogin(username, password):
     Logout()
-    time.sleep(1)
-    try:
-        # wait for the page to refresh
-        inputElement = GetElement(Global.driver, By.ID, 'j_username')
-        printFP(Global.driver.title)
-    except:
-        testComment = 'Did not reach login page'
-        printFP(testComment)
-        return False
-    # find the username field and enter a username
-    SendKeys(inputElement, username)
-    # fine the password field and enter the password
-    inputElement = GetElement(Global.driver, By.ID, 'j_password')
-    SendKeys(inputElement, password)
-    inputElement.submit()
+    result, testComment = Login(username, password)
 
-    if not WaitForTitle('dashboard'):
+    if result == Global.FAIL:
         alertmessage = GetElement(Global.driver, By.XPATH, "//div[contains(@class,'alert-warning')]/div/span").text
         printFP(alertmessage)
         if 'Kindly reset your password.' in alertmessage:
@@ -1588,19 +1507,14 @@ def CheckResetPasswordUserAccountLogin(username, password):
                 alertmessage = GetElement(Global.driver, By.XPATH, "//div[contains(@class,'alert-success')]/div/span").text
                 printFP(alertmessage)
             except Exception as e:
-                print e.message
+                printFP(e.message)
                 printFP('TEST FAIL - Error while setting new password')
                 return False
             if 'Your password was successfully changed - please login with your new password' in alertmessage:
                 GetElement(Global.driver, By.XPATH, "//div[contains(@class,'alert-success')]/../../a").click()
-                inputElement = GetElement(Global.driver, By.ID, 'j_username')
-                SendKeys(inputElement, username)
-                inputElement = GetElement(Global.driver, By.ID, 'j_password')
-                SendKeys(inputElement, password)
-                inputElement.submit()
-                time.sleep(2)
-                if WaitForTitle('dashboard'):
-                    printFP('INFO - Reached dashboard')
+                result, testComment = Login(username, password)
+                time.sleep(1)
+                if result == Global.PASS:
                     return True
                 else:
                     printFP('INFO - Timed out trying to login after successfully set up new password')
@@ -1623,7 +1537,6 @@ def CheckDisableAndForceResetActionButtons(loggedinuser=None):
 
     printFP('INFO - Verifying User Management Disable and Reset Password action buttons presence and its status')
     GoToUserMan()
-    time.sleep(2)
 
     disablebuttons = ActionsStatusMappingFromUserManagementTable('User Name', 'disableicon')
     resetpasswordbuttons = ActionsStatusMappingFromUserManagementTable('User Name', 'resetpasswordicon')
@@ -1669,19 +1582,25 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
     if 'sysadmin' in checkonscreens:
     #Attempts to go into Management/Settings locations as a User
         for i in range(len(sysadmin)):
-            GetElement(Global.driver, By.XPATH, xpaths['settings']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, sysadmin[i])
-                if not 'disabled' in link.get_attribute('class'):
-                    link.click()
-                    time.sleep(1)
-                else:
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where only Admins and Super Admins are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(sysadmin[i], 'enabled', xpaths['settings'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+    if 'accounts' in checkonscreens:
+    #Attempts to go into Management/Settings locations as a User
+        for i in range(len(accounts)):
+            result, testComment = CheckPageButtonLinkAccessibility(accounts[i], 'enabled', xpaths['dash_gear'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+    if 'currentjobs' in checkonscreens:
+        for i in range(len(currentjobs)):
+            result, testComment = CheckPageButtonLinkAccessibility(currentjobs[i], 'enabled', xpaths['current_jobs_menu'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     if 'configprop' in checkonscreens:
         GetElement(Global.driver, By.XPATH, xpaths['settings']).click()
@@ -1719,7 +1638,7 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
                         ClickButton(Global.driver, By.XPATH, "//button[contains(text(),'Cancel')]")
                     except:
                         ClickButton(Global.driver, By.XPATH, "//button[contains(@class,'close')]")
-                    print e.message
+                    printFP(e.message)
                     testComment = 'TEST FAIL - Unable to edit LTTP setting with Super Admin role permission'
                     printFP(testComment)
                     return Global.FAIL, testComment
@@ -1728,37 +1647,6 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
                 printFP(testComment)
                 return Global.FAIL, testComment
 
-    if 'accounts' in checkonscreens:
-    #Attempts to go into Management/Settings locations as a User
-        for i in range(len(accounts)):
-            GetElement(Global.driver, By.XPATH, xpaths['dash_gear']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, accounts[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
-
-    if 'currentjobs' in checkonscreens:
-        for i in range(len(currentjobs)):
-            GetElement(Global.driver, By.XPATH, xpaths['current_jobs_menu']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, currentjobs[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    link.click()
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
 
     #Attempts to perform Administrative actions such as delete/configure/unregister
     if 'devman' in checkonscreens:
@@ -1770,18 +1658,10 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
 
         for n in range(len(devman)):
             SelectDevice(testDev)
-            try:
-                link = GetElement(Global.driver, By.XPATH, devman[n])
-                if not 'disabled' in link.get_attribute('class'):
-                    pass
-                else:
-                    link.click()
-                    testComment = 'TEST FAIL - Admin/Super Admin is not able to modify and change elements in Manage Device Page'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(devman[n], 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -1794,20 +1674,11 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
             return Global.FAIL, testComment
 
         SelectDevice(testDev)
-        try:
-            link = GetElement(Global.driver, By.XPATH, devconfig)
-            if not 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                testComment = 'TEST FAIL - Admin/Super Admin is not able to modify and change elements in Device Configuration Page'
+        for n in range(len(devconfig)):
+            result, testComment = CheckPageButtonLinkAccessibility(devconfig[n], 'enabled')
+            if not result:
                 printFP(testComment)
                 return Global.FAIL, testComment
-        except:
-            pass
-
-        if not TableColumnSettingsButtonAccess():
-            return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
 
     #Attemps to perform Administrative action such as OTAP upgrade
     if 'devup' in checkonscreens:
@@ -1818,17 +1689,11 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
             return Global.FAIL, testComment
 
         SelectDevice(testDev)
-        try:
-            link = GetElement(Global.driver, By.XPATH, devup)
-            if not 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                testComment = 'TEST FAIL - Admin/Super Admin is not able to modify and change elements in Device Firmware Upgrade Page'
+        for n in range(len(devup)):
+            result, testComment = CheckPageButtonLinkAccessibility(devup[n], 'enabled')
+            if not result:
                 printFP(testComment)
                 return Global.FAIL, testComment
-        except:
-            pass
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -1836,18 +1701,10 @@ def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, ro
     if 'linemon' in checkonscreens:
         GoToLineMonitoring()
         for i in range(len(linemon)):
-            try:
-                link = GetElement(Global.driver, By.XPATH, linemon[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    link.click()
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(linemon[i], 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     if checkexportbutton:
         new_test_method_name = exportargs['exporttestmethodname']
