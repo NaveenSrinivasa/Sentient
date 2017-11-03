@@ -38,7 +38,7 @@ def RemoveActionsColumnFromUpgradeTable(input_file_path):
         SelectFromTableColumnFilters(filters_list, value)
         #Getting the entire column names from the table
         columnlist = GetCurrentTableDisplayedColumnNames()
-        print 'Selected columns along with Initial Load column names are :', columnlist
+        printFP('Selected columns along with Initial Load column names are : {}' .format(columnlist))
 
         if not 'Actions' in columnlist:
             testComment = 'TEST PASS - Actions Column is not present in the Firmware Upgrade page.'
@@ -68,7 +68,7 @@ def ColumnListChanges(input_file_path):
 
         #Getting column names - Initial load
         columnlist = GetCurrentTableDisplayedColumnNames()
-        print 'Initial Load column names are : ', columnlist
+        printFP('Initial Load column names are : {}' .format(columnlist))
         initial_load_column_names_list = ['Serial Number', 'Phase', 'Device Status', 'FW Version', 'FW Upgrade Status', 'Network Group', 'Sensor Gateway']
         if all(str(x) in initial_load_column_names_list for x in columnlist):
             testComment = 'Test Pass - Initial Load column names matched'
@@ -86,7 +86,7 @@ def ColumnListChanges(input_file_path):
         SelectFromTableColumnFilters(filters_list, value)
         #Getting the entire column names from the table
         columnlist = GetCurrentTableDisplayedColumnNames()
-        print 'All column names after selecting from the dropdown', columnlist
+        printFP('All column names after selecting from the dropdown : {}' .format(columnlist))
         all_column_names_list = ['Serial Number', 'Phase', 'Device Status', 'FW Version', 'FW Upgrade Status', 'Network Group', 'Sensor Gateway', 'Site', 'Feeder', 'Substation', 'Region']
         if all(str(x) in all_column_names_list for x in columnlist):
             testComment = 'Test Pass - Initial Load column names and selected columns matched'
@@ -432,58 +432,51 @@ def FirmwareUpgradeList(mtf_full_path, input_file_path, onlinedev, offlinedev):
         return Global.FAIL, testComment
 
     params = ParseJsonInputFile(input_file_path)
-
-    #result, msg = UploadMTFTest(mtf_full_path, wait_for_online=False)
-    #if 'TEST PASS' in msg:
-    GoToDevman()
-    GetRootNode()
-    GoToDevUpgrade()
-
-    if not GetLocationFromInput('dummyregion', 'dummysub', 'dummyfeeder', 'dummysite'):
-        testComment = "Unable to locate locations based off input file in Upgrade Page"
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    SelectDevice(offlinedev)
-    result, testComment = CheckPageButtonLinkAccessibility("//button[text()='Firmware Upgrade']", 'disabled')
-    print result
-    print testComment
-    if not result:
-        printFP(testComment)
-        return Global.FAIL, testComment
-    else:
-        printFP('INFO - Firmware upgrade button is disabled offline device')
-
-    if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
-        testComment = "Unable to locate locations based off input file in Upgrade Page"
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    GoToDevman()
-
-    if IsOnline(onlinedev):
+    result, msg = UploadMTFTest(mtf_full_path, wait_for_online=False)
+    if 'TEST PASS' in msg:
+        GoToDevman()
+        GetRootNode()
         GoToDevUpgrade()
-        testComment = 'INFO - %s did come online and successfully uploaded' %onlinedev
-        SelectDevice(onlinedev)
-        result, testComment = CheckPageButtonLinkAccessibility("//button[text()='Firmware Upgrade']", 'enabled')
-        print result, testComment
+        if not GetLocationFromInput('dummyregion', 'dummysub', 'dummyfeeder', 'dummysite'):
+            testComment = "Unable to locate locations based off input file in Upgrade Page"
+            printFP(testComment)
+            return Global.FAIL, testComment
+        SelectDevice(offlinedev)
+        result, testComment = CheckPageButtonLinkAccessibility("//button[text()='Firmware Upgrade']", 'disabled')
         if not result:
             printFP(testComment)
             return Global.FAIL, testComment
         else:
-            printFP('INFO - Firmware upgrade button is enabled for online device')
+            printFP('INFO - Firmware upgrade button is disabled offline device')
+
+        if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+            testComment = "Unable to locate locations based off input file in Upgrade Page"
+            printFP(testComment)
+            return Global.FAIL, testComment
+
+        GoToDevman()
+
+        if IsOnline(onlinedev):
+            GoToDevUpgrade()
+            testComment = 'INFO - %s did come online and successfully uploaded' %onlinedev
+            SelectDevice(onlinedev)
+            result, testComment = CheckPageButtonLinkAccessibility("//button[text()='Firmware Upgrade']", 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+            else:
+                printFP('INFO - Firmware upgrade button is enabled for online device')
+        else:
+            testComment = 'TEST FAIL - %s did not come online' % onlinedev
+            result = Global.FAIL
+
+        testComment = 'TEST PASS - Firmware upgrade button is enabled for online device and disabled for offline device'
+        printFP(testComment)
+        return Global.PASS, testComment
     else:
-        testComment = 'TEST FAIL - %s did not come online' % onlinedev
-        result = Global.FAIL
-
-    testComment = 'TEST PASS - Firmware upgrade button is enabled for online device and disabled for offline device'
-    printFP(testComment)
-    return Global.PASS, testComment
-
-    '''else:
     	testComment = 'Test Fail - MTF File Failed to upload'
     	printFP(testComment)
-    	return Global.FAIL, testComment'''
+    	return Global.FAIL, testComment
 
 def FirmwareUpgradeButtonDisabledWithoutDevicesSelected(mtf_full_path):
     if mtf_full_path == None:
