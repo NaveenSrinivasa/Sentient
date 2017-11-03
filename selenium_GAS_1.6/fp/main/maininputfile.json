@@ -50,7 +50,7 @@
         "guidance" : "Associated Network port number of SGW1 which is present on the ample",
         "networkgroup1_port": "12201",
         "guidance" : "Poll interval time",
-        "devicepollinterval": "100",
+        "devicepollinterval": "200",
         "guidance" : "Associated Network group name of SGW2",
         "networkgroup2_name" : "seleniumtest_group2",
         "guidance" : "Assocaited Network Port number of SGW2 which is present on the ample",

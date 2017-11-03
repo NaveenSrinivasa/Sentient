@@ -4443,50 +4443,69 @@ def selectFiltersBySerialNumber(serial_number):
     time.sleep(4)
     return True
 
-def UpgradeSettingsTestForTime(time_settings):
-    time_settings['from_time'] = ParseTime(time_settings['from_time'])
-    if time_settings['from_time'] is None:
-        testComment = 'Do not recognize this time format'
-        printFP(testComment)
-        return Global.FAIL, testComment
-    # set end time
-    time_settings['to_time'] = ParseTime(time_settings['to_time'])
-    if time_settings['to_time'] is None:
-        testComment = 'Do not recognize this time format'
-        printFP(testComment)
-        return Global.FAIL, testComment
 
-    GoToDevMan()
-    GoToDevUpgrade()
-    return ChangetimeSettings(time_settings)
-
-def ChangetimeSettings(time_settings):
-    # Select day
-    if ValidDay(time_settings['day']):
-        ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_days'])
-        menuElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_days_menu'])
-        SelectFromMenu(menuElement, By.TAG_NAME, 'li', time_settings['day'])
-        everydayCheckbox = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_everyday_checkbox'])
-        SetCheckBox(everydayCheckbox, "False")
-    else:
-        everydayCheckbox = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_everyday_checkbox'])
-        SetCheckbox(everydayCheckbox, "true")
-
-    # Select time
-    fromElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_from'])
-    toElement = GetElement(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_to'])
-    ConfigureTime(fromElement, time_settings['from_time'])
-    ConfigureTime(toElement, time_settings['to_time'])
-
-    # Submit
-    ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_settings_save'])
-    time.sleep(1)
+def GoToRootNodeAndClickOnRegion():
+    rootElement = GetElement(Global.driver, By.XPATH, '//*[@id="node-1"]')
     try:
-        msg = GetText(Global.driver, By.XPATH, xpaths['settings_upgrade_setting_errmsg'])
-        if 'Start time must be earlier than end time.' in msg:
-            ClickButton(Global.driver, By.XPATH, xpaths['dev_upgrade_fail_close'])
-            printFP(msg)
-            return Global.PASS, msg
+        if rootElement.get_attribute('collapsed') == 'true':
+            rootElement.click()
+            time.sleep(1)
+        else:
+            GetRootNode()
+            time.sleep(1)
+            region = GetElement(Global.driver, By.XPATH, "//span[contains(@class,'REGION-name')]")
+            JustClick(region)
     except:
-        pass
-    return Global.PASS, ''
+        testComment = 'TEST FAIL - Unable to click on region'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+def CheckFiltersInSite():
+    fwversion = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+    fwstatus = GetElement(Global.driver, By.XPATH, "//span[@options='fwUpgradeStatusSelection.list']/div/button")
+    nwgroup = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
+    serialnumber = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+    if fwversion.is_displayed() and fwstatus.is_displayed() and nwgroup.is_displayed() and serialnumber.is_displayed():
+        testComment = 'TEST FAIL - Filters are present when user is in site.'
+        printFP(testComment)
+        return Global.FAIL, testComment
+    else:
+        testComment = 'TEST PASS - Filters are NOT present when user is in site.'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+def CheckPageButtonLinkAccessibility(xpathofelement, expectedstatus, xpathtonavigate=None):
+
+    if not xpathtonavigate == None:
+        GetElement(Global.driver, By.XPATH, xpathtonavigate).click()
+
+    if 'disabled' in expectedstatus:
+        try:
+            link = GetElement(Global.driver, By.XPATH, xpathofelement)
+            if 'disabled' in link.get_attribute('class'):
+                pass
+            else:
+                link.click()
+                Global.driver.refresh()
+                time.sleep(1)
+                testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
+                return False, testComment
+        except Exception as e:
+            printFP(e.message)
+            Global.driver.refresh()
+            time.sleep(1)
+            return False, e.message
+
+    elif 'enabled' in expectedstatus:
+        try:
+            link = GetElement(Global.driver, By.XPATH, xpathofelement)
+            if 'disabled' in link.get_attribute('class'):
+                testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
+                return False, testComment
+        except Exception as e:
+            printFP(e.message)
+            Global.driver.refresh()
+            time.sleep(1)
+            return False, e.message
+
+    return True, ''

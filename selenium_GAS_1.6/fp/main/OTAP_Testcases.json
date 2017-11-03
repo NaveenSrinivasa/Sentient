@@ -43,7 +43,8 @@
             "hiptest_name": "No filters at site level selection Existing Site selection",
             "skip": true,
             "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_reg_name.json"
         },
         {
             "method_name": "DeleteRegion",
@@ -58,7 +59,8 @@
             "hiptest_name": "No filters at site level selection - Select a site without data",
             "skip": true,
             "expect_pass": true,
-            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_reg_name.json"
         },
         {
             "method_name": "DeleteRegion",
@@ -73,7 +75,8 @@
             "hiptest_name": "No filters at site level selection - Select a site with data",
             "skip": true,
             "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_reg_name.json"
         },
         {
             "method_name": "DeleteRegion",
@@ -88,7 +91,8 @@
             "hiptest_name": "No filters at site level selection New node creation via Group tree",
             "skip": true,
             "expect_pass": true,
-            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_reg_name.json"
         },
         {
             "method_name": "DeleteRegion",
@@ -103,9 +107,8 @@
             "hiptest_name": "Organization node level display and server side pagination",
             "skip": true,
             "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/OTAP/dvm_reg_sub_feeder_names.json",
-            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action301.csv"
-            
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/dvm_reg_sub_feeder_names.json",
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action301.csv"
         },
         {
             "method_name": "DeleteRegion",
@@ -115,15 +118,15 @@
             "use_global_test_device": false,
             "region_name": "b19"
         },
-        
         {
             "method_name": "FirmwareUpgradeList",
             "hiptest_name": "Firmware Upgrade List",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_reg_names.json",
-            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
-            
+            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "onlinedev": "device_1",
+            "offlinedev": "dummydevice"
         },
         {
             "method_name": "DeleteRegion",
@@ -132,6 +135,14 @@
             "expect_pass": true,
             "use_global_test_device": false,
             "region_name": "d1_region"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "dummyregion"
         },
         {
             "method_name": "OTAPWrongUpdateSetting",
@@ -210,7 +221,6 @@
             "fw_status_list": ["(BLANKS)"],
             "network_group_list": ["seleniumtest_group"],
             "serial_number": "at-ssn19"
-            
         },
         {
             "method_name": "DeleteRegion",
@@ -220,13 +230,11 @@
             "use_global_test_device": false,
             "region_name": "d1_region"
         },
-
         {
             "method_name": "ConfigureFwUpgradeSettingsStartTimeLaterThanEndTime",
             "hiptest_name": "Configure Fw Upgrade Settings Start Time Later Than End Time",
             "skip": true,
-            "expect_pass": true,
-            "time_or_day": "Time"
+            "expect_pass": true        
         },
         {
             "method_name": "OTAPWrongUpdateSetting",
@@ -235,7 +243,7 @@
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device Upgrade/d1_reg_names.json",
             "device_name" : ["device_1"],
-            "target_version" : "2.6.0",
+            "target_version" : "2.6.1",
             "actionButton" : false,
             "time_or_day": "Time"
         },
