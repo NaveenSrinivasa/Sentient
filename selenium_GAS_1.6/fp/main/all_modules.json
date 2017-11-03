@@ -33,12 +33,12 @@
         },
         {
             "Module": "Device Upgrade Tests",
-            "skip": true,
+            "skip": false,
             "test_json": "seleniumDir/inputfilesDir/OTAP_Testcases.json"
         },
         {
             "Module": "Device Management Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/DeviceManagement_Testcases.json"
         },
         {
