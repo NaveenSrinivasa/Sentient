@@ -3,150 +3,171 @@
     [
         {
             "method_name": "Login",
-            "hiptest_name": "Logout",
+            "hiptest_name": "",
             "skip": false,
             "expect_pass": true,
             "username": "ampleadmin",
             "password": "password_valid"
         },
         {
-            "test_name": "VerifyAEDEnableLatch",
+            "method_name": "VerifyAEDEnableLatch",
             "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
-            "skip": true,
+            "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "FloatingPointInProfiles",
+            "method_name": "FloatingPointInProfiles",
             "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
-            "skip": true,
+            "skip": false,
             "expect_pass": true
         },
         {
-            "test_name": "VerifyDefaultManagePage",
+            "method_name": "VerifyDefaultManagePage",
             "hiptest_name": "Default Manage Profile Page",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "existing_profile": false
         },
         {
 
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile - Positive Test Case",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/seleniumtest.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Create New Profile with Duplicate Name",
-            "skip": true,
+            "skip": false,
             "expect_pass": false,
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/seleniumtest.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Profile Name - Maximum Allowed Name Length",
-            "skip": true,
+            "skip": false,
             "expect_pass": false,
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/TooLongName.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Profile Name - Verify that Spaces are allowed in Name",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/NameWithSpaces.json"
         },
         {
-            "test_name": "CreateProfile",
+            "method_name": "CreateProfile",
             "hiptest_name": "Profile Name - Does Not Allow Special Characters",
-            "skip": true,
+            "skip": false,
             "expect_pass": false,
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/InvalidCharacters.json"
         },
         {
-            "test_name": "VerifyDefaultManagePage",
+            "method_name": "VerifyDefaultManagePage",
             "hiptest_name": "Default Manage Profile Page",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "existing_profile": true
         },
         {
-            "test_name": "VerifyProfileTabs",
+            "method_name": "VerifyProfileTabs",
             "hiptest_name": "Verify Profile Tabs - New Profile",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "existing_profile_name": ""
         },
         {
-            "test_name": "VerifyProfileTabs",
+            "method_name": "VerifyProfileTabs",
             "hiptest_name": "Verify Profile Tabs - Existing Profile",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "existing_profile_name": "seleniumtest"
         },
         {
-            "test_name": "VerifyAEDEnableLatch",
+            "method_name": "VerifyAEDEnableLatch",
             "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "profile_name": "seleniumtest"
         },
         {
-            "test_name": "EditProfile",
+            "method_name": "EditProfile",
             "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
-            "skip": true,
+            "skip": false,
             "expect_pass": false,
             "existing_profile_name": "seleniumtest",
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/nochange.json", 
             "save_key": "SAVE AS"
         },
         {
-            "test_name": "EditProfile",
+            "method_name": "EditProfile",
             "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
-            "skip": true,
+            "skip": false,
             "expect_pass": false,
             "existing_profile_name": "seleniumtest",
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/nochange.json", 
             "save_key": "SAVE"
         },
         {
-            "test_name": "EditProfile",
+            "method_name": "EditProfile",
             "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "existing_profile_name": "seleniumtest",
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/changeeverything.json", 
             "save_key": "SAVE AS"
         },
         {
-            "test_name": "EditProfile",
+            "method_name": "EditProfile",
             "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save Button",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "existing_profile_name": "seleniumtest",
             "profile_json": "seleniumDir/inputfilesDir/Manage Profiles/changeselenium.json", 
             "save_key": "SAVE"
         },
         {
-            "test_name": "FloatingPointInProfiles",
+            "method_name": "FloatingPointInProfiles",
             "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Edit Profile",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "profile_name": "changeselenium"
         },
         {
-            "test_name": "ValidateProfileFieldValues",
+            "method_name": "ValidateProfileFieldValues",
             "hiptest_name": "Validate Valid Range For Each Field",
             "skip": false,
             "expect_pass": true,
             "comment": "Validate Boundary Values of each Manage Profile form fields",
-            "input_file_path": "seleniumDir/inputfilesDir/Manage Profiles/DNP3_Point_Map v2.12.4.csv"
+            "input_file_path": "seleniumDir/inputfilesDir/Manage Profiles/DNP3_Point_Map v2.12.5.csv"
+        },
+        {   
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "Hello It Me"
+        },
+        {   
+            "method_name": "DeleteProfile",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "changeeverything"
+        },
+        {   
+            "method_name": "DeleteProfile",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "changeselenium"
         },
         {
             "method_name": "Logout",
-            "hiptest_name": "Logout",
-            "skip": true,
+            "hiptest_name": "",
+            "skip": false,
             "expect_pass": true
         }
     ]

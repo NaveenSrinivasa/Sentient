@@ -1,0 +1,97 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "FlashDevice",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
+            "target_version": "2.2.1-release",
+            "ipaddr": "10.48.0.76",
+            "portNumber": "d1_vto_port",
+            "networktype": "4G"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "comment": "Description - This test will add the device(s) inside the csv file to a global dictionary that will contain the device information",
+            "comment": "Allows the use of use_global_test_device",
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Upload MTF with GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/cll24.csv",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Upgrade/cll_reg_name.json",
+            "device_name" : ["cll24"],
+            "target_version" : "2.4.1",
+            "actionButton" : false
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["cll24"],
+            "target_version": "2.4.1",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "method_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Upgrade/cll_reg_name.json",
+            "device_name" : ["cll24"],
+            "target_version" : "2.4.3",
+            "actionButton" : false
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["cll24"],
+            "target_version": "2.4.3",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        },
+        {
+            "method_name": "OTAPUpgrade",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Upgrade/cll_reg_name.json",
+            "device_name" : ["cll24"],
+            "target_version" : "2.6.1",
+            "actionButton" : false
+        },
+        {
+            "method_name": "OTAPPollCurrentJobs",
+            "hiptest_name": "Logout",
+            "skip": false,
+            "expect_pass": true,
+            "device_name": ["cll24"],
+            "target_version": "2.4.3",
+            "desiredJobStatus": "COMPLETED",
+            "desiredOtapStatus": "UPGRADE_COMPLETE",
+            "polltime": 50
+        }
+    ]
+}

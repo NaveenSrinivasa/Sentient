@@ -6,7 +6,6 @@ from Utilities_Framework import *
 from Ample_DevMan import *
 
 
-
 def DefaultCustomGroups():
     printFP("INFO - Testing Default Items under Custom Groups for Group Tree.")
     #Checks if there are the default Custom Groups in the Group Tree
@@ -100,10 +99,13 @@ def JumpFromDashToGroupTree():
     if rootElement.get_attribute('collapsed') != 'true':
         rootElement.click()
     time.sleep(2)
-    GoToDashboard()
+    if not(GoToDashboard()):
+        testComment = 'Test could not navigate to Dashboard'
+        printFP("INFO - " + testComment)
+        return Global.FAIL, testComment
 
     #Active Feeder Table
-    divActiveTable = GetElement(Global.driver, By.XPATH, "//div[contains(@class,'active-faults-table')]")
+    divActiveTable = GetElement(Global.driver, By.TAG_NAME, 'feeder-tableview')
     activefaultTableBody = GetElement(divActiveTable, By.TAG_NAME, "tbody")
     try:
         activeFaults = GetElements(activefaultTableBody, By.TAG_NAME, 'tr')
@@ -113,7 +115,7 @@ def JumpFromDashToGroupTree():
 
     #Fault in Table , Get device name and click on it.
     result = Global.PASS
-    feedername = GetElement(activeFaults[0], By.XPATH, 'td[1]/div').text
+    feedername = GetElement(activeFaults[0], By.XPATH, 'td[3]/div').text
     time.sleep(1)
     try:
         GetElement(activeFaults[0], By.XPATH, 'td[1]/div').click()
@@ -281,9 +283,11 @@ def AddDeviceToTree(input_file_path=None, device_detail_path=None, wait_for_onli
     if not deviceInfo['Sensor Gateway Name'] == '':
         commserver = GetElement(Global.driver, By.XPATH, "//div[contains(@selected-model,'commServerSelection')]")
         commserver.click()
-        parentelement = GetElement(commserver, By.XPATH, '..')
-        SelectFromMenu(parentelement, By.TAG_NAME, 'span', deviceInfo['Sensor Gateway Name'])
-        time.sleep(5)
+        time.sleep(1)
+        print deviceInfo['Sensor Gateway Name']
+        button = GetElement(Global.driver, By.XPATH, "//a[@class='option']/span[2]/span[text()='"+ deviceInfo['Sensor Gateway Name'] +"']")
+        button.click()
+        time.sleep(2)
 
         network = GetElement(Global.driver, By.XPATH, "//div[contains(@selected-model,'networkGroupSelection')]")
         network.click()
@@ -364,31 +368,31 @@ def VerifyOrganizationDetails():
     ListofDetails.append(str(len(Regions)))
     for x in Regions:
         x.click()
-        time.sleep(1.5)
-        if 'ng-hide' in GetElement(Global.driver, By.XPATH, "//span[text()='No Data Available']/..").get_attribute('class'):
-            tablebody = GetElement(Global.driver, By.TAG_NAME, 'tbody')
-            totalDevices += len(GetElements(tablebody, By.TAG_NAME, 'tr'))
-        else:
-            printFP('INFO - No Devices Available for this region.')
-            totalDevices += 0
+        time.sleep(1)
     """Counts the number of substations and for each substation opens each of them for feederes"""
     Substations = GetElements(Global.driver, By.XPATH, "//span[contains(@class, 'SUBSTATION-name')]")
     ListofDetails.append(str(len(Substations)))
     for x in Substations:
         x.click()
-        time.sleep(1.5)
+        time.sleep(1)
     """Counts the number of feeders and for each feeder opens the feeder"""
     Feeders = GetElements(Global.driver, By.XPATH, "//span[contains(@class, 'FEEDER-name')]")
     ListofDetails.append(str(len(Feeders)))
     for x in Feeders:
         x.click()
-        time.sleep(1.5)
+        time.sleep(1)
     """Counts the number of sites and for each site opens the site"""
     Sites = GetElements(Global.driver, By.XPATH, "//span[contains(@class, 'SITE-name')]")
     ListofDetails.append(str(len(Sites)))
     for x in Sites:
         x.click()
-        time.sleep(1.5)
+        time.sleep(1)
+        if 'ng-hide' in GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'nodata-available') and contains(@class, 'display-table')]").get_attribute('class'):
+            tablebody = GetElement(Global.driver, By.TAG_NAME, 'tbody')
+            totalDevices += len(GetElements(tablebody, By.TAG_NAME, 'tr'))
+        else:
+            printFP('INFO - No Devices Available for this region.')
+        
     ListofDetails.append(str(totalDevices))
 
     """Right clicks the root node for the information and does a comparison to see if the information in the root node was correct"""
@@ -433,7 +437,10 @@ def SwitchTabsWhileSearching(searchKeyword=None):
     printFP('INFO - Value inside Search Text Box: %s' %searchtextbox.get_attribute('value'))
 
     #Switches to Dashboard
-    GoToDashboard()
+    if not GoToDashboard():
+        testComment = 'Test could not navigate to Dashboard to complete test.'
+        printFP("INFO - " + testComment)
+        return Global.FAIL, testComment
     time.sleep(5)
 
     #Go back to Device Management and check if the search box still has items
@@ -455,11 +462,8 @@ def HideGroupTree():
 
     """Goes to each location with a group tree and attempts to hide the group tree"""
     for n in range(len(LocationsWithGroupTree)):
-        printFP(LocationsWithGroupTree[n])
         LocationsWithGroupTree[n]()
         time.sleep(3)
-        #Global.driver.refresh()
-        #time.sleep(10)
         rootnode = GetElement(Global.driver, By.ID, 'node-1')
         time.sleep(1)
         #Checks if the group tree is expanded, if it is not, close it
@@ -559,7 +563,8 @@ def SearchBarTreeView(searchKeyword=None):
         return Global.FAIL, testComment
 
     GoToDevMan()
-    #Global.driver.refresh()
+    Global.driver.refresh()
+    time.sleep(1)
     printFP('Searching given keyword: %s in node tree' % searchKeyword)
     if Search(searchKeyword,0):
         testComment = 'Search was succesful for finding keyword in Nodes Tree.'
@@ -676,6 +681,8 @@ def EditNode(input_file_path=None, node_type=None, title=None, site_details=None
     site = params['Site']
     count = 0
 
+    Global.driver.refresh()
+    time.sleep(1)
     GoToDevMan()
     if not GetLocationFromInput(region,sub,feeder,site):
         testComment = "Could not locate portions of the data in the location input file"
@@ -691,6 +698,7 @@ def EditNode(input_file_path=None, node_type=None, title=None, site_details=None
            location = GetFeeder(feeder)
 
         RightClickElement(location)
+        time.sleep(1)
         SelectFromMenu(Global.driver, By.CLASS_NAME, 'pull-left', 'Edit')
         time.sleep(1)
         inputElement = GetElement(Global.driver, By.NAME, 'newNodeName')
@@ -764,10 +772,6 @@ def EditNode(input_file_path=None, node_type=None, title=None, site_details=None
                 gpsswitch = GetElement(Global.driver, By.XPATH, "//div[contains(@ng-model,'overrideGps')]/div")
                 SwitchOnOff(gpselement, gpsswitch, 'true')
                 time.sleep(1)
-        '''inputElement = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Latitude']")
-        SendKeys(inputElement, latitude)
-        inputElement = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Longitude']")
-        SendKeys(inputElement, longitude)'''
         if save:
             ClickButton(Global.driver, By.XPATH, xpaths['tree_edit_close'])
             time.sleep(1)

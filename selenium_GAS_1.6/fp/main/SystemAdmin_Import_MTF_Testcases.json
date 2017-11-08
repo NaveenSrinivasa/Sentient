@@ -266,7 +266,7 @@
             "validateerror": true,
             "validateargs": {
                 "validatemethodname": "ExportErrorLogForFailedMTF",
-                "downloadfolder": "/home/stanley/Downloads/"
+                "downloadfolder": "/home/sqa/Downloads/"
             }
         },
         {

@@ -7,14 +7,9 @@
             "test_json": "seleniumDir/inputfilesDir/Login_Testcases.json"
         },
         {
-            "Module": "Disturbance Tests",
+            "Module": "Manage Profile Tests",
             "skip": true,
-            "test_json": "seleniumDir/inputfilesDir/Disturbance_Testcases.json"
-        },
-        {
-            "Module": "User Management Tests",
-            "skip": false,
-            "test_json": "seleniumDir/inputfilesDir/UserManagement_Testcases.json"
+            "test_json": "seleniumDir/inputfilesDir/ManageProfile_Testcases.json"
         },
         {
             "Module": "Group Tree Tests",
@@ -22,44 +17,39 @@
             "test_json": "seleniumDir/inputfilesDir/GroupTree_Testcases.json"
         },
         {
-            "Module": "System Admin Tests",
-            "skip": false,
-            "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Testcases.json"
-        },
-        {
             "Module": "System Admin - Import MTF Tests",
             "skip": true,
             "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Import_MTF_Testcases.json"
         },
         {
-            "Module": "Device Upgrade Tests",
+            "Module": "User Roles Test",
             "skip": false,
+            "test_json": "seleniumDir/inputfilesDir/UserManagement_Testcases.json"
+        },
+        {   
+            "Module": "Add User Tests",
+            "skip": true,
+            "test_json": "seleniumDir/inputfilesDir/UserManage_Testcases.json"
+        },
+        {
+            "Module": "System Admin Tests",
+            "skip": true,
+            "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Testcases.json"
+        },
+        {
+            "Module": "Device Upgrade Tests",
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/DeviceUpgrade_Testcases.json"
         },
         {
-            "Module": "Device Management Tests",
+            "Module": "Cellular Upgrade Tests",
             "skip": true,
-            "test_json": "seleniumDir/inputfilesDir/DeviceManagement_Testcases.json"
+            "test_json": "seleniumDir/inputfilesDir/temp_testcases.json"
         },
         {
-            "Module": "Email Alert Notification Tests",
+            "Module": "Temp",
             "skip": true,
-            "test_json": "seleniumDir/inputfilesDir/AlertNotification_Testcases.json"
-        },
-        {
-            "Module": "Current Jobs Tests",
-            "skip": true,
-            "test_json": "seleniumDir/inputfilesDir/CurrentJobs_Testcases.json"
-        },
-        {
-            "Module": "Manage Profile Tests",
-            "skip": true,
-            "test_json": "seleniumDir/inputfilesDir/ManageProfile_Testcases.json"
-        },
-        {
-            "Module": "Line Monitoring Tests",
-            "skip": true,
-            "test_json": "seleniumDir/inputfilesDir/LineMonitoring_Testcases.json"
+            "test_json": "seleniumDir/inputfilesDir/temp_testcases2.json"
         },
         "End_Test"
     ]

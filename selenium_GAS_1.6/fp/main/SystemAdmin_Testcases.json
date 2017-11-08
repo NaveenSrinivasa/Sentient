@@ -55,7 +55,7 @@
             "method_name": "EditSGWParameterOutsideRange",
             "hiptest_name": "Edit Sensor Gateway With Invalid Data",
             "skip": false,
-            "expect_pass": false,
+            "expect_pass": true,
             "input_json" : "seleniumDir/inputfilesDir/System_Admin/editSGW_min_max.json",
             "comm_server_name" : "sensor_gw1_name"
         },

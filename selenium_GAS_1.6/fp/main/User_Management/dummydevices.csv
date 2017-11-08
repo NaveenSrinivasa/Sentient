@@ -1,6 +1,6 @@
 Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Latitude,Longitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
-d1_region,d1_sub,d1_feeder,site1,B,aaaa,MM3,2.3.0,corgi,,,00:0c:29:e1:80:aa,192.168.2.227,30001,note1,20000,sensor_gw2_name,0-00001-05,,SSN,networkgroup2_name,Production
-d1_region,d1_sub,d1_feeder,site1,C,aaab,MM3,2.3.0,corgi,,,00:0c:29:e1:80:ab,192.168.2.227,30002,note1,20001,sensor_gw2_name,0-00001-05,,SSN,networkgroup2_name,Maintenance
-d1_region,d1_sub,d1_feeder,site1,A,aaac,MM3,2.3.0,corgi,,,00:0c:29:e1:80:ac,192.168.2.227,30003,note1,20002,sensor_gw2_name,0-00001-05,,SSN,networkgroup2_name,RMA
-d1_region,d1_sub,d1_feeder,site2,B,aaad,MM3,2.3.0,corgi,,,00:0c:29:e1:80:ad,192.168.2.227,30004,note1,20003,sensor_gw2_name,0-00001-05,,SSN,networkgroup2_name,Other
-d1_region,d1_sub,d1_feeder,site2,C,aaae,MM3,2.3.0,corgi,,,00:0c:29:e1:80:ae,192.168.2.227,30005,note1,20004,sensor_gw2_name,0-00001-05,,SSN,networkgroup2_name,Non-Production
+d1_region,d1_sub,d1_feeder,site1,B,aaaa,MM3,2.3.0,corgi,,,00:0c:29:e1:80:aa,192.168.2.227,30001,note1,20000,sensor_gw2_name,0-00001-05,,SSN,seleniumtest_group2,Production
+d1_region,d1_sub,d1_feeder,site1,C,aaab,MM3,2.3.0,corgi,,,00:0c:29:e1:80:ab,192.168.2.227,30002,note1,20001,sensor_gw2_name,0-00001-05,,SSN,seleniumtest_group2,Maintenance
+d1_region,d1_sub,d1_feeder,site1,A,aaac,MM3,2.3.0,corgi,,,00:0c:29:e1:80:ac,192.168.2.227,30003,note1,20002,sensor_gw2_name,0-00001-05,,SSN,seleniumtest_group2,RMA
+d1_region,d1_sub,d1_feeder,site2,B,aaad,MM3,2.3.0,corgi,,,00:0c:29:e1:80:ad,192.168.2.227,30004,note1,20003,sensor_gw2_name,0-00001-05,,SSN,seleniumtest_group2,Other
+d1_region,d1_sub,d1_feeder,site2,C,aaae,MM3,2.3.0,corgi,,,00:0c:29:e1:80:ae,192.168.2.227,30005,note1,20004,sensor_gw2_name,0-00001-05,,SSN,seleniumtest_group2,Non-Production

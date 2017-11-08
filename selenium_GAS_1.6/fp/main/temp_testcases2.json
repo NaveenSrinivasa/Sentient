@@ -337,14 +337,12 @@
             "input_file_path": "seleniumDir/inputfilesDir/User_Management/all_roles_users_details.csv",
             "action": "Disable Account",
             "allowedroles": ["Administrator"],
-            "notallowedroles": ["Global Administrator"],
-            "login_disable": "AccAdmin",
-            "password_disable": "@mpacity"
+            "notallowedroles": ["Global Administrator"]
         },
         {
             "method_name": "Login",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "username": "AccAdmin",
             "password": "@mpacity"
@@ -357,14 +355,12 @@
             "input_file_path": "seleniumDir/inputfilesDir/User_Management/all_roles_users_details.csv",
             "action": "Disable Account",
             "allowedroles": ["User"],
-            "notallowedroles": [],
-            "login_disable": "AccAdmin",
-            "password_disable": "@mpacity"
+            "notallowedroles": []
         },
         {
             "method_name": "Login",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "username": "AccAdmin",
             "password": "@mpacity"

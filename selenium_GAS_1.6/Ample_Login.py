@@ -26,21 +26,20 @@ def Login(username, password):
 
     inputElement.submit()
 
-    if WaitForTitle('dashboard'):
+    if 'dashboard' in Global.driver.current_url:
         printFP('INFO - Reached dashboard')
         return Global.PASS, 'TEST PASS - Successfully Logged In'
     else:
-        testComment = 'Timed out trying to login'
+        testComment = 'Test was unable to login'
         printFP('INFO - ' + testComment)
         return Global.FAIL, 'TEST FAIL - ' + testComment
 
 
 def Logout():
-    time.sleep(2)
     ClickButton(Global.driver, By.XPATH, xpaths['dash_person_dropdown'])
     time.sleep(2)
-    ClickButton(Global.driver, By.XPATH, xpaths['dash_person_logout'])
-    time.sleep(15)
+    ClickButton(Global.driver, By.XPATH, "//a[text()='Log out']")
+    time.sleep(5)
     try:
         WebDriverWait(Global.driver, 15).until(EC.visibility_of_element_located((By.ID, "j_username")))
         printFP('INFO - Logout success!')
