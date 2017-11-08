@@ -96,37 +96,12 @@
             "skip": false,
             "expect_pass": true,
             "upgrade_settings": {
-<<<<<<< HEAD
                 "day": "Wednesday",
-=======
                 "day": "Thursday",
->>>>>>> Minor changes to System Admin
                 "from_time": "12:00AM",
                 "to_time": "otap_to_time",
                 "num_retries": 5
             }
-        },
-        {
-            "method_name": "FlashDevice",
-            "hiptest_name": "",
-            "skip": false,
-            "expect_pass": true,
-            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
-            "target_version": "2.3.0-release",
-            "ipaddr": "d1_ip_to_ssh",
-            "portNumber": "d1_vto_port",
-            "networktype": "d1_networktype"
-        },
-        {
-            "method_name": "FlashDevice",
-            "hiptest_name": "",
-            "skip": false,
-            "expect_pass": true,
-            "path_to_rsa_key": "~/.ssh/sentient/id_rsa",
-            "target_version": "2.2.1-release",
-            "ipaddr": "d2_ip_to_ssh",
-            "portNumber": "d2_vto_port",
-            "networktype": "d2_networktype"
         },
         {
             "method_name": "OTAPUpgrade",

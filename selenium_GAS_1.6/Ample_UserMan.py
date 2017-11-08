@@ -69,17 +69,6 @@ def UpdateOwnProfile(updated_values=None):
     inputElement.send_keys(params['Time Zone'])
     inputElement.send_keys(Keys.RETURN)
     GetElement(Global.driver, By.XPATH, "//button[text()='Update']").click()
-    '''if not CheckIfStaleElement(inputElement):
-        printFP("INFO - Update Information window may not have disappeared.")
-
-    #Checks if there are error messages displayed due to your input
-    try:
-        error = GetElement(Global.driver, By.XPATH, "//div[@class='alert ng-isolate-scope alert-warning']/div/span").text
-        printFP("INFO - Error encountered. Message is %s. Refreshing page and ending." %error )
-        Global.driver.refresh()
-        return Global.FAIL, 'TEST FAIL - ' + error
-    except:
-        pass'''
 
     #Checks for success message
     returnmsg = GetElement(Global.driver, By.XPATH, "//div[@class='alert ng-isolate-scope alert-success']/div/span").text
@@ -530,27 +519,20 @@ def FindUser(username):
 def SelectUser(username):
     """Searches user management table for username then checks the box """
     usermgnttableview = GetElement(Global.driver, By.CLASS_NAME, 'user-management-table-view')
-    time.sleep(1)
     usermgnttable = GetElement(usermgnttableview, By.TAG_NAME, 'table')
-    time.sleep(1)
     usermgnttbody = GetElement(usermgnttable, By.TAG_NAME, 'tbody')
-    time.sleep(1)
     usermgntusers = GetElements(usermgnttbody, By.TAG_NAME, 'tr')
     for usermgntuser in usermgntusers:
         usermgntusername = GetElements(usermgntuser, By.TAG_NAME, 'td')
         time.sleep(1)
         for finduser in usermgntusername:
             tmpusername = finduser.text
-            #print ('tmpusername: %s' %tmpusername)
-            #print ('Given username: %s' %username)
             if username == tmpusername:
                 parentelementfinduser = finduser.find_element_by_xpath("..")
-                #print parentelementfinduser
                 time.sleep(1)
                 cols = GetElements(parentelementfinduser, By.TAG_NAME, 'input')
                 time.sleep(1)
                 for element in cols:
-                    #print element
                     if element.get_attribute('type') == "checkbox":
                         SetCheckBox(element, 'true')
                         return True
@@ -564,7 +546,6 @@ def AddUser(user):
     time.sleep(2)
     printFP('INFO - Filling out form')
     returnval = True
-    time.sleep(2)
     addusertabset = GetElement(Global.driver, By.CLASS_NAME, 'screen-tabset')
     addusertabframe = GetElement(addusertabset, By.TAG_NAME, 'ul')
     addusertabs = GetElements(addusertabframe, By.TAG_NAME, 'li')
@@ -573,13 +554,11 @@ def AddUser(user):
         JustClick(tabElement)
         time.sleep(1)
         tabname = tabElement.text
-        print('tabname: %s' %tabname)
         if 'General' in tabname:
             forms = GetElements(Global.driver, By.TAG_NAME, 'form')
             for form in forms:
                 parentelement = GetElement(form, By.XPATH, '../../../../..')
                 classname = parentelement.get_attribute('class')
-                print('classname: %s' %classname)
                 if 'active' in classname:
                     time.sleep(1)
                     formGroups = GetElements(form, By.CLASS_NAME, 'form-group')
@@ -616,21 +595,20 @@ def AddUser(user):
             for form in forms:
                 parentelement = GetElement(form, By.XPATH, '../../../../..')
                 classname = parentelement.get_attribute('class')
-                print('classname: %s' %classname)
                 if 'active' in classname:
                     formGroups = GetElements(form, By.CLASS_NAME, 'form-group')
-                    time.sleep(1)
                     # Fill in fields on form
-                    time.sleep(1)
-                    fields = GetElement(formGroups[0], By.XPATH, "//span[@tabindex='-1']").click()
-                    inputElement = GetElement(formGroups[0], By.XPATH, "//input[@type='search']")
-                    inputElement.send_keys(user['timezone'])
-                    inputElement.send_keys(Keys.RETURN)
-                    time.sleep(2)
+                    if('timezone' in user.keys()):
+                        fields = GetElement(formGroups[0], By.XPATH, "//span[@tabindex='-1']").click()
+                        inputElement = GetElement(formGroups[0], By.XPATH, "//input[@type='search']")
+                        inputElement.send_keys(user['timezone'])
+                        inputElement.send_keys(Keys.RETURN)
                     # Fill in fields on form
-                    dropdownMenu = GetElement(formGroups[1], By.XPATH, xpaths['user_man_temperatureunit_dropdown'])
-                    dropdownMenu.click()
-                    SelectFromMenu(dropdownMenu, By.XPATH, "//span[@class='ui-select-choices-row-inner']", user['temperatureunit'])
+                    if('temperatureunit' in user.keys()):
+                        dropdownMenu = GetElement(Global.driver, By.XPATH, xpaths['user_man_temperatureunit_dropdown'])
+                        dropdownMenu.click()
+                        selectTemp = GetElement(Global.driver, By.XPATH, "//div[text()='"+user['temperatureunit']+"']")
+                        selectTemp.click()
                     time.sleep(1)
 
     try:
@@ -639,9 +617,23 @@ def AddUser(user):
         printFP(e.message)
         printFP('Unable to click Add User Create Button')
         return False
+    
+    try:
+        errorVerify = GetElements(Global.driver, By.XPATH, "//span[contains(@ng-show, '(key ==')]")
+        for error in errorVerify:
+            if not('ng-hide' in error.get_attribute('class')):
+                printFP("INFO - Error message shown: %s" %(error.text))
+                returnval = False
+        errorLength = GetElement(Global.driver, By.XPATH, "//span[@ng-show='objectKeys(form.userFieldsForm.$error).length > 1']")
+        if not('ng-hide' in errorLength):
+            printFP("INFO - Error message shown: %s" %(errorLength.text))
+            returnval = False
+    except:
+        printFP("INFO - No String Verification Error")
+
     #Checks for error messages with fields
     try:
-        errormsgs = GetElements(formElement, By.CLASS_NAME, "ample-error-message")
+        errormsgs = GetElements(Global.driver, By.CLASS_NAME, "ample-error-message")
         for errormsg in errormsgs:
             if not 'ng-hide' in errormsg.get_attribute('class'):
                 printFP("INFO - Error in creating User: %s" %errormsg.text)
@@ -652,9 +644,8 @@ def AddUser(user):
 
     #Checks for error message popup
     try:
-        msg = GetElement(Global.driver, By.XPATH, xpaths['user_man_create_err']).text
-        time.sleep(1)
-        if "Email address already exists" in msg:
+        msg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'alert-danger')]/div/span").text
+        if msg:
             printFP("INFO - Error: %s" %msg)
             returnval = False
     except:
@@ -663,7 +654,7 @@ def AddUser(user):
 
     if not returnval:
         GetElement(Global.driver, By.XPATH, xpaths['user_man_close']).click()
-    return True
+    return returnval
 
 
 def EditUser(user=None):
@@ -784,9 +775,13 @@ def DeleteUser(username):
     GoToUserMan()
     #Finds username and deletes it, false if not able to find username
     if SelectUser(username):
-        ClickButton(Global.driver, By.XPATH, xpaths['user_man_delete'])
+        deleteButton = GetElement(Global.driver, By.XPATH, "//button[text()='Delete']")
+        if 'disabled' in deleteButton.get_attribute('class'):
+            printFP("INFO - Delete Button is disabled.")
+            return False
+        deleteButton.click()
         time.sleep(1)
-        ClickButton(Global.driver, By.XPATH, xpaths['user_man_confirm_delete'])
+        ClickButton(Global.driver, By.XPATH, "//div[@class='modal-footer ng-scope']/button[text()='Ok']")
         return True
     else:
         return False
@@ -1105,7 +1100,7 @@ def ViewOnlyRoleCapabilitiesDownloadWaveforms(input_file_path=None):
         return Global.FAIL, testComment
 
 
-def VerifyUserCapabilitiesInAddModifyDeleteDisableResetpasswordActions(allowedroles, notallowedroles, input_file_path=None, action=None):
+def VerifyUserCapabilitiesInAddModifyDeleteDisableResetpasswordActions(allowedroles, notallowedroles, input_file_path=None, action=None, login_disable=None, password_disable=None):
     if not (input_file_path and action):
         testComment = 'Test is missing mandatory parameter'
         printFP(testComment)
@@ -1256,6 +1251,7 @@ def VerifyUserCapabilitiesInAddModifyDeleteDisableResetpasswordActions(allowedro
                         Global.driver.refresh()
                         time.sleep(5)
                         pass
+                Login(login_disable, password_disable)
 
         if notallowedroles:
             for i in range(len(notallowedroles)):
@@ -1325,7 +1321,6 @@ def VerifyUserCapabilitiesInAddModifyDeleteDisableResetpasswordActions(allowedro
                     printFP('TEST PASS - Able to delete a user with ' + allowedroles[i] + ' role when have permission')
                     Global.driver.refresh()
                     time.sleep(5)
-                    pass
 
         if notallowedroles:
             for i in range(len(notallowedroles)):
@@ -1339,7 +1334,6 @@ def VerifyUserCapabilitiesInAddModifyDeleteDisableResetpasswordActions(allowedro
                     printFP('TEST PASS - Not able to delete a user with ' + notallowedroles[i] + ' role when dont have permission')
                     Global.driver.refresh()
                     time.sleep(5)
-                    pass
 
         testComment = 'TEST PASS - able to delete users with all permitted roles'
         printFP(testComment)
@@ -1535,32 +1529,29 @@ def CheckDisableAndForceResetActionButtons(loggedinuser=None):
         printFP(testComment)
         return Global.FAIL, testComment
 
+
     printFP('INFO - Verifying User Management Disable and Reset Password action buttons presence and its status')
     GoToUserMan()
 
-    disablebuttons = ActionsStatusMappingFromUserManagementTable('User Name', 'disableicon')
-    resetpasswordbuttons = ActionsStatusMappingFromUserManagementTable('User Name', 'resetpasswordicon')
-
-    if any(str(disablebuttons[x]) == '' for x in list(disablebuttons)):
-        testComment = 'TEST FAIL - disable button is not present for all users'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    if any(str(resetpasswordbuttons[x]) == '' for x in list(resetpasswordbuttons)):
-        testComment = 'TEST FAIL - Force Reset Password button is not present for all users'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    if not 'disabled' in disablebuttons[loggedinuser] or not 'disabled' in resetpasswordbuttons[loggedinuser]:
-        testComment = 'TEST FAIL - Both (or) Either disable and force reset password button is not disabled for current user'
-        printFP(testComment)
-        return Global.FAIL, testComment
-
-    testComment = 'TEST PASS - disable and force reset password buttons are exist for all user and both buttons are disabled for current user'
-    printFP(testComment)
+    tablerows = GetElements(Global.driver, By.XPATH, "//tr[@ng-repeat='user in $data']")
+    for row in tablerows:
+        try:
+            GetElement(row, By.XPATH, "td[14]/div/span[contains(@class,'glyphicons-lock')]")
+            printFP("INFO - Disable Button exists for user row")
+        except:
+            printFP("INFO - Disable Button does not exist one of the user rows")
+            return Global.FAIL, "Disable Button does not exist one of the user rows"
+        try:
+            GetElement(row, By.XPATH, "td[14]/div/span[contains(@class,'glyphicons-force-reset')]")
+            printFP("INFO - Force Reset Button exists for user row")
+        except:
+            printFP("INFO - Force Reset Button does not exist one of the user rows")
+            return Global.FAIL, "Force Reset Button does not exist one of the user rows"
+ 
+    testComment = "Each row in User Management had a Disable and Force Reset Button."
+    printFP("INFO - " + testComment)
     return Global.PASS, testComment
-
-
+     
 def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, role=None, checkonscreens=None, checkexportbutton=False,  exportargs=None):
     if not (input_file_path and testDev and role and checkonscreens):
         testComment = 'Test is missing mandatory parameter'

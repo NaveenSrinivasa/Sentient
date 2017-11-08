@@ -23,25 +23,27 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         #driver.session_id = '60b560b2-759b-44ec-b9f9-06c00a363374' # To connect with your desirable session
-
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
         desired['platform'] = platform
         print('desired: %s' % desired)
         driver = webdriver.Firefox()
     elif 'internet explorer' in browser:
-        desired = DesiredCapabilities.INTERNETEXPLORER.copy()
+        desired = DesiredCapabilities.INTERNETEXPLORER
         desired['platform'] = platform
         desired['nativeEvents'] = True
-        desired['pageLoadStrategy'] = "eager"
         desired['enablePersistentHover'] = False
+        desired['pageLoadStrategy'] = "eager"
+        desired['ie.usePerProcessProxy'] = True
         desired['requireWindowFocus'] = False
-        desired['IE_ENSURE_CLEAN_SESSION'] = True
+        #desired['ie.ensureCleanSession'] = True
         print('desired: %s' % desired)
         if '11' in browser:
-            driver = webdriver.Remote(command_executor='http://internet_explorer_machine_ip:5555/wd/hub', desired_capabilities=desired)
+            # driver = webdriver.Remote(command_executor='http://10.16.56.154:5555/wd/hub', desired_capabilities=desired)
+            driver = webdriver.Remote(command_executor='http://10.8.1.29:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
-            driver = webdriver.Remote(command_executor='http://172.20.3.49:5555/wd/hub', desired_capabilities=desired)
+            driver = webdriver.Remote(command_executor='http://10.8.1.19:5555/wd/hub', desired_capabilities=desired)
+    
     return driver
 
 def CreateSubMTF(mtf_file_path, browsers, platforms):
@@ -298,17 +300,13 @@ def BackupScreenshotsAndTestReport(src):
         printFP('Not found given screenshot path directory to back up screenshots : %s' % src)
 
 def FindAndReplace(directory, find, replace, filePattern):
-    print '.',
     if 'Utilities_Framework.py' in filePattern or 'connections.json' in filePattern or 'configurations.json' in filePattern:
         filepath = os.path.join(directory, filePattern)
-        print(filepath)
-        time.sleep(2)
+        #print(filepath)
         with open(filepath) as f:
             s = f.read()
         #print('find: %s' %find)
-        time.sleep(3)
         #print('replace: %s' %replace)
-        time.sleep(3)
         s = s.replace(find, replace)
         with open(filepath, "w") as f:
             f.write(s)
@@ -317,17 +315,17 @@ def FindAndReplace(directory, find, replace, filePattern):
             for filename in fnmatch.filter(files, filePattern):
                 filepath = os.path.join(path, filename)
                 #print(filepath)
-                if '.py' not in filepath and 'maininputfile' not in filepath and 'Point' not in filepath and 'non_ascii' not in filepath and 'zip' not in filepath and 'tar' not in filepath:
+                if 'maininputfile' not in filepath and 'Point' not in filepath and 'non_ascii' not in filepath and 'zip' not in filepath and 'tar' not in filepath:
                     with open(filepath) as f:
                         s = f.read()
                     #print('find: %s' %find)
                     #print('replace: %s' %replace)
                     try:
                         s = s.replace(find, replace)
-                        with open(filepath, "w") as f:
-                            f.write(s)
                     except:
                         pass
+                    with open(filepath, "w") as f:
+                        f.write(s)
 
 def InitialDirectorySetup(src):
     print 'Setting up input files according to user given inputs '
@@ -361,7 +359,7 @@ def InitialDirectorySetup(src):
         print('Not found given input path to duplicate input directory : %s' % src)
 
 def FilePathAndInputDataSetup(userdefinedvariables, directory):
-    if 'none' in directory:
+    if directory == 'none':
         directory = userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'
     for key, value in userdefinedvariables.items():
         if not key == 'guidance' and not key == 'devices' and not key == 'browser_name' and not key == 'platform_name' and not key == 'email_recipients' and not 'internet_explorer_machine' in key:
@@ -374,7 +372,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                     tmpvalue = value + '"' + userdefinedvariables['browser_name'][i] + '",'
                 value = tmpvalue
             newvalue = value[:-1]
-            FindAndReplace(directory, key, newvalue, "fp/main/connections.json")
+            FindAndReplace(directory, key, newvalue, userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/' + "connections.json")
         elif key == 'platform_name':
             for i in range(len(userdefinedvariables['platform_name'])):
                 if i==0:
@@ -383,7 +381,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                     tmpvalue = value + '"' + userdefinedvariables['platform_name'][i] + '",'
                 value = tmpvalue
             newvalue = value[:-1]
-            FindAndReplace(directory, key, newvalue, "fp/main/connections.json")
+            FindAndReplace(directory, key, newvalue, userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/' + "connections.json")
         elif key == 'email_recipients':
             for i in range(len(userdefinedvariables['email_recipients'])):
                 if i==0:
@@ -392,7 +390,7 @@ def FilePathAndInputDataSetup(userdefinedvariables, directory):
                     tmpvalue = value + '"' + userdefinedvariables['email_recipients'][i] + '",'
                 value = tmpvalue
             newvalue = value[:-1]
-            FindAndReplace(directory, key, newvalue, "fp/main/configurations.json")
+            FindAndReplace(directory, key, newvalue, userdefinedvariables['seleniumDir'] + '/' + userdefinedvariables['inputfilesDir'] + '/'+"configurations.json")
         elif 'internet_explorer_machine' in key:
-            iedirectory = userdefinedvariables['seleniumDir']
-            FindAndReplace(iedirectory, key, value, "Utilities_Framework.py")
+            directory = userdefinedvariables['seleniumDir']
+            FindAndReplace(directory, key, value, "Utilities_Framework.py")

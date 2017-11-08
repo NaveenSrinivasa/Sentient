@@ -1,0 +1,2 @@
+Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Latitude,Longitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
+England,London,City of London,Guildhall,A,cll14,MM3,2.6.2,whippet,,,thisiscll14,10.65.0.6,1234,Verizon Sim,20000,,0-00001-10,,4G,,Other

@@ -20,15 +20,18 @@ from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup as soup
 from Utilities_Framework import *
 
-
 def WaitForXTime(min = 5):
     i = 0
     while i < min:
-        time.sleep(120)
+        time.sleep(60)
         Global.driver.refresh()
         i += 1
 
     return Global.PASS, ''
+
+def RefreshDriver():
+    Global.driver.refresh()
+    time.sleep(2)
 
 # Get/Select Elements on Ample
 #  This section contains helper functions to get elements from Ample as well
@@ -106,7 +109,6 @@ def ClickButton(driver, method, locator):
     """Wrapper function to get the button element and click it."""
     button = GetElement(driver, method, locator)
     try:
-        time.sleep(1)
         button.click()
         time.sleep(2)
         return True
@@ -114,7 +116,7 @@ def ClickButton(driver, method, locator):
         try:
             ActionChains(driver).move_to_element(button).click().perform()
         except:
-            printFP('Failed to click button')
+            printFP('INFO - Failed to click button')
             return False
 
 def JustClick(element):
@@ -130,8 +132,10 @@ def ClearInput(element):
     try:
         element.send_keys(Keys.CONTROL + "a")
         element.send_keys(Keys.DELETE)
+        return True
     except:
         printFP("INFO - Test could not clear input.")
+        return False
 
 def SelectFromMenu(driver, method, locator, target):
     """Given a menu object, it reads the text of all the options in the menu
@@ -263,31 +267,32 @@ def FindRowInTable(tableBodyElement, nameToSearchFor):
 
 # Site Navigation
 def GoToDashboard():
-    try:
-        ClickButton(Global.driver, By.XPATH, xpaths['dashboard'])
-    except:
-        return False
-    return True
+    if 'dashboard' in Global.driver.current_url:
+        printFP("INFO - Already at Dashboard page. Refreshing page.")
+        RefreshDriver()
+        return True
+    else:
+        return ClickButton(Global.driver, By.XPATH, "//a[text()='Dashboard']")
 
 def GoToDevMan():
-    try:
-        time.sleep(1)
-        GetElement(Global.driver, By.XPATH, xpaths['dev_man']).click()
-        time.sleep(3)
-    except:
-        Global.driver.refresh()
-        time.sleep(10)
-        try:
-            time.sleep(1)
-            GetElement(Global.driver, By.XPATH, xpaths['dev_man']).click()
-            time.sleep(3)
-        except:
-            print "failed to go to Dev Man"
-            return False
-    time.sleep(1)
-    return True
+    if 'device-management/manage-devices' in Global.driver.current_url:
+        printFP("INFO - Currently on Manage Devices Page, Just refreshing")
+        RefreshDriver()
+        return True
 
+    try:
+        GetElement(Global.driver, By.XPATH, "//a[text()='Device Management']").click()
+        time.sleep(1)
+        if 'device-management' in Global.driver.current_url:
+            return True
+        else:
+            return False
+    except:
+        printFP("INFO - Ran into Exception Navigating to Device Management")
+        return False
+        
 def GoToDevConfig():
+    
     try:
         ClickButton(Global.driver, By.XPATH, xpaths['dev_man_config'])
     except:
@@ -353,22 +358,27 @@ def GoToLineMonDNP3():
     return True
 
 def GoToCurrentJobsConfig():
-    i = 0
-    while i < 5:
+    if 'current-jobs/config' in Global.driver.current_url:
+        printFP("INFO - Global driver is already on Manage Profile Page. Just performing a refresh.")
+        Global.driver.refresh()
+        time.sleep(1)
+        return True
+    else:
         try:
-            Global.driver.refresh()
-            currentJobs = GetElement(Global.driver, By.XPATH, xpaths['current_jobs_menu'])
-            currentJobs.click()
-            time.sleep(1)
-            currentJobConfig = GetElement(Global.driver, By.XPATH, xpaths['current_jobs_config'])
+            GetElement(Global.driver, By.XPATH, "//a[span='Current Jobs']").click()
+            time.sleep(2)
+            currentJobConfig = GetElement(Global.driver, By.XPATH, "//a[text()='Device Configuration']")
             currentJobConfig.click()
-            time.sleep(1)
-            break
+            time.sleep(2)
+            if 'current-jobs/config' in Global.driver.current_url:
+                printFP("INFO - Successfully navigated to Current Jobs - Config Page.")
+                return True
+            else:
+                printFP("INFO - Unable to navigate to Current Jobs - Config Page")
+                return False
         except:
-            Global.driver.refresh()
-            i += 1
-            printFP("INFO - Function could not reach current jobs config page. Retry #%s"%i)
-            time.sleep(1)
+            printFP("INFO - Exception trying to navigate to Current Jobs - Config Page")
+            return False
 
 def GoToCurrentJobsUpgrade():
     ClickButton(Global.driver, By.XPATH, xpaths['current_jobs_menu'])
@@ -377,53 +387,48 @@ def GoToCurrentJobsUpgrade():
     return True
 
 def GoToManageProfile():
-    i = 0
-    while i < 5:
+    if 'manage-profile' in Global.driver.current_url:
+        printFP("INFO - Global driver is already on Manage Profile Page. Just performing a refresh.")
+        Global.driver.refresh() 
+        time.sleep(1)
+        return True
+    else:
         try:
-            Global.driver.refresh()
-            time.sleep(5)
-            gear = GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear')
-            gear.click()
-            time.sleep(1)
-            link = GetElement(Global.driver, By.XPATH, "//a[text()='Manage Profiles']")
-            link.click()
-            time.sleep(1)
-            printFP("INFO - Test Reached Manage Profile page")
-            return True
-        except:
-            Global.driver.refresh()
-            time.sleep(5)
-            i += 1
-            if i < 5:
-                printFP("INFO - Function could not reach current jobs config page. Retry #%s"%i)
-                time.sleep(1)
+            GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
+            time.sleep(2)
+            GetElement(Global.driver, By.LINK_TEXT, 'Manage Profiles').click()
+            time.sleep(2)
+            if 'system-admin' in Global.driver.current_url:
+                printFP("INFO - Successfully Navigated to Manage Profile Page")
+                return True
             else:
-                printFP("INFO - Test could not reach Manage Profile")
+                printFP("INFO - Unable to navigate to Manage Profile Page")
                 return False
+        except:
+            printFP("INFO - Exception trying to navigate to Manage Profile Page")
+            return False
 
 def GoToSysAdmin():
-    try:
-        GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
-        time.sleep(2)
-        GetElement(Global.driver, By.LINK_TEXT, 'System Admin').click()
-        time.sleep(2)
-    except:
+    if 'system-admin' in Global.driver.current_url:
+        printFP("INFO - Global driver is already on System Admin Page. Just performing a refresh.")
         Global.driver.refresh()
-        time.sleep(10)
+        time.sleep(1)
+        return True
+    else:
         try:
             GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
             time.sleep(2)
             GetElement(Global.driver, By.LINK_TEXT, 'System Admin').click()
             time.sleep(2)
+            if 'system-admin' in Global.driver.current_url:
+                printFP("INFO - Successfully Navigated to System Admin Page")
+                return True
+            else:
+                printFP("INFO - Unable to navigate to System Admin Page")
+                return False
         except:
+            printFP("INFO - Exception trying to navigate to System Admin Page")
             return False
-    try:
-        GetElement(Global.driver, By.XPATH, "//div[contains(text(),'Import Firmware File')]")
-        printFP("INFO - Reached System Admin Page")
-    except:
-        printFP("INFO - May not have reached System Admin Page")
-        time.sleep(1)
-    return True
 
 def GoToConfigProp():
     Global.driver.refresh()
@@ -456,13 +461,29 @@ def GoToUpdateProfile():
             return False
 
 def GoToUserMan():
-    GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
-    GetElement(Global.driver, By.LINK_TEXT, 'User Management').click()
-    time.sleep(4)
+    if 'user-management' in Global.driver.current_url:
+        printFP("INFO - Global driver is already on User Management. Just performing a refresh.")
+        Global.driver.refresh()
+        time.sleep(1)
+        return True
+    else:
+        try:
+            GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
+            time.sleep(2)
+            GetElement(Global.driver, By.LINK_TEXT, 'User Management').click()
+            time.sleep(2)
+            if 'user-management' in Global.driver.current_url:
+                printFP("INFO - Successfully Navigated to User Management Page")
+                return True
+            else:
+                printFP("INFO - Unable to navigate to User Management Page")
+                return False
+        except:
+            printFP("INFO - Exception trying to navigate to User Management Page")
+            return False
 
 def UploadMTF(fileName):
     fileUpload = GetElement(Global.driver, By.ID, 'mFile')
-    time.sleep(5)
     fileUpload.send_keys(fileName)
     time.sleep(2)
 
@@ -473,7 +494,6 @@ def GetRootNode():
 
     try:
         node = WebDriverWait(Global.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'ROOTNODE-name')))
-        time.sleep(2)
         node.click()
     except:
         return None
@@ -707,12 +727,21 @@ def GetDevice(serial):
     the web element for the row containing serial.
     Note that this will fail if the device is not showing on the current table.
     This can happen if the driver has not selected the node yet."""
-
-    devTable = GetElement(Global.driver, By.TAG_NAME, 'table')
-    time.sleep(1)
-    devtbody = GetElement(devTable, By.TAG_NAME, 'tbody')
-    time.sleep(1)
-    deviceslist = GetElements(devtbody, By.TAG_NAME, 'tr')
+    try:
+    	devTable = GetElement(Global.driver, By.TAG_NAME, 'table')
+    except:
+	printFP("No Table was found.")
+	return None
+    try:
+    	devtbody = GetElement(devTable, By.TAG_NAME, 'tbody')
+    except:
+        printFP("No table body exists")
+        return None
+    try:
+        deviceslist = GetElements(devtbody, By.TAG_NAME, 'tr')
+    except:
+        printFP("INFO - No table rows exist to search")
+        return None
     for device in deviceslist:
         devicedetails = GetElements(device, By.TAG_NAME, 'span')
         time.sleep(1)
@@ -789,20 +818,28 @@ def CreateRegion(regionName, node):
 
     # Fill in fields
     inputElement = GetElement(Global.driver, By.NAME, 'newNodeName')
+    ClearInput(inputElement)
     SendKeys(inputElement, regionName)
     time.sleep(1)
     try:
-        errors = GetElements(Global.driver, By.XPATH, "//p[@class='ample-error-message ng-binding']")
+        errors = GetElements(Global.driver, By.XPATH, "//p[contains(@class,'ample-error-message ng-binding')]")
         for error in errors:
             if not 'ng-hide' in error.get_attribute('class'):
-                GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
                 printFP("Error Message: %s" % error.text)
+                GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
                 return None
     except:
         pass
 
     # Submit
-    ClickButton(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    addButton = GetElement(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    if 'disabled' in addButton.get_attribute('class'):
+        testComment = 'Add button is disabled'
+        printFP("INFO - " + testComment)
+        return Global.FAIL, testComment
+    else:
+        addButton.click()
+        
     time.sleep(1)
     try:
         errorBox = GetElement(Global.driver, By.CLASS_NAME, 'alert-danger')
@@ -844,20 +881,28 @@ def CreateSubstation(substationName, region):
 
     # Fill in fields
     inputElement = GetElement(Global.driver, By.NAME, 'newNodeName')
+    ClearInput(inputElement)
     SendKeys(inputElement, substationName)
     time.sleep(1)
     try:
-        errors = GetElements(Global.driver, By.XPATH, "//p[@class='ample-error-message ng-binding']")
+        errors = GetElements(Global.driver, By.XPATH, "//p[contains(@class,'ample-error-message ng-binding')]")
         for error in errors:
             if not 'ng-hide' in error.get_attribute('class'):
-                GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
                 printFP("Error Message: %s" % error.text)
+                GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
                 return None
     except:
         pass
 
     # Submit
-    ClickButton(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    addButton = GetElement(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    if 'disabled' in addButton.get_attribute('class'):
+        testComment = 'Add button is disabled'
+        printFP("INFO - " + testComment)
+        return Global.FAIL, testComment
+    else:
+        addButton.click()
+
     time.sleep(1)
     try:
         errorBox = GetElement(Global.driver, By.CLASS_NAME, 'alert-danger')
@@ -893,21 +938,28 @@ def CreateFeeder(feederName, substation):
 
     # Fill in fields
     inputElement = GetElement(Global.driver, By.NAME, 'newNodeName')
+    ClearInput(inputElement)
     SendKeys(inputElement, feederName)
     time.sleep(1)
     try:
-        errors = GetElements(Global.driver, By.XPATH, "//p[@class='ample-error-message ng-binding']")
-        print len(errors)
+        errors = GetElements(Global.driver, By.XPATH, "//p[contains(@class,'ample-error-message ng-binding')]")
         for error in errors:
             if not 'ng-hide' in error.get_attribute('class'):
-                GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
                 printFP("Error Message: %s" % error.text)
+                GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
                 return None
     except:
         pass
 
     # Submit
-    ClickButton(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    addButton = GetElement(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    if 'disabled' in addButton.get_attribute('class'):
+        testComment = 'Add button is disabled'
+        printFP("INFO - " + testComment)
+        return Global.FAIL, testComment
+    else:
+        addButton.click()
+
     time.sleep(1)
     try:
         errorBox = GetElement(Global.driver, By.CLASS_NAME, 'alert-danger')
@@ -945,32 +997,41 @@ def CreateSite(siteName, feeder, latitude, longitude):
 
     # Fill in fields
     inputElement = GetElement(Global.driver, By.NAME, 'newNodeName')
+    ClearInput(inputElement)
     SendKeys(inputElement, siteName)
     time.sleep(1)
 
     try:
-        errors = GetElements(Global.driver, By.XPATH, "//p[@class='ample-error-message ng-binding']")
-        print len(errors)
+        errors = GetElements(Global.driver, By.XPATH, "//p[contains(@class,'ample-error-message ng-binding')]")
         for error in errors:
             if not 'ng-hide' in error.get_attribute('class'):
-                GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
                 printFP("Error Message: %s" % error.text)
+                GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
                 return None
     except:
         pass
 
     if latitude and longitude:
-        gpselement = GetElement(Global.driver, By.XPATH, "//label[contains(text(),'Override GPS')]")
-        gpsswitch = GetElement(Global.driver, By.XPATH, "//div[contains(@ng-model,'overrideGps')]/div")
-        SwitchOnOff(gpselement, gpsswitch, 'true')
+        toggleDiv = GetElement(Global.driver, By.XPATH, "//div[contains(@class,'toggle-switch-animate')]")
+        if 'switch-off' in toggleDiv.get_attribute('class'):
+            knob = GetElement(toggleDiv, By.CLASS_NAME, 'knob')
+            knob.click()
         time.sleep(1)
         inputElement = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Latitude']")
+        ClearInput(inputElement)
         SendKeys(inputElement, latitude)
         inputElement = GetElement(Global.driver, By.XPATH, "//input[@placeholder='Longitude']")
+        ClearInput(inputElement)
         SendKeys(inputElement, longitude)
 
     # Submit
-    ClickButton(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    addButton = GetElement(Global.driver, By.XPATH, xpaths['tree_add_node_submit'])
+    if 'disabled' in addButton.get_attribute('class'):
+        testComment = 'Add button is disabled'
+        printFP("INFO - " + testComment)
+        return Global.FAIL, testComment
+    else:
+        addButton.click()
     time.sleep(1)
     try:
         errorBox = GetElement(Global.driver, By.CLASS_NAME, 'alert-danger')
@@ -1012,7 +1073,6 @@ def GetContextMenuID(element): # deprecated
     if not elementID:
         elementID = GetElement(element, By.XPATH, '../..').get_attribute('id')
     menuID = 'menu%s' % elementID[4:]
-    printFP(menuID)
     return menuID
 
 def OpenContextMenu(identifier): # deprecated
@@ -1227,15 +1287,15 @@ def printFP(message):
       4 - error
       5 - critical"""
     print message
-    if Global.loglevel == 'debug':
+    if Global.info == 'debug':
         logging.debug(message)
-    elif Global.loglevel == 'info':
+    elif Global.info == 'info':
         logging.info(message)
-    elif Global.loglevel == 'warning':
+    elif Global.info == 'warning':
         logging.warning(message)
-    elif Global.loglevel == 'error':
+    elif Global.info == 'error':
         logging.error(message)
-    elif Global.loglevel == 'critical':
+    elif Global.info == 'critical':
         logging.critical(message)
     else:
         pass
@@ -1373,14 +1433,18 @@ def GetTableColumnOrder(pagename):
             name = columnname.text.strip().replace('"','')
             columnnamesorder[name] = n
             n = n+1
-        if pagename == 'user-management-view':
-            columnnamesorder['Actions'] = n
-
-    printFP(columnnamesorder)
     return columnnamesorder
 
 
-def FilteredDataFromTable(columnname, keyword):
+def FilteredDataFromTable(columnname, pagename):
+
+    if pagename == "line-monitoring":
+        keyword = 'line-monitoring'
+    elif pagename == "device-management" or pagename == "device-management-upgrade":
+        keyword = 'device-management'
+    else:
+        printFP('NoDataAvailable: Unable to find the requested Page')
+        return None
 
     columnorder = GetTableColumnOrder(keyword)
 
@@ -1401,7 +1465,7 @@ def FilteredDataFromTable(columnname, keyword):
         # Get all rows
         rows = tabledata.find_all('tr', class_=re.compile('row'))
         for row in rows:
-            if keyword == 'device-management' or keyword == 'user-management-view':
+            if pagename == 'device-management':
                 n=0
             else:
                 n=1
@@ -4227,7 +4291,6 @@ def GetCurrentTableColumnNamesNotShown():
 
     return tablecolumnnameslist
 
-
 def GetFWSatusMsgFromFWScreen(device_name):
     GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
     time.sleep(1)
@@ -4235,6 +4298,42 @@ def GetFWSatusMsgFromFWScreen(device_name):
     ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
     return fwstatusmsg
 
+
+def GetFirmwareUpgradeEachPhaseStatus():
+
+    firmwareupgradeeachphasestatus = {}
+    otapstatusframe = GetElement(Global.driver, By.XPATH, "//div[@class='otapStatusModel']")
+    otapstatus = GetElement(otapstatusframe, By.TAG_NAME, 'ul')
+    options = GetElements(otapstatus, By.XPATH, "li[@class='ng-scope']")
+    for option in options:
+        phasename = GetElement(option, By.XPATH, 'div[1]').text
+        phasestatus = GetElement(option, By.XPATH, 'div[2]').get_attribute('class')
+        phasestatus = phasestatus.split(' ')
+        firmwareupgradeeachphasestatus[phasename] = phasestatus[2]
+    printFP(firmwareupgradeeachphasestatus)
+    return firmwareupgradeeachphasestatus
+
+
+def CheckAllJobsPresence():
+    printFP("INFO - Locating Job that contains the devices")
+    try:
+        allJobs = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='job in dataset']")
+    except:
+        printFP("INFO - Exception while trying to get jobs in the Current Jobs Upgrade Page")
+        return False, 'TEST FAIL - Exception occurred while trying to get jobs in the current jobs Page'
+
+    if len(allJobs) == 0:
+        printFP("INFO - No upgrades were found.")
+        return False, 'TEST FAIL - No Jobs were found.'
+
+    return True, ''
+
+def GetFWSatusMsgFromFWScreen(device_name):
+    GetElement(Global.driver, By.XPATH, "//table//tr[contains(td[2], device_name)]/td[6]/span/a").click()
+    time.sleep(1)
+    fwstatusmsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body')]/p").text
+    ClickButton(Global.driver, By.XPATH, "//div[contains(@class, 'modal-header')]//button[contains(@class, 'close')")
+    return fwstatusmsg
 
 def GetFirmwareUpgradeEachPhaseStatus():
 
@@ -4281,62 +4380,3 @@ def CheckAllJobsPresence():
 
     return True, ''
 
-def TableColumnSettingsButtonAccess():
-    columnsettingsbtn = GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]")
-    time.sleep(1)
-    if 'disabled' in columnsettingsbtn.get_attribute('class'):
-        return False
-    else:
-        columnsettingsbtn.click()
-        time.sleep(1)
-        columnsettingsbtn.click()
-        return True
-
-
-def CountOfReadOnlyFieldsInTheForm():
-    html = Global.driver.page_source
-    pageElements = soup(html, "lxml")
-    activetab = pageElements.find('div', class_=re.compile('tab-pane' and 'active'))
-    fields = activetab.find_all('fieldset')
-    n = 0
-    for field in fields:
-        inputfield = field.find('input')
-        if inputfield.has_attr('readonly'):
-            n = n+1
-    return n
-
-def CheckPageButtonLinkAccessibility(xpathofelement, expectedstatus, xpathtonavigate=None):
-
-    if not xpathtonavigate == None:
-        GetElement(Global.driver, By.XPATH, xpathtonavigate).click()
-
-    if 'disabled' in expectedstatus:
-        try:
-            link = GetElement(Global.driver, By.XPATH, xpathofelement)
-            if 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                Global.driver.refresh()
-                time.sleep(1)
-                testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
-                return False, testComment
-        except Exception as e:
-            printFP(e.message)
-            Global.driver.refresh()
-            time.sleep(1)
-            return False, e.message
-
-    elif 'enabled' in expectedstatus:
-        try:
-            link = GetElement(Global.driver, By.XPATH, xpathofelement)
-            if 'disabled' in link.get_attribute('class'):
-                testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                return False, testComment
-        except Exception as e:
-            printFP(e.message)
-            Global.driver.refresh()
-            time.sleep(1)
-            return False, e.message
-
-    return True, ''

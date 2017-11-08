@@ -224,7 +224,7 @@ def FillInProfileFields(tabID, fields):
         value = fields[field_label]
         if 'latch' not in field_label: 
             inputelement = GetElement(Global.driver, By.XPATH, "//div[@class='tab-pane ng-scope active']//span[contains(text(),'"+field_label+"')]/parent::span/parent::fieldset/span[2]/input")
-            inputelement.clear()
+            ClearInput(inputelement)
             inputelement.send_keys(value)
         else:
             inputElement = GetElement(Global.driver, By.XPATH, "//div[@class='tab-pane ng-scope active']//span[contains(text(),'"+field_label+"')]/parent::span/parent::fieldset/span[2]/div")
@@ -253,18 +253,20 @@ def CreateProfile(profile_json):
 
     inputElement = GetElement(Global.driver, By.XPATH, xpaths['mp_profile_name'])
     ClearInput(inputElement)
+    time.sleep(1)
     SendKeys(inputElement, profile['Profile Name'])
-
+    time.sleep(2)
     if 'cfciData' in profile:
         FillInProfileFields('cfciData', profile['cfciData'])
     if 'nonCfciData' in profile:
         FillInProfileFields('nonCfciData', profile['nonCfciData'])
     if 'logiData' in profile:
         FillInProfileFields('logiData', profile['logiData'])
+    time.sleep(1)
     ClickButton(Global.driver, By.XPATH, xpaths['man_prof_create'])
     time.sleep(1)
     try:
-        confirmButton = GetElement(Global.driver, By.XPATH, xpaths['man_prof_submit'])
+        confirmButton = GetElement(Global.driver, By.XPATH, "//div[@class='modal-footer ng-scope']/button[text()='Create']")
         confirmButton.click()
         time.sleep(1)
         if not CheckIfStaleElement(confirmButton):
@@ -432,6 +434,7 @@ def ValidateProfileFieldValues(input_file_path):
                 nameElement.send_keys('TESTTRIAL')
                 createButton = GetElement(Global.driver, By.XPATH, "//button[text()='Create']")
                 createButton.click()
+                time.sleep(1)
                 if not CheckIfStaleElement(createButton):
                     printFP("INFO - Save Profile window may still be up")
             except:
@@ -547,19 +550,17 @@ def VerifyAEDEnableOn(inputElements, enabled=None):
     """
     if enabled:
         for i in range(len(inputElements)):
-            try:
-                ClearInput(inputElements[i])
+            if(ClearInput(inputElements[i])):
                 printFP("INFO - Field is edittable.")
-            except:
+            else:
                 return False
     else:
         for i in range(len(inputElements)):
-            try:
-                ClearInput(inputElements[i])
-                return False
-            except:
+            printFP("INFO - Input Value: %s" %(inputElements[i].get_attribute('value')))
+            if not(ClearInput(inputElements[i])):
                 printFP("INFO - Field is not edittable")
-                pass
+            else:
+                return False
     return True
 
 def VerifyAEDEnableLatch(profile_name=None):
@@ -578,7 +579,7 @@ def VerifyAEDEnableLatch(profile_name=None):
     else:
         GetElement(Global.driver, By.XPATH, xpaths['man_prof_new']).click()
 
-    time.sleep(0.5)
+    time.sleep(1)
     try:
         GetElement(Global.driver, By.ID, 'anomalyData').click()
     except:

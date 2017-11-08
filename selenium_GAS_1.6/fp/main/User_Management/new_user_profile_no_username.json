@@ -1,10 +1,9 @@
 {
-    "username": "AccUser2",
+    "username": "A",
     "firstname": "selenium",
     "middlename": "acceptance",
     "lastname": "tests",
-    "email": "nobody@sentient-energy.com",
-    "timezone": "(UTC-08:00) Pacific/Pitcairn",
+    "email": "u1213asasda3@acceptance.test",
     "password": "@mpacity",
     "confirmpassword": "@mpacity",
     "role": "User"

@@ -1,0 +1,162 @@
+Point Name,Min,Default,Max,Units,Index,Class,Deadband,Quality Code,MM2 Support,MM3 Support,Notes
+Analog Inputs (signed 32-bit integer),,,,,,,,,,,
+Dnp3MapVersion,---,2.12.4,---,BCD,0,0,N/A,N,Y,Y,DRAFT - Derived from v2.12.3
+TotalUpTime,0,0,4294967295,seconds,1,0,N/A,N,Y,Y,
+TotalPowerLowTime,0,0,4294967295,seconds,2,0,N/A,N,Y,Deprecated,
+ActiveUpTime,0,0,4294967295,seconds,3,0,N/A,N,Y,Y,
+ActivePowerLowTime,0,0,4294967295,seconds,4,0,N/A,N,Y,Deprecated,
+CndTemp,-40,-1,365,F,5,1,2147483648,Y,Y,Y,
+CndIrms,0,-1,10000,A,6,1,2147483648,N,Y,Y,
+CndTempExcept,-40,0,365,F,7,1,0,N,Y,Y,"Resting value of 0, reports max values during event"
+CndIrmsExcept,0,0,10000,A,8,1,0,N,Y,Deprecated,"Resting value of 0, reports max values during event"
+FciThreshFaultCurrent,0,0,10000,A,9,1,0,N,Y,Y,"Licensed feature #1
+Resting value of 0, reports max values during event"
+FciPercentFaultCurrent,0,0,10000,A,10,1,0,N,Y,Y,"Licensed feature #1
+Resting value of 0, reports max values during event"
+FciDiDtFaultCurrent,0,0,10000,A,11,1,0,N,Y,Y,"Licensed feature #1
+Resting value of 0, reports trigger value of event"
+YesterdayMaxIrms,0,0,10000,A,12,0,N/A,N,Y,Y,Maximum 5-minute average of Irms for the previous day. Changed to class 0 per CKSW-321.
+YesterdayMaxTemp,-40,0,365,F,13,0,N/A,N,Y,Y,Maximum 5-minute average of temperature for the previous day. Changed to class 0 per CKSW-321.
+AvailableLogData,-2147483647,0,2147483648,---,14,3,0,N,Y,Y,SENTIENT USE ONLY. Code indicating the available data awaiting retrieval
+LastCommandStatus,-2147483647,0,2147483648,---,15,3,0,N,Y,Y,SENTIENT USE ONLY. Code indicating the status of the last command
+EIRelativePhaseDisplacement,-180,0,180,degs,16,1,2147483648,N,N,Y,Phase difference between E-Field  and Current
+LatitudeInteger,-90,0,90,"fraction 
+degs",17,0,N/A,Y,N,Y,Integer part of the latitude value.
+LatitudeFraction1,0,0,9999,"fraction
+ degs",18,0,N/A,Y,N,Y,Decimal part 1 of the latitude value.
+LatitudeFraction2,0,0,9999,"fraction
+ degs",19,,N/A,Y,N,Y,Fraction part 1 of the latitude value.
+LongitudeInteger,-180,0,180,degs,20,0,N/A,Y,N,Y,Integer part of the logitude value.
+LongitudeFraction1,0,0,9999,"fraction
+ degs",21,0,N/A,Y,N,Y,Fraction part 1 of the logitude value.
+LongitudeFraction2,0,0,9999,"fraction
+ degs",22,0,N/A,Y,N,Y,Fraction part 2 of the logitude value.
+Altitude,-10911,0,8850,meters (ASL),23,0,N/A,Y,N,Y,
+EnergyReserveVoltage,0,0,5000,millivolts,24,0,N/A,N,Reserved,Y,SENTIENT USE ONLY
+TotalWanOffTime,0,0,4294967295,seconds,25,0,N/A,N,Reserved,Y,
+ActiveWanOffTime,0,0,4294967295,seconds,26,0,N/A,N,Reserved,Y,
+SoftwareVersion,---,---,---,BCD,27,0,N/A,N,Y,Y,The software version of the device
+OtapStatus,0,0,300,---,28,0,N/A,N,N,Y,SENTIENT USE ONLY
+DeviceType,---,---,---,---,29,0,N/A,N,Reserved,Y,"0 - Unknown type, 2 - MM3 SSN, 3 - MM3 LG, 4 - MM3 Sierra 5728v (3G cellular), 5 - MM3 Sierra MC7354(LTE), 6 - MM3 Telit Le910-NAG(LTE)"
+DeviceSerialNumber1,---,---,---,---,30,0,N/A,N,Reserved,Y,ASCII codes of the alpha characters part of the serial number
+DeviceSerialNumber2,---,---,---,---,31,0,N/A,N,Reserved,Y,Numeric portion of serial number
+LogIIrmsAlert1,0,0,1000,A,32,2,N/A,N,Reserved,Y,
+LogIIrmsAlert2,0,0,1000,A,33,2,N/A,N,Reserved,Y,
+LogITemperatureAlert1,-40,0,300,F,34,2,N/A,N,Reserved,Y,
+LogITemperatureAlert2,-40,0,300,F,35,2,N/A,N,Reserved,Y,
+FciPercentAutoThreshold,50,---,10000,A,36,0,N/A,N,Reserved,Y,
+LocationAccuracyEstimate,0,1001,1000,meters (ASL),37,0,N/A,Y,N,Y,Location accuracy measured in meters. Max of accuracy between latitude and longitude.
+LocationFix,0,1,3,,38,0,N/A,Y,N,Y,"0 - Unknown Fix, 1 - No Fix, 2 - 2D Fix, 3 - 3D Fix"
+AltitudeAccuracyEstimate,0,1001,1000,meters (ASL),39,0,N/A,Y,N,Y,Altitude accuracy measured in meters
+PhaseIdSignature,0,0,4294967295,---,40,0,N/A,N,N,Y,Periodic measurements to support conductor phase ID
+Binary Inputs,,,,,,,,,,,
+FieldMaintenanceAlert,0,0,1,boolean,0,0,N/A,N,Y,Deprecated,Changed from 1 to 0 as per ESW-121
+PowerLowAlert,0,0,1,boolean,1,0,N/A,N,Y,Deprecated,
+BatteryMaintenanceAlert,0,0,1,boolean,2,0,N/A,N,Y,Reserved,"0 if battery condition is OK, 1 if not"
+FciLicenseEnabled,0,0,1,boolean,3,0,N/A,N,Y,Y,"1 if cFCI license enabled, 0 if not"
+FciFaultIndicationAlert,0,0,1,boolean,4,1,N/A,N,Y,Y,"1 if a FCI fault has been detected, 0 if not"
+FciLossOfSourceInProgress,0,0,1,boolean,5,1,N/A,N,Reserved,Y,1 if Loss of Source is in progress
+FciLedState,0,0,1,boolean,6,3,N/A,N,N,Y,1 if FCI LED is on.
+EfieldNotPresentAlert,0,0,1,boolean,7,1,N/A,N,N,Y,
+CurrentDirectionReversed,0,0,1,boolean,8,1,N/A,N,N,Y,The current E-I orientation.  0 implies Screw-to-LED on the Monitoring unit.
+WanOffAlert,0,0,1,boolean,9,1,N/A,N,Reserved,Y,
+Counter Inputs (unsigned 32-bit integer),,,,,,,,,,,
+SystemBootCounter,0,0,4294967295,---,0,0,N/A,N,Y,Y,
+FieldMaintenanceAlertCounter,0,0,4294967295,---,1,0,N/A,N,Y,Deprecated,
+PowerLowAlertCounter,0,0,4294967295,---,2,0,N/A,N,Y,Deprecated,
+CndTempExceptCounter,0,0,4294967295,---,3,0,N/A,N,Y,Y,
+CndIrmsExceptCounter,0,0,4294967295,---,4,0,N/A,N,Y,Deprecated,
+FciThreshFaultCounter,0,0,4294967295,---,5,0,N/A,N,Y,Y,
+FciPercentFaultCounter,0,0,4294967295,---,6,0,N/A,N,Y,Y,
+FciDiDtFaultCounter,0,0,4294967295,---,7,0,N/A,N,Y,Y,
+CaptureCounter,0,0,4294967295,--,8,0,N/A,N,Reserved,Y,
+FciLossOfSourceCounter,0,0,4294967295,---,9,0,N/A,N,Reserved,Y,
+EfieldNotPresentAlertCounter,0,0,4294967295,---,10,0,N/A,N,N,Y,Count of number of times VoltageNotPresentAlert goes to 1
+CurrentDirectionReversalCounter,0,0,4294967295,---,11,0,N/A,N,N,Y,Count of number of times CurrentDirectionReversed changes value
+WanOffCounter,0,0,4294967295,---,12,0,N/A,N,Reserved,Y,
+DebugCounter,0,0,4294967295,---,13,0,N/A,N,Y,Reserved,SENTIENT USE ONLY
+AnomalyCounter,0,0,4294967295,---,14,0,N/A,N,N,Y,
+DistClass1Counter,0,0,4294967295,---,15,0,N/A,N,N,Deprecated,"Total number of Class1 disturbances detected. Class1 disturbances include, but is not limited to, faults."
+DistClass2Counter,0,0,4294967295,---,16,0,N/A,N,N,Deprecated,"Total number of Class2 disturbances detected. Class2 disturbances include, but is not limited to, load changes."
+DistClass3Counter,0,0,4294967295,---,17,0,N/A,N,N,Y,Total number of disturbance events detected by the second generation AED. 
+DistClass4Counter,0,0,4294967295,---,18,0,N/A,N,N,Deprecated,Total number of Class4 disturbances detected. Class4 disturbances include all disturbances not otherwise classified.
+DistCapBankCounter,0,0,4294967295,---,19,0,N/A,N,N,Deprecated,Number of Capacitor Bank switching disturbances detected. Capacitor Bank switching disturbances are a Class2 disturbance.
+DistLogCounter,0,0,4294967295,---,20,0,N/A,N,N,Y,Total number of disturbance logs generated over the lifetime of the unit.
+Analog Outputs (signed 32-bit integer),,,,,,,,,,,
+CndTempThresh,0,185,300,F,0,---,N/A,N,Y,Y,
+CndIrmsThresh,0,2000,10000,A,1,---,N/A,N,Y,Deprecated,
+EnableLicensedFeature,---,0,---,hash key,2,---,N/A,N,Y,Deprecated,256-bit hash based on feature id and unit serial number
+FciThreshLimit,20,2000,10000,A,3,---,N/A,N,Y,Y,Licensed feature #1
+FciThreshMinDuration,8,24,167,msec,4,---,N/A,N,Y,Y,Licensed feature #1
+FciPercentLimit,100,130,200,%,5,---,N/A,N,Y,Y,Licensed feature #1
+FciPercentMinLimit,50,50,200,A,6,---,N/A,N,Y,Y,Licensed feature #1
+FciPercentSamplePeriod,24,72,96,hours,7,---,N/A,N,Y,Y,Licensed feature #1
+FciPercentMinDuration,8,24,167,msec,8,---,N/A,N,Y,Y,Licensed feature #1
+FciDiDtLimit,10,100,500,A,9,---,N/A,N,Y,Y,Licensed feature #1
+FciDiDtRiseTime,8,24,167,msec,10,---,N/A,N,Y,Y,Licensed feature #1
+FciInrushDelay,0,120000,120000,msec,11,---,N/A,N,Y,Y,"Licensed feature #1
+Duration where inrush current will be squelched"
+FciLedTimeoutDuration,10,10800,32400,seconds,12,---,N/A,N,Y,Y,"Licensed feature #1
+Maximum duration that the FCI LED will blink"
+FciNormalLimit,10,10,1000,A,13,---,N/A,N,Y,Y,"Licensed feature #1
+IRMS threshold under which is ""normal"" operation"
+FciNormalMinDuration,0,60,600,seconds,14,---,N/A,N,Y,Y,"Licensed feature #1
+Duration required for FciNormalLimit"
+FciTemporaryMaxDuration,60,0,600,seconds,15,---,N/A,N,Deprecated,Deprecated,
+GenerateLogPackage,-2147483647,0,2147483648,---,16,---,N/A,N,Y,Y,Code indicating the data that should be included in the generated package
+LocalTimeOffset,---,0,---,---,17,---,N/A,N,Y,Y,The time offset to convert from DNP network time to local time.
+FciDiDtMinDuration,24,24,167,msec,18,---,N/A,N,Reserved,Y,Licensed feature #1
+FciLossOfSourceFallLimitPercent,3,90,100,%,19,---,N/A,N,Reserved,Y,Licensed feature #1
+FciLossOfSourceFallTime,8,24,167,msec,20,---,N/A,N,Reserved,Y,Licensed feature #1
+FciLossOfSourceMinDuration,8,24,167,msec,21,---,N/A,N,Reserved,Y,Licensed feature #1
+FciLossOfSourceFinalLevel,0,3,100,A,22,---,N/A,N,Reserved,Y,Licensed feature #1
+FciPreInrushLowCurrentMinDuration,8,100,6000,msec,23,---,N/A,N,Y,Y,Licensed feature #1
+LogIIrmsThreshold1,0,600,1000,A,24,---,N/A,N,Reserved,Y,Associates with LogIIrmsAlert1
+LogIIrmsThreshold2,0,300,1000,A,25,---,N/A,N,Reserved,Y,Associates with LogIIrmsAlert2
+LogITempThreshold1,-40,176,300,F,26,---,N/A,N,Reserved,Y,Associates with LogITemperatureAlert1
+LogITempThreshold2,-40,104,300,F,27,---,N/A,N,Reserved,Y,Associates with LogITemperatureAlert2
+AnomalyGuardBandSize,0,32,130,samples,28,---,N/A,N,N,Deprecated,Analysis guard time
+AnomalyKsigToStart,0,40,100,tenths,29,---,N/A,N,N,Deprecated,Start capture trigger threshold
+AnomalyCurrentNoiseFloor,0,10,100,tenths A,30,---,N/A,N,N,Deprecated,Minimum detectable level
+AnomalyMinSnrToStop,0,100,200,tenths,31,---,N/A,N,N,Deprecated,Stop capture trigger threshold
+AnomalyWindowSize,2,651,1300,samples,32,---,N/A,N,N,Deprecated,Capture window sample size
+DnpUTCTimeOffset,-1200,0,1200,---,33,---,N/A,N,N,Y,The time offset from UTC to local time.  Format is =/-HHMM
+DnpStaleStackTime,0,604800,5184000,seconds,34,---,N/A,N,N,Y,"The amount of time a stack has failed to receive a master request, is considered stale, and is deleted. A value of 0 disables stale stack detection/removal."
+DnpDSTOn,0,0,206968635,---,35,---,N/A,N,N,Y,"Determines when DST is enabled. Format is MWDHHMM where M is month, W is week of month, D is day of week, HH is hour and MM is minutes."
+DnpDSTOff,0,0,206968635,---,36,---,N/A,N,N,Y,"Determines when DST is disable. Format is MWDHHMM where M is month, W is week of month, D is day of week, HH is hour and MM is minutes."
+DnpDSTTimeOffset,-1200,0,1200,---,37,---,N/A,N,N,Y,The DST time adjustment. Format is +/- HHMM.
+WaveformCaptureTime,0,0,4294967295,seconds,38,---,N/A,N,N,Y,Capture waveform at specified time. Time is specified in seconds since 1970 UTC.
+DistLogPeriod,0,14400,86400,seconds,39,---,N/A,N,N,Y,Frequency the disturbance log file is generated in seconds
+AedWindowSize,128,4096,4096,samples,40,---,N/A,N,N,Y,"Statistical window size in samples applied uniformly to every channel. This is the window over ""normal"" line conditions are established."
+AedGuardBand,128,1024,2048,samples,41,---,N/A,N,N,Y,Number of guard samples between the sample under test and the statistical window.
+AedSensitivity,1,2,3,---,42,---,N/A,N,N,Y,"1 - Lowest sensitivity (catches less, least noisy), 2 - Medium sensitivity,  3 - Highest sensitivity (catches more, more noisy)"
+AedCooldown,2048,2048,56250000,samples,43,---,N/A,N,N,Y,Minimum number of samples between anomaly events
+Binary Outputs,,,,,,,,,,,
+MasterRebootPulse,0,0,1,boolean,0,---,N/A,N,Y,Y,
+FieldMaintenanceLatch,0,1,1,boolean,1,---,N/A,N,Y,Deprecated,
+ReserveModeLatch,0,1,1,boolean,2,---,N/A,N,Deprecated,Deprecated,
+IndLedLatch,0,0,1,boolean,3,---,N/A,N,Y,Reserved,
+FciLedLatch,0,0,1,boolean,4,---,N/A,N,Y,Y,
+FciMasterEnableLatch,0,0,1,boolean,5,---,N/A,N,Y,Y,"Licensed feature #1
+Disables cFCI feature without changing other settings"
+FciLocalAnunciatorLatch,0,0,1,boolean,6,---,N/A,N,Y,Y,"Licensed feature #1
+0 for remote operation, 1 for local operation"
+FciThreshEnabledLatch,0,0,1,boolean,7,---,N/A,N,Y,Y,Licensed feature #1
+FciPercentEnabledLatch,0,0,1,boolean,8,---,N/A,N,Y,Y,Licensed feature #1
+FciDiDtEnabledLatch,0,0,1,boolean,9,---,N/A,N,Y,Y,Licensed feature #1
+FciResetPulse,0,0,1,boolean,10,---,N/A,N,Y,Y,"Licensed feature #1
+Allows operator to acknowledge/retire a fault early"
+FciLossOfSourceEnabledLatch,0,0,1,boolean,11,---,N/A,N,Reserved,Y,Licensed feature #1
+FciLedStateEnabledLatch,0,0,1,boolean,12,---,N/A,N,Reserved,Y,
+CurrentDirectionInvert,0,1,1,boolean,13,---,N/A,N,N,Y,
+EfieldNotPresentEnableLatch,0,0,1,boolean,14,---,N/A,N,N,Y,Disables E-field not present detection
+CurrentDirectionReversedEnableLatch,0,0,1,boolean,15,---,N/A,N,N,Y,Disables current direction detection
+GpsEnableLatch,0,1,1,boolean,16,---,N/A,N,N,Y,Disables GPS
+WanOffAlertEnableLatch,0,1,1,boolean,17,---,N/A,N,Reserved,Y,
+OtapStart,0,0,1,boolean,18,---,N/A,N,N,Y,SENTIENT USE ONLY
+OtapStatusClear,0,0,1,boolean,19,---,N/A,N,N,Y,SENTIENT USE ONLY
+LogIAlertEnableLatch,0,0,1,boolean,20,---,N/A,N,Reserved,Y,
+LogILoggingEnableLatch,0,0,1,boolean,21,---,N/A,N,Reserved,Y,
+AedEnableLatch,0,0,1,boolean,22,---,N/A,N,N,Y,Enable disturbance metadata feature
+PhaseIdEnableLatch,0,0,1,boolean,23,---,N/A,N,N,Y,Enable measurements to support conductor phase ID
+DisturbanceClassificationEnableLatch,0,0,1,boolean,24,---,N/A,N,N,Deprecated,"Enable waveform disturbance classification feature. The counters DistClass1Counter, DistClass2Counter, DistClass3Counter, and DistClass4Counter are updated as appropriate when this feature is enabled."
