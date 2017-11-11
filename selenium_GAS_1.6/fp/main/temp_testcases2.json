@@ -39,7 +39,7 @@
         {
             "method_name":"AddUserTest",
             "hiptest_name": "",
-            "skip": false,
+            "skip": true,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User_Management/new_user_profile.json"
         },
@@ -337,14 +337,12 @@
             "input_file_path": "seleniumDir/inputfilesDir/User_Management/all_roles_users_details.csv",
             "action": "Disable Account",
             "allowedroles": ["Administrator"],
-            "notallowedroles": ["Global Administrator"],
-            "login_disable": "AccAdmin",
-            "password_disable": "@mpacity"
+            "notallowedroles": ["Global Administrator"]
         },
         {
             "method_name": "Login",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "username": "AccAdmin",
             "password": "@mpacity"
@@ -357,14 +355,12 @@
             "input_file_path": "seleniumDir/inputfilesDir/User_Management/all_roles_users_details.csv",
             "action": "Disable Account",
             "allowedroles": ["User"],
-            "notallowedroles": [],
-            "login_disable": "AccAdmin",
-            "password_disable": "@mpacity"
+            "notallowedroles": []
         },
         {
             "method_name": "Login",
             "hiptest_name": "",
-            "skip": true,
+            "skip": false,
             "expect_pass": true,
             "username": "AccAdmin",
             "password": "@mpacity"
@@ -905,98 +901,7 @@
         {
             "method_name": "Logout",
             "hiptest_name": "",
-            "skip": false,
-            "expect_pass": true
-        },
-        {
-            "method_name": "Login",
-            "hiptest_name": "",
-            "skip": false,
-            "expect_pass": true,
-            "username": "AccViewOnly",
-            "password": "@mpacity"
-        },
-        {
-            "method_name": "VerifyUserCapabilities",
-            "hiptest_name": "View Only -  A role with access to view only capability in Ample",
-            "skip": false,
-            "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_names.json",
-            "checkonscreens": ["sysadmin", "devman", "devconfig", "devup"],
-            "testDev": "device_1",
-            "checkexportbutton": false
-        },
-        {
-            "method_name": "ViewOnlyRoleCapabilitiesDownloadWaveforms",
-            "hiptest_name": "View Only - Can't download waveforms",
-            "skip": false,
-            "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_feeder_site_names.json"
-        },
-        {
-            "method_name": "VerifyUserCapabilitiesExportData",
-            "hiptest_name": "View Only - Can export data",
-            "skip": false,
-            "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_feeder_names.json",
-            "downloadfolder": "defaultdownloadpath"
-        },
-        {
-            "method_name": "VerifyUserCapabilities",
-            "hiptest_name": "Restrictions on Certain User Roles - View Only",
-            "skip": false,
-            "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_feeder_names.json",
-            "checkonscreens": ["sysadmin", "devman", "devconfig", "devup", "linemon", "currentjobs"],
-            "testDev": "device_1",
-            "checkexportbutton": true,
-            "exportargs": {
-                "exporttestmethodname": "VerifyUserCapabilitiesExportData",
-                "downloadfolder": "defaultdownloadpath"
-            }
-        },
-        {
-            "method_name": "Logout",
-            "hiptest_name": "",
-            "skip": false,
-            "expect_pass": true
-        },
-        {
-            "method_name": "Login",
-            "hiptest_name": "",
-            "skip": false,
-            "expect_pass": true,
-            "username": "AccUser",
-            "password": "@mpacity"
-        },
-        {
-            "method_name": "VerifyUserCapabilities",
-            "hiptest_name": "User - Verify User Capabilities",
-            "skip": false,
-            "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_names.json",
-            "checkonscreens": ["devman", "devconfig", "devup"],
-            "testDev": "device_1",
-            "checkexportbutton": false
-        },
-        {
-            "method_name": "VerifyUserCapabilities",
-            "hiptest_name": "Restrictions on Certain User Roles - User",
-            "skip": false,
-            "expect_pass": true,
-            "input_file_path": "seleniumDir/inputfilesDir/User_Management/d1_reg_sub_feeder_names.json",
-            "checkonscreens": ["sysadmin", "devman", "devconfig", "devup", "linemon", "currentjobs"],
-            "testDev": "device_1",
-            "checkexportbutton": true,
-            "exportargs": {
-                "exporttestmethodname": "VerifyUserCapabilitiesExportData",
-                "downloadfolder": "defaultdownloadpath"
-            }
-        },
-        {
-            "method_name": "Logout",
-            "hiptest_name": "",
-            "skip": false,
+            "skip": true,
             "expect_pass": true
         },
         {
@@ -1176,13 +1081,6 @@
             "method_name": "DeleteUserTest",
             "hiptest_name": "Delete User",
             "skip": true,
-            "expect_pass": true,
-            "user_profile_path": "seleniumDir/inputfilesDir/User_Management/new_user_profile.json"
-        },
-        {
-            "method_name": "DeleteUserTest",
-            "hiptest_name": "Delete User",
-            "skip": false,
             "expect_pass": true,
             "user_profile_path": "seleniumDir/inputfilesDir/User_Management/new_viewonly_profile.json"
         },

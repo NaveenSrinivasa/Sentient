@@ -10,6 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from Utilities_Ample import *
 from Ample_DevMan import *
+from Ample_Login import *
 
 
 def Add100UsersTest():
@@ -68,17 +69,6 @@ def UpdateOwnProfile(updated_values=None):
     inputElement.send_keys(params['Time Zone'])
     inputElement.send_keys(Keys.RETURN)
     GetElement(Global.driver, By.XPATH, "//button[text()='Update']").click()
-    '''if not CheckIfStaleElement(inputElement):
-        printFP("INFO - Update Information window may not have disappeared.")
-
-    #Checks if there are error messages displayed due to your input
-    try:
-        error = GetElement(Global.driver, By.XPATH, "//div[@class='alert ng-isolate-scope alert-warning']/div/span").text
-        printFP("INFO - Error encountered. Message is %s. Refreshing page and ending." %error )
-        Global.driver.refresh()
-        return Global.FAIL, 'TEST FAIL - ' + error
-    except:
-        pass'''
 
     #Checks for success message
     returnmsg = GetElement(Global.driver, By.XPATH, "//div[@class='alert ng-isolate-scope alert-success']/div/span").text
@@ -131,7 +121,6 @@ def TableSortTest(username=None):
         testComment = "TEST FAIL - WebDriverException Occured. May be caused due to being logged in at user level."
         printFP(testComment)
         return Global.FAIL, testComment
-    time.sleep(2)
 
     OrderOfUsers=[]
     OrderOfUsersAfter=[]
@@ -223,7 +212,8 @@ def SelectMultipleUsersTest(usernames=None):
             printFP(testComment)
         try:
             GetElement(Global.driver, By.PARTIAL_LINK_TEXT, 'First').click()
-        except:
+        except Exception as e:
+            printFP(e.message)
             pass
 
     if result == Global.PASS:
@@ -239,7 +229,8 @@ def SelectMultipleUser(usernames):
         time.sleep(2)
         try:
             GetElement(Global.driver, By.PARTIAL_LINK_TEXT, 'First').click()
-        except:
+        except Exception as e:
+            printFP(e.message)
             pass
 
 def EditOwnDetailsInUserMan(user_name=None):
@@ -284,55 +275,30 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
     devup = [xpaths['dev_upgrade_button']]
     linemon = [xpaths['line_mon_fault_events'], xpaths['line_mon_disturbances'], xpaths['line_mon_waveforms'], xpaths['line_mon_logi'], xpaths['line_mon_dnp3'],]
     currentjobs = [xpaths['current_jobs_config'], xpaths['current_jobs_upgrade']]
-
+    accounts = [xpaths['dash_person_update_prof'], xpaths['dash_person_email_alert'], xpaths['dash_person_change_pw'], xpaths['dash_person_logout']]
+    
     if 'sysadmin' in checkonscreens:
     #Attempts to go into Management/Settings locations as a User
         for i in range(len(sysadmin)):
-            GetElement(Global.driver, By.XPATH, xpaths['settings']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, sysadmin[i])
-                if 'disabled' in link.get_attribute('class'):
-                    pass
-                else:
-                    link.click()
-                    testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(sysadmin[i], 'disabled', xpaths['settings'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     if 'accounts' in checkonscreens:
     #Attempts to go into Management/Settings locations as a User
         for i in range(len(accounts)):
-            GetElement(Global.driver, By.XPATH, xpaths['dash_gear']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, accounts[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(accounts[i], 'enabled', xpaths['dash_gear'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     if 'currentjobs' in checkonscreens:
         for i in range(len(currentjobs)):
-            GetElement(Global.driver, By.XPATH, xpaths['current_jobs_menu']).click()
-            try:
-                link = GetElement(Global.driver, By.XPATH, currentjobs[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    link.click()
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(currentjobs[i], 'enabled', xpaths['current_jobs_menu'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     #Attempts to perform Administrative actions such as delete/configure/unregister
     if 'devman' in checkonscreens:
@@ -344,18 +310,10 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
 
         for n in range(len(devman)):
             SelectDevice(testDev)
-            try:
-                link = GetElement(Global.driver, By.XPATH, devman[n])
-                if 'disabled' in link.get_attribute('class'):
-                    pass
-                else:
-                    link.click()
-                    testComment = 'TEST FAIL - User is able to modify and change elements in Manage Device Page'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(devman[n], 'disabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -368,17 +326,11 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
             return Global.FAIL, testComment
 
         SelectDevice(testDev)
-        try:
-            link = GetElement(Global.driver, By.XPATH, devconfig)
-            if 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                testComment = 'TEST FAIL - User is able to modify and change elements in Device Configuration Page'
+        for n in range(len(devconfig)):
+            result, testComment = CheckPageButtonLinkAccessibility(devconfig[n], 'disabled')
+            if not result:
                 printFP(testComment)
                 return Global.FAIL, testComment
-        except:
-            pass
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -392,17 +344,11 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
             return Global.FAIL, testComment
 
         SelectDevice(testDev)
-        try:
-            link = GetElement(Global.driver, By.XPATH, devup)
-            if 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                testComment = 'TEST FAIL - User is able to modify and change elements in Device Firmware Upgrade Page'
+        for n in range(len(devup)):
+            result, testComment = CheckPageButtonLinkAccessibility(devup[n], 'disabled')
+            if not result:
                 printFP(testComment)
                 return Global.FAIL, testComment
-        except:
-            pass
 
         if not TableColumnSettingsButtonAccess():
             return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
@@ -410,18 +356,10 @@ def VerifyUserCapabilities(input_file_path=None, testDev=None, checkonscreens=No
     if 'linemon' in checkonscreens:
         GoToLineMonitoring()
         for i in range(len(linemon)):
-            try:
-                link = GetElement(Global.driver, By.XPATH, linemon[i])
-                if 'disabled' in link.get_attribute('class'):
-                    testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                    printFP(testComment)
-                    return Global.FAIL, testComment
-                else:
-                    link.click()
-                    pass
-            except:
-                Global.driver.refresh()
-                time.sleep(1)
+            result, testComment = CheckPageButtonLinkAccessibility(linemon[i], 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
 
     if checkexportbutton:
         new_test_method_name = exportargs['exporttestmethodname']
@@ -460,7 +398,8 @@ def GoToNextPageInTable():
         tablefooter = GetElement(usermgnttableview, By.CLASS_NAME, 'table-footer')
         pageoptions = GetElement(tablefooter, By.CLASS_NAME, 'pager-options')
         pageoptionslist = GetElements(pageoptions, By.TAG_NAME, 'div')
-    except:
+    except Exception as e:
+        printFP(e.message)
         return False
 
     for pageoption in pageoptionslist:
@@ -489,7 +428,8 @@ def GoToPrevPageInTable():
         tablefooter = GetElement(usermgnttableview, By.CLASS_NAME, 'table-footer')
         pageoptions = GetElement(tablefooter, By.CLASS_NAME, 'pager-options')
         pageoptionslist = GetElements(pageoptions, By.TAG_NAME, 'div')
-    except:
+    except Exception as e:
+        printFP(e.message)
         return False
 
     for pageoption in pageoptionslist:
@@ -552,7 +492,7 @@ def FindUser(username):
       rowWithUser - web element representing the row of the table that contains
                     username"""
 
-    table = GetElement(Global.driver, By.XPATH, xpaths['user_man_table'])
+    table = GetElement(Global.driver, By.XPATH, "//table/tbody")
     firstusers = []
     for page in range(10):
         # try to find the user in the visible table
@@ -579,27 +519,20 @@ def FindUser(username):
 def SelectUser(username):
     """Searches user management table for username then checks the box """
     usermgnttableview = GetElement(Global.driver, By.CLASS_NAME, 'user-management-table-view')
-    time.sleep(1)
     usermgnttable = GetElement(usermgnttableview, By.TAG_NAME, 'table')
-    time.sleep(1)
     usermgnttbody = GetElement(usermgnttable, By.TAG_NAME, 'tbody')
-    time.sleep(1)
     usermgntusers = GetElements(usermgnttbody, By.TAG_NAME, 'tr')
     for usermgntuser in usermgntusers:
         usermgntusername = GetElements(usermgntuser, By.TAG_NAME, 'td')
         time.sleep(1)
         for finduser in usermgntusername:
             tmpusername = finduser.text
-            #print ('tmpusername: %s' %tmpusername)
-            #print ('Given username: %s' %username)
             if username == tmpusername:
                 parentelementfinduser = finduser.find_element_by_xpath("..")
-                #print parentelementfinduser
                 time.sleep(1)
                 cols = GetElements(parentelementfinduser, By.TAG_NAME, 'input')
                 time.sleep(1)
                 for element in cols:
-                    #print element
                     if element.get_attribute('type') == "checkbox":
                         SetCheckBox(element, 'true')
                         return True
@@ -609,12 +542,10 @@ def AddUser(user):
     printFP('INFO - Going to user management')
     GoToUserMan()
     printFP('INFO - Adding a user')
-    time.sleep(4)
     ClickButton(Global.driver, By.XPATH, xpaths['user_man_add'])
     time.sleep(2)
     printFP('INFO - Filling out form')
     returnval = True
-    time.sleep(2)
     addusertabset = GetElement(Global.driver, By.CLASS_NAME, 'screen-tabset')
     addusertabframe = GetElement(addusertabset, By.TAG_NAME, 'ul')
     addusertabs = GetElements(addusertabframe, By.TAG_NAME, 'li')
@@ -623,13 +554,11 @@ def AddUser(user):
         JustClick(tabElement)
         time.sleep(1)
         tabname = tabElement.text
-        print('tabname: %s' %tabname)
         if 'General' in tabname:
             forms = GetElements(Global.driver, By.TAG_NAME, 'form')
             for form in forms:
                 parentelement = GetElement(form, By.XPATH, '../../../../..')
                 classname = parentelement.get_attribute('class')
-                print('classname: %s' %classname)
                 if 'active' in classname:
                     time.sleep(1)
                     formGroups = GetElements(form, By.CLASS_NAME, 'form-group')
@@ -658,78 +587,91 @@ def AddUser(user):
                     GetElement(formGroups[7], By.TAG_NAME, 'button').click()
                     time.sleep(1)
                     dropdownMenu = GetElement(formGroups[7], By.XPATH, xpaths['user_man_role_dropdown'])
-                    SelectFromMenu(dropdownMenu, By.TAG_NAME, 'li', user['role'])
+                    if not SelectFromMenu(dropdownMenu, By.TAG_NAME, 'li', user['role']):
+                        printFP('Unable to select given role: ' + user['role'])
+                        return False
         elif 'Preferences' in tabname:
             forms = GetElements(Global.driver, By.TAG_NAME, 'form')
             for form in forms:
                 parentelement = GetElement(form, By.XPATH, '../../../../..')
                 classname = parentelement.get_attribute('class')
-                print('classname: %s' %classname)
                 if 'active' in classname:
                     formGroups = GetElements(form, By.CLASS_NAME, 'form-group')
-                    print formGroups
-                    time.sleep(1)
                     # Fill in fields on form
-                    time.sleep(1)
-                    '''GetElement(formGroups[0], By.TAG_NAME, 'button').click()
-                    dropdownMenu = GetElement(formGroups[0], By.XPATH, xpaths['user_man_timezone_dropdown'])
-                    SelectFromMenu(dropdownMenu, By.TAG_NAME, 'li', user['timezone'])
-                    time.sleep(2)'''
-                    fields = GetElement(formGroups[0], By.XPATH, "//span[@tabindex='-1']").click()
-                    inputElement = GetElement(formGroups[0], By.XPATH, "//input[@type='search']")
-                    inputElement.send_keys(user['timezone'])
-                    inputElement.send_keys(Keys.RETURN)
-                    time.sleep(2)
+                    if('timezone' in user.keys()):
+                        fields = GetElement(formGroups[0], By.XPATH, "//span[@tabindex='-1']").click()
+                        inputElement = GetElement(formGroups[0], By.XPATH, "//input[@type='search']")
+                        inputElement.send_keys(user['timezone'])
+                        inputElement.send_keys(Keys.RETURN)
                     # Fill in fields on form
-                    '''GetElement(formGroups[1], By.TAG_NAME, 'button').click()
+                    if('temperatureunit' in user.keys()):
+                        dropdownMenu = GetElement(Global.driver, By.XPATH, xpaths['user_man_temperatureunit_dropdown'])
+                        dropdownMenu.click()
+                        selectTemp = GetElement(Global.driver, By.XPATH, "//div[text()='"+user['temperatureunit']+"']")
+                        selectTemp.click()
                     time.sleep(1)
-                    dropdownMenu = GetElement(formGroups[1], By.XPATH, xpaths['user_man_temperatureunit_dropdown'])
-                    SelectFromMenu(dropdownMenu, By.TAG_NAME, 'li', user['temperatureunit'])'''
-                    fields = GetElement(formGroups[1], By.XPATH, "//span[@tabindex='-1']").click()
-                    time.sleep(1)
-                    inputElement = GetElement(formGroups[1], By.XPATH, "//input[@type='search']")
-                    inputElement.send_keys(user['temperatureunit'])
-                    inputElement.send_keys(Keys.RETURN)
-                    time.sleep(2)
 
     try:
         ClickButton(Global.driver, By.XPATH, xpaths['user_man_submit'])
     except Exception as e:
-        print e.message
+        printFP(e.message)
         printFP('Unable to click Add User Create Button')
         return False
+    
+    try:
+        errorVerify = GetElements(Global.driver, By.XPATH, "//span[contains(@ng-show, '(key ==')]")
+        for error in errorVerify:
+            if not('ng-hide' in error.get_attribute('class')):
+                printFP("INFO - Error message shown: %s" %(error.text))
+                returnval = False
+        errorLength = GetElement(Global.driver, By.XPATH, "//span[@ng-show='objectKeys(form.userFieldsForm.$error).length > 1']")
+        if not('ng-hide' in errorLength):
+            printFP("INFO - Error message shown: %s" %(errorLength.text))
+            returnval = False
+    except:
+        printFP("INFO - No String Verification Error")
+
     #Checks for error messages with fields
     try:
-        errormsgs = GetElements(formElement, By.CLASS_NAME, "ample-error-message")
+        errormsgs = GetElements(Global.driver, By.CLASS_NAME, "ample-error-message")
         for errormsg in errormsgs:
             if not 'ng-hide' in errormsg.get_attribute('class'):
                 printFP("INFO - Error in creating User: %s" %errormsg.text)
                 returnval = False
     except:
+        printFP('INFO - There were no errors found')
         pass
 
     #Checks for error message popup
     try:
-        msg = GetElement(Global.driver, By.XPATH, xpaths['user_man_create_err']).text
-        time.sleep(1)
-        if "Email address already exists" in msg:
+        msg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'alert-danger')]/div/span").text
+        if msg:
             printFP("INFO - Error: %s" %msg)
             returnval = False
     except:
+        printFP('INFO - There were no errors found')
         pass
 
     if not returnval:
         GetElement(Global.driver, By.XPATH, xpaths['user_man_close']).click()
-    return True
+    return returnval
+
 
 def EditUser(user=None):
+    printFP('INFO - Going to user management')
+    GoToUserMan()
     printFP("Editting User: {}" .format(user['username']))
     returnval = True
     rowWithUser = FindUser(user['username'])
     checkBox = GetElement(rowWithUser, By.TAG_NAME, 'input')
     SetCheckBox(checkBox, 'true')
     time.sleep(1)
-    GetElement(Global.driver, By.XPATH, xpaths['user_man_edit']).click()
+    try:
+        GetElement(Global.driver, By.XPATH, xpaths['user_man_edit']).click()
+    except Exception as e:
+        printFP(e.message)
+        printFP('Unable to click Edit User Create Button')
+        return False
     try:
         addusertabset = GetElement(Global.driver, By.CLASS_NAME, 'screen-tabset')
         addusertabframe = GetElement(addusertabset, By.TAG_NAME, 'ul')
@@ -751,29 +693,28 @@ def EditUser(user=None):
                         formGroups = GetElements(form, By.CLASS_NAME, 'form-group')
                         # Fill in fields on form
                         field = GetElement(formGroups[0], By.TAG_NAME, 'input')
+                        ClearInput(field)
                         SendKeys(field, user['username'])
 
                         field = GetElement(formGroups[1], By.TAG_NAME, 'input')
+                        ClearInput(field)
                         SendKeys(field, user['firstname'])
 
                         field = GetElement(formGroups[2], By.TAG_NAME, 'input')
+                        ClearInput(field)
                         SendKeys(field, user['middlename'])
 
                         field = GetElement(formGroups[3], By.TAG_NAME, 'input')
+                        ClearInput(field)
                         SendKeys(field, user['lastname'])
 
                         field = GetElement(formGroups[4], By.TAG_NAME, 'input')
+                        ClearInput(field)
                         SendKeys(field, user['email'])
 
-                        field = GetElement(formGroups[5], By.TAG_NAME, 'input')
-                        SendKeys(field, user['password'])
-
-                        field = GetElement(formGroups[6], By.TAG_NAME, 'input')
-                        SendKeys(field, user['confirmpassword'])
-
-                        GetElement(formGroups[7], By.TAG_NAME, 'button').click()
+                        GetElement(formGroups[5], By.TAG_NAME, 'button').click()
                         time.sleep(1)
-                        dropdownMenu = GetElement(formGroups[7], By.XPATH, xpaths['user_man_role_dropdown'])
+                        dropdownMenu = GetElement(formGroups[5], By.XPATH, xpaths['user_man_role_dropdown'])
                         SelectFromMenu(dropdownMenu, By.TAG_NAME, 'li', user['role'])
             elif 'Preferences' in tabname:
                 forms = GetElements(Global.driver, By.TAG_NAME, 'form')
@@ -791,14 +732,15 @@ def EditUser(user=None):
                         inputElement.send_keys(Keys.RETURN)
                         time.sleep(2)
                         # Fill in fields on form
-                        fields = GetElement(formGroups[1], By.XPATH, "//span[@tabindex='-1']").click()
-                        inputElement = GetElement(formGroups[1], By.XPATH, "//input[@type='search']")
-                        inputElement.send_keys(user['temperatureunit'])
+                        dropdownMenu = GetElement(formGroups[1], By.XPATH, xpaths['user_man_temperatureunit_dropdown'])
+                        dropdownMenu.click()
+                        SelectFromMenu(dropdownMenu, By.XPATH, "//span[@class='ui-select-choices-row-inner']", user['temperatureunit'])
+                        time.sleep(1)
         try:
-            ClickButton(Global.driver, By.XPATH, xpaths['user_man_submit'])
+            ClickButton(Global.driver, By.XPATH, xpaths['user_man_update'])
         except Exception as e:
-            print e.message
-            printFP('Unable to click Add User Create Button')
+            printFP(e.message)
+            printFP('Unable to click Edit User Update Button')
             return False
         #Checks for error messages with fields
         try:
@@ -808,6 +750,7 @@ def EditUser(user=None):
                     printFP("INFO - Error in creating User: %s" %errormsg.text)
                     returnval = False
         except:
+            printFP('INFO - There were no errors found')
             pass
 
         #Checks for error message popup
@@ -818,20 +761,27 @@ def EditUser(user=None):
                 printFP("INFO - Error: %s" %msg)
                 returnval = False
         except:
+            printFP('INFO - There were no errors found')
             pass
 
         if not returnval:
             GetElement(Global.driver, By.XPATH, xpaths['user_man_close']).click()
         return True
-    except:
+    except Exception as e:
+        printFP(e.message)
         return False
 
 def DeleteUser(username):
+    GoToUserMan()
     #Finds username and deletes it, false if not able to find username
     if SelectUser(username):
-        ClickButton(Global.driver, By.XPATH, xpaths['user_man_delete'])
+        deleteButton = GetElement(Global.driver, By.XPATH, "//button[text()='Delete']")
+        if 'disabled' in deleteButton.get_attribute('class'):
+            printFP("INFO - Delete Button is disabled.")
+            return False
+        deleteButton.click()
         time.sleep(1)
-        ClickButton(Global.driver, By.XPATH, xpaths['user_man_confirm_delete'])
+        ClickButton(Global.driver, By.XPATH, "//div[@class='modal-footer ng-scope']/button[text()='Ok']")
         return True
     else:
         return False
@@ -853,10 +803,9 @@ def EditUserTest(edit_user_path=None):
     try:
         GoToUserMan()
     except WebDriverException:
-        testComment = "TEST FAIL - WebDriverException Occured. May be caused due to being logged in at user level."
+        testComment = "TEST FAIL - WebDriverException Occurred. May be caused due to being logged in at user level."
         printFP(testComment)
         return Global.FAIL, testComment
-    time.sleep(2)
 
     #Shows all fields in user management table
     ButtonElement = GetElement(Global.driver, By.XPATH, xpaths['user_man_header_btn'])
@@ -867,7 +816,8 @@ def EditUserTest(edit_user_path=None):
     for i in fieldinputs:
         try:
             SetCheckBox(i, "true")
-        except:
+        except Exception as e:
+            printFP(e.message)
             pass
     GetElement(Global.driver, By.XPATH, xpaths['user_man_header_btn']).click()
     time.sleep(1)
@@ -954,7 +904,6 @@ def DeleteUserTest(user_profile_path, deleteuserstatus=False):
     printFP('Deleting user: %s' %deleteuser)
 
     GoToUserMan()
-    time.sleep(3)
     Global.driver.refresh()
     time.sleep(5)
 
@@ -1117,7 +1066,8 @@ def ViewOnlyRoleCapabilitiesDownloadWaveforms(input_file_path=None):
                 try:
                     parentelement = GetElement(row, By.XPATH, "..")
                     deviceevent = GetElement(parentelement, By.XPATH, "//span[text()='" + params['Phase'] + "']")
-                except:
+                except Exception as e:
+                    printFP(e.message)
                     pass
             deviceevent.click()
             time.sleep(2)
@@ -1148,3 +1098,617 @@ def ViewOnlyRoleCapabilitiesDownloadWaveforms(input_file_path=None):
         testComment = 'Test Fail - Unable to locate Given site "%s"' %params['Site']
         printFP(testComment)
         return Global.FAIL, testComment
+
+
+def VerifyUserCapabilitiesInAddModifyDeleteDisableResetpasswordActions(allowedroles, notallowedroles, input_file_path=None, action=None, login_disable=None, password_disable=None):
+    if not (input_file_path and action):
+        testComment = 'Test is missing mandatory parameter'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    """Create User details dictionary"""
+    with open(input_file_path, 'r') as users:
+            time.sleep(1)
+            for line in users:
+                if line.strip('\n').split(',')[9] == 'role':
+                    headers = line.strip('\n').split(',')
+                elif line.strip('\n').split(',')[9] == 'Global Administrator':
+                    globaladmin = line.strip('\n').split(',')
+                    globaladministrator = dict(zip(headers, globaladmin))
+                elif line.strip('\n').split(',')[9] == 'Administrator':
+                    admin = line.strip('\n').split(',')
+                    administrator = dict(zip(headers, admin))
+                elif line.strip('\n').split(',')[9] == 'User':
+                    userrole = line.strip('\n').split(',')
+                    user = dict(zip(headers, userrole))
+                elif line.strip('\n').split(',')[9] == 'View Only':
+                    viewrole = line.strip('\n').split(',')
+                    viewonly = dict(zip(headers, viewrole))
+                else:
+                    printFP('Unable to recognize the given role')
+
+    if 'Create' in action:
+        if allowedroles:
+            for i in range(len(allowedroles)):
+            #Adds user to AMPLE; if unable to add returns FAIL
+                details = eval(allowedroles[i].replace(' ','').lower())
+                if not AddUser(details):
+                    testComment = 'TEST FAIL - Unable to create new user with ' + allowedroles[i] + ' role when have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Able to create new user with ' + allowedroles[i] + ' role when have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+                    pass
+
+        if notallowedroles:
+            for i in range(len(notallowedroles)):
+            #Adds user to AMPLE; if unable to add returns FAIL
+                details = eval(notallowedroles[i].replace(' ','').lower())
+                if AddUser(details):
+                    testComment = 'TEST FAIL - Able to create new user with ' + notallowedroles[i] + ' role when dont have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Not able to create new user with ' + notallowedroles[i] + ' role when dont have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+                    pass
+
+        testComment = 'TEST PASS - able to create new users with all permitted roles'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+    if 'Edit' in action:
+        if allowedroles:
+            for i in range(len(allowedroles)):
+            #Adds user to AMPLE; if unable to add returns FAIL
+                details = eval(allowedroles[i].replace(' ','').lower())
+                details['firstname'] = details['firstname'] + '_Edit'
+                details['lastname'] = details['lastname'] + '_Edit'
+                if not EditUser(details):
+                    testComment = 'TEST FAIL - Unable to edit user with ' + allowedroles[i] + ' role when have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Able to edit user with ' + allowedroles[i] + ' role when have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+                    pass
+
+        if notallowedroles:
+            for i in range(len(notallowedroles)):
+            #Adds user to AMPLE; if unable to add returns FAIL
+                details = eval(notallowedroles[i].replace(' ','').lower())
+                if EditUser(details):
+                    testComment = 'TEST FAIL - Able to edit user with ' + notallowedroles[i] + ' role when dont have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Not able to edit user with ' + notallowedroles[i] + ' role when dont have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+                    pass
+
+        testComment = 'TEST PASS - able to edit users with all permitted roles'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+    if 'Reset Password' in action:
+        if allowedroles:
+            for i in range(len(allowedroles)):
+                details = eval(allowedroles[i].replace(' ','').lower())
+                if not ResetPasswordForUserAccount(details):
+                    testComment = 'TEST FAIL - Unable to do Force Reset Password for user with ' + allowedroles[i] + ' role when have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Able to do Force Reset Password for user with ' + allowedroles[i] + ' role when have permission')
+                    if not CheckResetPasswordUserAccountLogin(details['username'], details['password']):
+                        testComment = 'TEST FAIL - Unable to set new password and login after done force reset password for user with ' + allowedroles[i] + ' role when have permission'
+                        printFP(testComment)
+                        return Global.FAIL, testComment
+                    else:
+                        printFP('TEST PASS - Able to set new password and login after done force reset password for user with ' + allowedroles[i] + ' role when have permission')
+                        Global.driver.refresh()
+                        time.sleep(5)
+                        pass
+
+        if notallowedroles:
+            for i in range(len(notallowedroles)):
+                details = eval(notallowedroles[i].replace(' ','').lower())
+                if ResetPasswordForUserAccount(details):
+                    testComment = 'TEST FAIL - able to do Force Reset Password for user with ' + notallowedroles[i] + ' role when dont have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Unable to do Force Reset Password for user with ' + notallowedroles[i] + ' role when dont have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+                    pass
+
+        testComment = 'TEST PASS - able to do force reset password and set new password and login with new password for users with all permitted roles'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+    if 'Disable Account' in action:
+        if allowedroles:
+            for i in range(len(allowedroles)):
+                details = eval(allowedroles[i].replace(' ','').lower())
+                if not DisableUserAccount(details):
+                    testComment = 'TEST FAIL - Unable to disable user account with ' + allowedroles[i] + ' role when have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Able to disable user account with ' + allowedroles[i] + ' role when have permission')
+                    if not CheckDisabledEnabledUserAccountLogin(details['username'], details['password'], 'disabled'):
+                        testComment = 'TEST FAIL - Account disabled successfully but customize message is not displayed for disabled user when trying to login into ample for user with ' + allowedroles[i] + ' role'
+                        printFP(testComment)
+                        return Global.FAIL, testComment
+                    else:
+                        printFP('TEST PASS - Account disabled successfully and customize message is displayed for disabled user when trying to login into ample for user with ' + allowedroles[i] + ' role')
+                        Global.driver.refresh()
+                        time.sleep(5)
+                        pass
+                Login(login_disable, password_disable)
+
+        if notallowedroles:
+            for i in range(len(notallowedroles)):
+                details = eval(notallowedroles[i].replace(' ','').lower())
+                if DisableUserAccount(details):
+                    testComment = 'TEST FAIL - able to disable user account with ' + notallowedroles[i] + ' role when dont have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Unable to disable user account with ' + notallowedroles[i] + ' role when dont have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+                    pass
+
+        testComment = 'TEST PASS - able to do disable account for users with all permitted roles'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+    if 'Enable Account' in action:
+        if allowedroles:
+            for i in range(len(allowedroles)):
+                details = eval(allowedroles[i].replace(' ','').lower())
+                if not EnableUserAccount(details):
+                    testComment = 'TEST FAIL - Unable to enable user account with ' + allowedroles[i] + ' role when have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Able to enable user account with ' + allowedroles[i] + ' role when have permission')
+                    if not CheckDisabledEnabledUserAccountLogin(details['username'], details['password'], 'enabled'):
+                        testComment = 'TEST FAIL - Account enabled successfully but throws exception when trying to login into ample for user with ' + allowedroles[i] + ' role'
+                        printFP(testComment)
+                        return Global.FAIL, testComment
+                    else:
+                        printFP('TEST PASS - Account enabled successfully and able to login again into ample for user with ' + allowedroles[i] + ' role')
+                        Global.driver.refresh()
+                        time.sleep(5)
+                        pass
+
+        if notallowedroles:
+            for i in range(len(notallowedroles)):
+                details = eval(notallowedroles[i].replace(' ','').lower())
+                if EnableUserAccount(details):
+                    testComment = 'TEST FAIL - able to enable user account with ' + notallowedroles[i] + ' role when dont have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Unable to enable user account with ' + notallowedroles[i] + ' role when dont have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+                    pass
+
+        testComment = 'TEST PASS - able to do enable user account and login with old password for users with all permitted roles'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+
+    if 'Delete' in action:
+        if allowedroles:
+            for i in range(len(allowedroles)):
+            #Adds user to AMPLE; if unable to add returns FAIL
+                details = eval(allowedroles[i].replace(' ','').lower())
+                if not DeleteUser(details['username']):
+                    testComment = 'TEST FAIL - Unable to delete a user with ' + allowedroles[i] + ' role when have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Able to delete a user with ' + allowedroles[i] + ' role when have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+
+        if notallowedroles:
+            for i in range(len(notallowedroles)):
+            #Adds user to AMPLE; if unable to add returns FAIL
+                details = eval(notallowedroles[i].replace(' ','').lower())
+                if DeleteUser(details['username']):
+                    testComment = 'TEST FAIL - Able to delete a user with ' + notallowedroles[i] + ' role when dont have permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+                else:
+                    printFP('TEST PASS - Not able to delete a user with ' + notallowedroles[i] + ' role when dont have permission')
+                    Global.driver.refresh()
+                    time.sleep(5)
+
+        testComment = 'TEST PASS - able to delete users with all permitted roles'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+
+def DisableUserAccount(user=None):
+    printFP('INFO - Going to user management')
+    GoToUserMan()
+    printFP("Disabling Account for the user: {}" .format(user['username']))
+    returnval = True
+    rowWithUser = FindUser(user['username'])
+    try:
+        disablebutton = GetElement(rowWithUser, By.XPATH, "td[contains(@class,'action-column')]/div/span[contains(@tooltip,'Disable')]")
+    except Exception as e:
+        printFP(e.message)
+        printFP('Unable to find disable user button')
+        return False
+    if not 'disabled' in disablebutton.get_attribute('class'):
+        disablebutton.click()
+        time.sleep(1)
+    else:
+        printFP('"Disable User" button is disabled for user:' + user['username'])
+        return False
+
+    disablepromptframe = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'confirm-modal-body')]")
+    if 'Do you want to disable this user?' in disablepromptframe.text:
+        ClickButton(Global.driver, By.XPATH, "//button[@ng-click='confirm()' and text()='Ok']")
+        time.sleep(2)
+    else:
+        printFP("Disable User confirmation window is not prompted")
+        return False
+    try:
+        errormsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body']")
+        printFP("INFO - Error in disabling user: %s" %errormsg.text)
+        GetElement(Global.driver, By.XPATH, "//span[@ng-click='closeModal()']").click()
+        return False
+    except:
+        printFP('INFO - There were no errors found')
+        pass
+
+    currentenabledsstatus = FilteredDataFromTableMapping('User Name', 'Enabled', 'user-management-view')
+    if currentenabledsstatus[user['username']] == 'false':
+        printFP("INFO - Enabled Status in the table is updated to False after disabled the user successfully")
+        return True
+    else:
+        printFP("TEST FAIL - Enabled Status in the table is not updated to False after disabled the user successfully")
+        return False
+
+def EnableUserAccount(user=None):
+    printFP('INFO - Going to user management')
+    GoToUserMan()
+    printFP("Enabling Account for the user: {}" .format(user['username']))
+    returnval = True
+    rowWithUser = FindUser(user['username'])
+    try:
+        enablebutton = GetElement(rowWithUser, By.XPATH, "td[contains(@class,'action-column')]/div/span[contains(@tooltip,'Enable')]")
+    except Exception as e:
+        printFP(e.message)
+        printFP('Unable to find enable user button')
+        return False
+    if not 'disabled' in enablebutton.get_attribute('class'):
+        enablebutton.click()
+        time.sleep(1)
+    else:
+        printFP('"Enable User" button is disabled for user:' + user['username'])
+        return False
+
+    enablepromptframe = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'confirm-modal-body')]")
+    if 'Do you want to enable this user?' in enablepromptframe.text:
+        ClickButton(Global.driver, By.XPATH, "//button[@ng-click='confirm()' and text()='Ok']")
+        time.sleep(2)
+    else:
+        printFP("Enable User confirmation window is not prompted")
+        return False
+    try:
+        errormsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body']")
+        printFP("INFO - Error in enabling user: %s" %errormsg.text)
+        GetElement(Global.driver, By.XPATH, "//span[@ng-click='closeModal()']").click()
+        return False
+    except:
+        printFP('INFO - There were no errors found')
+        pass
+
+    currentenabledsstatus = FilteredDataFromTableMapping('User Name', 'Enabled', 'user-management-view')
+    if currentenabledsstatus[user['username']] == 'true':
+        printFP("INFO - Enabled Status in the table is updated to True after enabled the user successfully")
+        return True
+    else:
+        printFP("TEST FAIL - Enabled Status in the table is not updated to True after enabled the user successfully")
+        return False
+
+def ResetPasswordForUserAccount(user=None):
+    printFP('INFO - Going to user management')
+    GoToUserMan()
+    printFP("Reset Password for the user: {}" .format(user['username']))
+    returnval = True
+    rowWithUser = FindUser(user['username'])
+    try:
+        resetpwdbutton = GetElement(rowWithUser, By.XPATH, "td[contains(@class,'action-column')]/div/span[contains(@tooltip,'Reset')]")
+    except Exception as e:
+        printFP(e.message)
+        printFP('Unable to find reset password button')
+        return False
+    if not 'disabled' in resetpwdbutton.get_attribute('class'):
+        resetpwdbutton.click()
+        time.sleep(1)
+    else:
+        printFP('"Reset Password" button is disabled for user:' + user['username'])
+        return False
+
+    resetpasswordpromptframe = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'confirm-modal-body')]")
+    if 'Do you want to force the user to reset password on the next login?' in resetpasswordpromptframe.text:
+        ClickButton(Global.driver, By.XPATH, "//button[@ng-click='confirm()' and text()='Ok']")
+    else:
+        printFP("Reset Password confirmation window is not prompted")
+        return False
+    try:
+        errormsg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'modal-body']")
+        printFP("INFO - Error while reset password: %s" %errormsg.text)
+        GetElement(Global.driver, By.XPATH, "//span[@ng-click='closeModal()']").click()
+        returnval = False
+    except:
+        printFP('INFO - There were no errors found')
+        pass
+    return True
+
+def CheckDisabledEnabledUserAccountLogin(username, password, currentstatus):
+    Logout()
+    result, testComment = Login(username, password)
+
+    if 'enabled' in currentstatus:
+        if result == Global.PASS:
+            return True
+        else:
+            return False
+    elif 'disabled' in currentstatus:
+        if result == Global.FAIL:
+            alertmessage = GetElement(Global.driver, By.XPATH, "//div[contains(@class,'alert-danger')]/div/span").text
+            printFP(alertmessage)
+            if 'Account has been disabled. Please contact your administrator.' in alertmessage:
+                return True
+            else:
+                printFP('TEST FAIL - Account is disabled. But Expected Alert Message is not matched')
+                return False
+        else:
+            printFP('TEST FAIL - Reached dashboard successfully with disabled account credentials')
+            return False
+
+def CheckResetPasswordUserAccountLogin(username, password):
+    Logout()
+    result, testComment = Login(username, password)
+
+    if result == Global.FAIL:
+        alertmessage = GetElement(Global.driver, By.XPATH, "//div[contains(@class,'alert-warning')]/div/span").text
+        printFP(alertmessage)
+        if 'Kindly reset your password.' in alertmessage:
+            inputElement = GetElement(Global.driver, By.ID, 'newPassword')
+            SendKeys(inputElement, password)
+            inputElement = GetElement(Global.driver, By.ID, 'confirmPassword')
+            SendKeys(inputElement, password)
+            ClickButton(Global.driver, By.XPATH, "//button[contains(text(),'Reset')]")
+            time.sleep(2)
+            try:
+                alertmessage = GetElement(Global.driver, By.XPATH, "//div[contains(@class,'alert-success')]/div/span").text
+                printFP(alertmessage)
+            except Exception as e:
+                printFP(e.message)
+                printFP('TEST FAIL - Error while setting new password')
+                return False
+            if 'Your password was successfully changed - please login with your new password' in alertmessage:
+                GetElement(Global.driver, By.XPATH, "//div[contains(@class,'alert-success')]/../../a").click()
+                result, testComment = Login(username, password)
+                time.sleep(1)
+                if result == Global.PASS:
+                    return True
+                else:
+                    printFP('INFO - Timed out trying to login after successfully set up new password')
+                    return False
+            else:
+                printFP('TEST FAIL - Set new password successfully. But Expected Alert Success message is not matched')
+                return False
+        else:
+            printFP('TEST FAIL - Set new password screen shown successfully. But Expected Alert Warning is not matched')
+            return False
+    else:
+        printFP('TEST FAIL - Reached dashboard successfully with Forced Reset Password account credentials')
+        return False
+
+def CheckDisableAndForceResetActionButtons(loggedinuser=None):
+    if loggedinuser == None:
+        testComment = 'Test is missing mandatory parameter'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+
+    printFP('INFO - Verifying User Management Disable and Reset Password action buttons presence and its status')
+    GoToUserMan()
+
+    tablerows = GetElements(Global.driver, By.XPATH, "//tr[@ng-repeat='user in $data']")
+    for row in tablerows:
+        try:
+            GetElement(row, By.XPATH, "td[14]/div/span[contains(@class,'glyphicons-lock')]")
+            printFP("INFO - Disable Button exists for user row")
+        except:
+            printFP("INFO - Disable Button does not exist one of the user rows")
+            return Global.FAIL, "Disable Button does not exist one of the user rows"
+        try:
+            GetElement(row, By.XPATH, "td[14]/div/span[contains(@class,'glyphicons-force-reset')]")
+            printFP("INFO - Force Reset Button exists for user row")
+        except:
+            printFP("INFO - Force Reset Button does not exist one of the user rows")
+            return Global.FAIL, "Force Reset Button does not exist one of the user rows"
+ 
+    testComment = "Each row in User Management had a Disable and Force Reset Button."
+    printFP("INFO - " + testComment)
+    return Global.PASS, testComment
+     
+def VerifyUserCapabilitiesAdminSuperAdmin(input_file_path=None, testDev=None, role=None, checkonscreens=None, checkexportbutton=False,  exportargs=None):
+    if not (input_file_path and testDev and role and checkonscreens):
+        testComment = 'Test is missing mandatory parameter'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+    """Must be logged in as a User"""
+    params = ParseJsonInputFile(input_file_path)
+
+    sysadmin = [xpaths['settings_sys_admin'], xpaths['settings_config_prop'], xpaths['settings_man_prof'], xpaths['dev_upgrade_settings_button'], xpaths['settings_user_man'], xpaths['settings_audit_trail'], xpaths['settings_notif_temp']]
+    devman = [xpaths['dev_man_edit'], xpaths['dev_man_add_device'], xpaths['dev_man_unregister'], xpaths['dev_man_register'], xpaths['dev_man_delete']]
+    devconfig = [xpaths['dev_configure_button']]
+    devup = [xpaths['dev_upgrade_button']]
+    linemon = [xpaths['line_mon_fault_events'], xpaths['line_mon_disturbances'], xpaths['line_mon_waveforms'], xpaths['line_mon_logi'], xpaths['line_mon_dnp3'],]
+    currentjobs = [xpaths['current_jobs_config'], xpaths['current_jobs_upgrade']]
+    accounts = [xpaths['dash_person_update_prof'], xpaths['dash_person_email_alert'], xpaths['dash_person_change_pw'], xpaths['dash_person_logout']]
+    configprop = [xpaths['settings_config_prop']]
+
+    if 'sysadmin' in checkonscreens:
+    #Attempts to go into Management/Settings locations as a User
+        for i in range(len(sysadmin)):
+            result, testComment = CheckPageButtonLinkAccessibility(sysadmin[i], 'enabled', xpaths['settings'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+    if 'accounts' in checkonscreens:
+    #Attempts to go into Management/Settings locations as a User
+        for i in range(len(accounts)):
+            result, testComment = CheckPageButtonLinkAccessibility(accounts[i], 'enabled', xpaths['dash_gear'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+    if 'currentjobs' in checkonscreens:
+        for i in range(len(currentjobs)):
+            result, testComment = CheckPageButtonLinkAccessibility(currentjobs[i], 'enabled', xpaths['current_jobs_menu'])
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+    if 'configprop' in checkonscreens:
+        GetElement(Global.driver, By.XPATH, xpaths['settings']).click()
+        GetElement(Global.driver, By.XPATH, configprop[0]).click()
+        time.sleep(2)
+        GetElement(Global.driver, By.ID, 'comPropertyLttpData').click()
+        readonlyfieldcount = CountOfReadOnlyFieldsInTheForm()
+
+        if role == 'admin':
+            if readonlyfieldcount == 14:
+                testComment = 'TEST PASS - Unable to edit LTTP setting with Admin role permission'
+                printFP(testComment)
+                ClickButton(Global.driver, By.XPATH, "//button[contains(text(),'Cancel')]")
+            else:
+                ClickButton(Global.driver, By.XPATH, "//button[contains(text(),'Cancel')]")
+                testComment = 'TEST FAIL - Able to edit LTTP setting with Admin role permission'
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+        if role == 'superadmin' :
+            if readonlyfieldcount == 0:
+                try:
+                    inputfield = GetElement(Global.driver, By.XPATH, "//span[contains(text(),'LTTP pull interval')]/../../span/input")
+                    ClearInput(inputfield)
+                    SendKeys(inputfield, randint(3, 20))
+                    ClickButton(Global.driver, By.XPATH, "//button[contains(text(),'Save')]")
+                    time.sleep(2)
+                    lttpeditstatus = GetElement(Global.driver, By.XPATH, "//h4[contains(@class,'modal-title')]/span[2]")
+                    if 'Success' in lttpeditstatus.text:
+                        testComment = 'TEST PASS - Able to modify LTTP setting with Super Admin role permission'
+                        printFP(testComment)
+                    ClickButton(Global.driver, By.XPATH, "//button[contains(@class,'close')]")
+                except Exception as e:
+                    try:
+                        ClickButton(Global.driver, By.XPATH, "//button[contains(text(),'Cancel')]")
+                    except:
+                        ClickButton(Global.driver, By.XPATH, "//button[contains(@class,'close')]")
+                    printFP(e.message)
+                    testComment = 'TEST FAIL - Unable to edit LTTP setting with Super Admin role permission'
+                    printFP(testComment)
+                    return Global.FAIL, testComment
+            else:
+                testComment = 'TEST FAIL - fields of LTTP setting are in readonly state for Super Admin User'
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+
+    #Attempts to perform Administrative actions such as delete/configure/unregister
+    if 'devman' in checkonscreens:
+        GoToDevMan()
+        if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+            testComment = "TEST FAIL - Unable to locate locations based off input file in Manage Device Page"
+            printFP(testComment)
+            return Global.FAIL, testComment
+
+        for n in range(len(devman)):
+            SelectDevice(testDev)
+            result, testComment = CheckPageButtonLinkAccessibility(devman[n], 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+        if not TableColumnSettingsButtonAccess():
+            return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
+
+    if 'devconfig' in checkonscreens:
+        GoToDevConfig()
+        if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+            testComment = "Unable to locate locations based off input file in Configuration Page"
+            printFP(testComment)
+            return Global.FAIL, testComment
+
+        SelectDevice(testDev)
+        for n in range(len(devconfig)):
+            result, testComment = CheckPageButtonLinkAccessibility(devconfig[n], 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+    #Attemps to perform Administrative action such as OTAP upgrade
+    if 'devup' in checkonscreens:
+        GoToDevUpgrade()
+        if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
+            testComment = "Unable to locate locations based off input file in Upgrade Page"
+            printFP(testComment)
+            return Global.FAIL, testComment
+
+        SelectDevice(testDev)
+        for n in range(len(devup)):
+            result, testComment = CheckPageButtonLinkAccessibility(devup[n], 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+        if not TableColumnSettingsButtonAccess():
+            return Global.FAIL, 'TEST FAIL - User is not able to access column settings button in Ample where all user roles are allowed. Please check log file.'
+
+    if 'linemon' in checkonscreens:
+        GoToLineMonitoring()
+        for i in range(len(linemon)):
+            result, testComment = CheckPageButtonLinkAccessibility(linemon[i], 'enabled')
+            if not result:
+                printFP(testComment)
+                return Global.FAIL, testComment
+
+    if checkexportbutton:
+        new_test_method_name = exportargs['exporttestmethodname']
+        printFP('Testing export button access. Calling external function: {}' .format(new_test_method_name))
+        del exportargs['exporttestmethodname']
+        exportargs['input_file_path'] = input_file_path
+        args = exportargs
+        result, testComment = globals()[new_test_method_name](**args)
+        if result == Global.FAIL:
+            testComment = 'TEST FAIL - User is not able to access excel/csv export button. Please check the log file.'
+            printFP(testComment)
+            return Global.FAIL, testComment
+
+    testComment = 'TEST PASS - Admin/SuperAdmin is able to access all features in Ample'
+    printFP(testComment)
+    return Global.PASS, testComment

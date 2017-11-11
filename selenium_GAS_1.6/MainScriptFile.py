@@ -30,18 +30,6 @@ from testdebug import *
 from Ample_DevMan_ManageDevices import *
 from Ample_LinMon_LogI import *
 
-
-
-def Sleep(sleep_time):
-    printFP('sleeping for %d seconds' % sleep_time)
-    elapsed = 0
-    while elapsed < sleep_time:
-        time.sleep(180)
-        Global.driver.refresh()
-        elapsed += 180
-    return Global.PASS, ''
-
-
 def ConfigureLogging(parsed_config, browser, platform):
     configured_log_level = parsed_config['log_level'].lower()
     Global.info = configured_log_level
@@ -59,7 +47,6 @@ def ConfigureLogging(parsed_config, browser, platform):
         log_level = logging.DEBUG
     log_location = '%sample_%s_%s.log' % (parsed_config['log_path'], browser[:2], platform[:2])
     logging.basicConfig(filename=log_location, level=log_level, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-
 
 def RunTest(test, report, test_runner):
     method_name = test['method_name']
@@ -110,12 +97,10 @@ def RunTest(test, report, test_runner):
         elif result == Global.PASS and not expect_pass:
             finaltestresult = Global.FAIL
             Global.totalFail += 1
-            TakeScreenshot()
             report.write('%d %s, %s, expect_pass = %s, %d, FAIL, %s\n' % (Global.testCount, method_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
         elif result == Global.FAIL and expect_pass:
             finaltestresult = Global.FAIL
             Global.totalFail += 1
-            TakeScreenshot()
             report.write('%d %s, %s, expect_pass = %s, %d, FAIL, %s\n' % (Global.testCount, method_name, FormatParams(args), expect_pass, testElapsedTime, testComment))
 
         if finaltestresult == Global.PASS:
@@ -128,18 +113,16 @@ def RunTest(test, report, test_runner):
         test_runner.run_publishresult(hiptestresults, hiptest_name)
     return result
 
-
 def RunTests(tests, platform, browser, config, url, count, test_runner):
     GenerateXPATHDictionary(config['xpath_file_path'])
     # Create new webdriver
     Global.driver = SpawnBrowser(browser, platform)
     Global.driver.maximize_window()
-
+    print "Launched."
     # Go to Ample
     print Global.driver
     Global.driver.get('https://%s/amplemanage/login' % url)
     if (Global.driver.desired_capabilities['browserName'] == 'internet explorer'):
-        time.sleep(2)
         Global.driver.get("javascript:document.getElementById('overridelink').click();")
 
     ConfigureLogging(config, browser, platform)
@@ -187,13 +170,12 @@ def RunTests(tests, platform, browser, config, url, count, test_runner):
                     if submodule_test['hiptest_name']:
                         Global.testCount += 1
                     expect_pass = submodule_test['expect_pass']
-                    result = RunTest(submodule_test, report, test_runner)
+                    result = RunTest(submodule_test, report, test_runner) 
             else:
                 if test['hiptest_name']:
                     Global.testCount += 1
                 expect_pass = test['expect_pass']
                 result = RunTest(test, report, test_runner)
-
         # finalize the test report
         totalTime = time.time() - startTime
         report.write('\n\nTotal Test Time: %d seconds\n' % totalTime)
@@ -236,11 +218,6 @@ def TestConfig(config, connections, tests):
 
     # merge test report
     MergeTestReports(config, connections)
-    # MergeTestReportsMultipleUsers(config, connections)
-    # Stop hub and node
-    # cmd = 'ps aux | grep java | grep selenium | awk \'{ print $2; }\' | xargs kill'
-    # subprocess.call('ps aux | grep java | grep selenium | awk \'{ print $2; }\' | xargs kill', shell=True)
-
 
 if __name__ == '__main__':
     """Order of events is:
@@ -276,9 +253,7 @@ if __name__ == '__main__':
 
         #config_file = usrdef['seleniumDir'] + '/' + usrdef['inputfilesDir'] + '/configurations.json'
         open(parsed_config['Config']['log_path'] + 'ample_ch_li.log', "w+").close()
-        time.sleep(2)
         open(parsed_config['Config']['log_path'] + 'ample_in_WI.log', "w+").close()
-        time.sleep(2)
         # Get test connections
         # In template, there are:seconds
         #  parsed_connections["Connections"] - ample ip address
@@ -291,8 +266,8 @@ if __name__ == '__main__':
             # kick off the test
 
         TestConfig(parsed_config['Config'], parsed_connections['Connections'], parsed_json['Tests'])
-        FindAndReplace(usrdef['seleniumDir'], usrdef['internet_explorer_machine_ip'], 'internet_explorer_machine_ip', "Utilities_Framework.py")
-        if parsed_config['Email']['enabled']:
+        #FindAndReplace(usrdef['seleniumDir'], usrdef['internet_explorer_machine_ip'], 'internet_explorer_machine_ip', "Utilities_Framework.py")
+        if parsed_userdefinedtmp['user_defined']['email_send_testreport']:
             EmailAttachment(parsed_config['Email']['attachments'], parsed_config['Email']['recipients'], parsed_config['Email']['subject_line'])
     else:
         print('Missing input file')

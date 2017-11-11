@@ -1873,7 +1873,10 @@ def FlashDevice(path_to_rsa_key=None, target_version=None, ipaddr=None, portNumb
         return Global.FAIL, testComment
 
     # Start the flash
-    FlashUnitFromSSD(ipaddr, path_to_rsa_key, target_version, portNumber, networktype)
+    flashstatus = FlashUnitFromSSD(ipaddr, path_to_rsa_key, target_version, portNumber, networktype)
+    if not(flashstatus):
+        printFP("INFO - Device did not Flash from ssh")
+        return Global.FAIL, 'Device could not flash unit from SSH'
 
     # Wait for the device to finish rebooting
     flash_complete = CheckIfFlashComplete(ipaddr, path_to_rsa_key, target_version, portNumber, networktype)

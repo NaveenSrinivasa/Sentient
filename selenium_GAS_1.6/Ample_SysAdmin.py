@@ -714,7 +714,7 @@ def VerifySensorGateWayDetails():
     rows = GetElements(commServerTbody, By.TAG_NAME, 'tr')
     result = Global.PASS
     printFP("INFO - Verifying Headers")
-    correctHeaders = ["Name", "Host", "Port", "Master DNP Address", "Uptime", "Status", "Last Modified", "Description", "Firmware Version", "Actions"]
+    correctHeaders = ["Name", "Host", "Port", "Master DNP Address", "Uptime", "Status", "Last Modified", "Description", "Software Version", "Actions"]
     tableheaders = GetElements(Global.driver, By.XPATH, "//th[@ng-repeat='column in columns' or contains(text(),'Actions')]")
     headers = []
     for i in range(len(tableheaders)):
