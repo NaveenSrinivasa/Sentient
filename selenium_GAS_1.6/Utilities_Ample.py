@@ -487,6 +487,7 @@ def GoToUserMan():
     GetElement(Global.driver, By.LINK_TEXT, 'User Management').click()
 
 def UploadMTF(fileName):
+    time.sleep(2)
     fileUpload = GetElement(Global.driver, By.ID, 'mFile')
     time.sleep(5)
     fileUpload.send_keys(fileName)
@@ -4632,3 +4633,68 @@ def selectFiltersByProfileStatus(profile_status_list):
             printFP("INFO - Test could not find fw version %s" %(profile_status_list[i]))
     return True
 
+def GoToRootNodeAndClickOnRegion():
+    rootElement = GetElement(Global.driver, By.XPATH, '//*[@id="node-1"]')
+    try:
+        if rootElement.get_attribute('collapsed') == 'true':
+            rootElement.click()
+            time.sleep(1)
+        else:
+            GetRootNode()
+            time.sleep(1)
+            region = GetElement(Global.driver, By.XPATH, "//span[contains(@class,'REGION-name')]")
+            JustClick(region)
+    except:
+        testComment = 'TEST FAIL - Unable to click on region'
+        printFP(testComment)
+        return Global.FAIL, testComment
+
+def CheckFiltersInSite():
+    fwversion = GetElement(Global.driver, By.XPATH, "//span[@options='fwVersionSelection.list']/div/button")
+    fwstatus = GetElement(Global.driver, By.XPATH, "//span[@options='fwUpgradeStatusSelection.list']/div/button")
+    nwgroup = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
+    serialnumber = GetElement(Global.driver, By.XPATH, "//input[@ng-model='deviceSearch']")
+    if fwversion.is_displayed() and fwstatus.is_displayed() and nwgroup.is_displayed() and serialnumber.is_displayed():
+        testComment = 'TEST FAIL - Filters are present when user is in site.'
+        printFP(testComment)
+        return Global.FAIL, testComment
+    else:
+        testComment = 'TEST PASS - Filters are NOT present when user is in site.'
+        printFP(testComment)
+        return Global.PASS, testComment
+
+def CheckPageButtonLinkAccessibility(xpathofelement, expectedstatus, xpathtonavigate=None):
+
+    if not xpathtonavigate == None:
+        GetElement(Global.driver, By.XPATH, xpathtonavigate).click()
+
+    if 'disabled' in expectedstatus:
+        try:
+            link = GetElement(Global.driver, By.XPATH, xpathofelement)
+            if 'disabled' in link.get_attribute('class'):
+                pass
+            else:
+                link.click()
+                Global.driver.refresh()
+                time.sleep(1)
+                testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
+                return False, testComment
+        except Exception as e:
+            printFP(e.message)
+            Global.driver.refresh()
+            time.sleep(1)
+            return False, e.message
+
+    elif 'enabled' in expectedstatus:
+        try:
+            link = GetElement(Global.driver, By.XPATH, xpathofelement)
+            if 'disabled' in link.get_attribute('class'):
+                testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
+                return False, testComment
+        except Exception as e:
+            printFP(e.message)
+            Global.driver.refresh()
+            time.sleep(1)
+            return False, e.message
+
+    return True, ''

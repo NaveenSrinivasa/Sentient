@@ -16,6 +16,7 @@ def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
         testComment = 'Test could not navigate to Go To Sys Admin'
         printFP('INFO - ' + testComment)
         return Global.FAIL, 'TEST FAIL - ' + testComment
+    time.sleep(1)
 
     #Json file contains all edits wish to be made on SGW
     params = ParseJsonInputFile(editjson)
@@ -25,7 +26,7 @@ def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
     if row:
         result = Global.PASS
         ClickButton(row, By.XPATH, 'td[4]/div/span[1]')
-        time.sleep(2)
+        time.sleep(5)
         tabs = params.keys()
         #for each tab, it will go through that tab's dictionary and fill out the fields
         #please reference example json file for more information
@@ -34,7 +35,7 @@ def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
                 GetElement(Global.driver, By.ID, tabs[i]).click()
             except:
                 pass
-            time.sleep(1)
+            time.sleep(5)
             keys = params[tabs[i]].keys();
             for key in keys:
                 if not (key == 'allow.time.sync' or key == 'default.device.unsolicited.enable'):
@@ -48,13 +49,14 @@ def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
                     location = GetElement(Global.driver, By.XPATH, "//span[@tooltip='"+key+"']/parent::span[@class='pull-left input-label']/following-sibling::span[@class='input-fields']/div/div")
                     if not params[tabs[i]][key].lower() in location.get_attribute('class'):
                         GetElement(location, By.XPATH, 'span[1]').click()
-            time.sleep(1)
+            time.sleep(3)
         GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Update')]").click()
-        time.sleep(1)
+        time.sleep(3)
         try:
             msg = GetElement(Global.driver, By.XPATH, "//div[contains(@class, 'alert-danger')]/div/span").text
             printFP('INFO - ' + msg)
             GetElement(Global.driver, By.CLASS_NAME, 'close-icon').click()
+            time.sleep(5)
             return Global.FAIL, 'TEST FAIL - ' + msg
         except:
             GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Close')]").click()
@@ -322,12 +324,17 @@ def AddNetworkGroup(input_json=None, comm_server_name=None):
     body = GetElement(Global.driver, By.CLASS_NAME, 'section-body')
     textbox = GetElement(body, By.TAG_NAME, 'textarea')
     textbox.send_keys(params['description'])
+    time.sleep(2)
     inElement = GetElement(body, By.XPATH, '//fieldset[1]/span[2]/input')
     inElement.send_keys(params['input'][0])
+    time.sleep(2)
     inElement = GetElement(body, By.XPATH, '//fieldset[4]/span[2]/input')
     inElement.send_keys(params['input'][1])
+    time.sleep(2)
     result = Global.PASS
+    time.sleep(3)
     GetElement(Global.driver, By.XPATH, '//div[3]/button[2]').click()
+    time.sleep(2)
 
     #checks if there are any warning messages after clicking OK
     try:
@@ -356,6 +363,7 @@ def DeleteNetworkGroup(comm_server_name=None, network_group_deleted=None, checkU
 
     #finds network group for the given SGW
     row, testComment = FindNetworkGroupRow(comm_server_name, network_group_deleted)
+    print row
     if row:
         result = Global.PASS
         #deletes network group by clicking delete for a network group
@@ -365,7 +373,7 @@ def DeleteNetworkGroup(comm_server_name=None, network_group_deleted=None, checkU
         printFP("Title: %s" %title)
         if "Delete" in title:
             GetElement(Global.driver, By.XPATH, '//button[text()="Ok"]').click()
-            time.sleep(1)
+            time.sleep(5)
             body = GetElement(Global.driver, By.CLASS_NAME, 'modal-body')
             if not 'The network group deleted successfully.' in GetElement(body, By.TAG_NAME, 'p').text:
                 result = Global.FAIL
@@ -388,10 +396,9 @@ def DeleteNetworkGroup(comm_server_name=None, network_group_deleted=None, checkU
                 testComment = "Test was unable to get to desired location based on input file"
                 printFP('INFO - ' + testComment)
                 return Global.FAIL, 'TEST FAIL - ' + testComment
-            time.sleep(1)
+            time.sleep(3)
             for i in range(len(devices)):
-                printFP("INFO - Trying to find device: %s" %(devices[i]))
-                classValue = GetElement(Global.driver, By.XPATH, "//span[a='"+devices[i]+"']/../../td[4]/span").get_attribute('class')
+                classValue = GetElement(Global.driver, By.XPATH, "//td[span='"+devices[i]+"']/following-sibling::td[2]/span").get_attribute('class')
                 if classValue != 'glyphicon glyphicon-transfer':
                     result = Global.FAIL
             if result == Global.FAIL:
@@ -475,7 +482,7 @@ def CloneNetworkGroup(comm_server_name=None, network_group=None, clone_info=None
         GetElement(Global.driver, By.ID, 'masterDnpAddress').send_keys(params['Master DNP Address'])
         footer = GetElement(Global.driver, By.CLASS_NAME, 'modal-footer')
         GetElement(footer, By.XPATH, 'button[2]').click()
-        time.sleep(1)
+        time.sleep(5)
         body = GetElement(Global.driver, By.CLASS_NAME, 'modal-body')
         msg = GetElement(body, By.TAG_NAME, 'p').text
         printFP('INFO - ' + msg)
@@ -522,7 +529,7 @@ def CloneNetworkGroup(comm_server_name=None, network_group=None, clone_info=None
     return result, (('TEST PASS - ' + testComment) if result == Global.PASS else ('TEST FAIL - ' + testComment))
 
 def EditSGWParameterOutsideRange(input_json=None, comm_server_name=None):
-    if not(input_json and comm_server_name):
+    if not input_json:
         testComment = 'Test is missing mandatory parameter(s).'
         printFP(testComment)
         return Global.FAIL, testComment
@@ -530,6 +537,7 @@ def EditSGWParameterOutsideRange(input_json=None, comm_server_name=None):
     params = ParseJsonInputFile(input_json)
 
     GoToSysAdmin()
+    time.sleep(2)
 
     retval, comment = OpenEditForSGW(comm_server_name)
     if retval == Global.FAIL:
@@ -555,7 +563,7 @@ def EditSGWParameterOutsideRange(input_json=None, comm_server_name=None):
             except:
                 printFP("INFO - Test could not locate input field within this tab. Skipping key %s" %tabKeys[j])
                 continue
-            
+
             defaultvalue = inputfield.get_attribute('value')
             for k in range(2):
                 ClearInput(inputfield)
@@ -569,16 +577,16 @@ def EditSGWParameterOutsideRange(input_json=None, comm_server_name=None):
 
                 try:
                     alertElement = GetElement(Global.driver, By.XPATH, "//div[@class='alert ng-isolate-scope alert-dismissable alert-danger']/div/span")
-                    printFP("Alert message: %s" %alertElement.text)
-                    if str(tabKeys[j]) in alertElement.text or 'Please correct the errors on the form.' in alertElement.text:
-                        printFP("INFO - %s field caused an error." %tabKeys[j])
-                    else:
-                        result = Global.FAIL
-                    ClearInput(inputfield)
-                    inputfield.send_keys(defaultvalue)
                 except:
                     printFP("INFO - Test was unable to get an alert for this element")
                     result = Global.FAIL
+                printFP("Alert message: %s" %alertElement.text)
+                if str(tabKeys[j]) in alertElement.text or 'Please correct the errors on the form.' in alertElement.text:
+                    printFP("INFO - %s field caused an error." %tabKeys[j])
+                else:
+                    result = Global.FAIL
+            ClearInput(inputfield)
+            inputfield.send_keys(defaultvalue)
 
     GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
     if result == Global.PASS:
@@ -597,7 +605,7 @@ def EditSGWSetting(input_json=None, comm_server_name=None):
     params = ParseJsonInputFile(input_json)
 
     GoToSysAdmin()
-    Global.driver.refresh()
+    time.sleep(2)
 
     retval, comment = OpenEditForSGW(comm_server_name)
     if retval == Global.FAIL:
@@ -706,58 +714,40 @@ def VerifySensorGateWayDetails():
     inputElements = GetElements(Global.driver, By.TAG_NAME, 'input')
     for x in inputElements:
         if x.get_attribute('type') == 'checkbox':
-            SetCheckBox(x, "true")
+            try:
+                SetCheckBox(x, "true")
+            except:
+                pass
 
     ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_comm_header_btn'])
 
     commServerTbody = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_comm_table'])
     rows = GetElements(commServerTbody, By.TAG_NAME, 'tr')
     result = Global.PASS
-    printFP("INFO - Verifying Headers")
-    correctHeaders = ["Name", "Host", "Port", "Master DNP Address", "Uptime", "Status", "Last Modified", "Description", "Firmware Version", "Actions"]
-    tableheaders = GetElements(Global.driver, By.XPATH, "//th[@ng-repeat='column in columns' or contains(text(),'Actions')]")
-    headers = []
-    for i in range(len(tableheaders)):
-        if tableheaders[i].text != 'Actions':
-            string = str(GetElement(tableheaders[i], By.XPATH, 'div').text)
-            if 'Last Modified' in string:
-                string = 'Last Modified'
-            headers.append(string)
-        else:
-            headers.append(tableheaders[i].text)
-
-    if not(sorted(headers) == sorted(correctHeaders)):
-        testComment = 'The displayed table headers for the Sensor Gateways in System Admin is incorrect.'
-        printFP("INFO - " + testComment)
-        return Global.FAIL, testComment
-    else:
-        printFP("INFO - SGW Displayed Headers Match.")
-
     for row in rows:
-        onlineStatus = True
+        sgw_flag = True
         edit_gateway_flag = True
         add_network_flag = True
-        #Each iteration from 1-11 represents the column of the sensor gateway table inside System Admin
-        #Hence, 1 presents the first, while 11 represents the 11th.
         for i in range(1,12):
             if i == 1:
                 if 'toggle-icon disabled' in GetElement(row, By.XPATH, 'td[1]/i').get_attribute('class'):
-                    printFP("INFO - Toggle Button for show/hide Network Groups does not exist")
-                    result = Global.FAIL
+                    printFP("Toggle Button for show/hide Network Groups does not exist")
+                    sgw_flag = False
                 else:
-                    printFP("INFO - Toggle Button for show/hide Network Groups exist")
-            elif i == 5:
-                masterDNP = GetElement(row, By.XPATH, 'td[5]/span').text
-                if not('NA' == masterDNP):
-                    printFP("INFO - Master DNP Address should be NA. For this SGW, it is %s."%(masterDNP))
-                    result = Global.FAIL
-                else:
-                    printFP("INFO - Master DNP Address is NA, which is correct")
+                    printFP("Toggle Button for show/hide Network Groups exist")
             elif i == 7:
                 classval = GetElement(row, By.XPATH, 'td[7]/span').get_attribute('class')
-                if not(classval == 'icon ion-checkmark-circled'):
+                if classval == 'icon ion-checkmark-circled':
+                    onlineStatus = True
+                else:
                     onlineStatus = False
-            elif i == 11:
+            elif i > 1 and i < 11:
+                textval = GetElement(row, By.XPATH, 'td['+str(i)+']/span').text
+                if textval:
+                    print textval
+                else:
+                    print("No value was provided.")
+            else:
                 try:
                     GetElement(row, By.XPATH, 'td[11]/div/span[1]').click()
                     time.sleep(1)
@@ -768,7 +758,7 @@ def VerifySensorGateWayDetails():
                 except:
                     printFP("Error trying to get title of Editting Sensor Gateway")
                     edit_gateway_flag = False
-                time.sleep(1)
+                time.sleep(3)
                 try:
                     GetElement(row, By.XPATH, 'td[11]/div/span[2]').click()
                     time.sleep(1)
@@ -780,16 +770,22 @@ def VerifySensorGateWayDetails():
                 except:
                     printFP("Error trying to get title of Adding Network Group")
                     add_network_flag = False
-                time.sleep(1)
+                time.sleep(3)
 
-        if onlineStatus == edit_gateway_flag == add_network_flag:
-            printFP("INFO - This is an %s sensor gateway." %('online' if onlineStatus else 'offline'))
+        if onlineStatus and sgw_flag and edit_gateway_flag and add_network_flag:
+            printFP("INFO - This is an online sensor gateway.")
+        elif (not onlineStatus) and sgw_flag and (not edit_gateway_flag) and (not add_network_flag):
+            printFP("INFO - This is an offline sensor gateway.")
+        elif (onlineStatus and (not sgw_flag) and edit_gateway_flag and (not add_network_flag)):
+            printFP("INFO - This is an online legacy comm server.")
+        elif (not onlineStatus) and (not sgw_flag) and (not edit_gateway_flag) and (not add_network_flag):
+            printFP("INFO - This is an offline legacy comm server.")
         else:
-            printFP("INFO - This sensor gateway is incorrect.")
+            printFP("INFO - This sensor gateway/comm server is incorrect.")
             result = Global.FAIL
 
     if result == Global.FAIL:
-        testComment = 'Test failed and there were things wrong with the System Admin SGW screen. Refer to log.'
+        testComment = 'Test failed and certain displays were not available'
     else:
         testComment = 'Test passed and all displays were displayed correctly'
 
@@ -819,11 +815,11 @@ def UploadMTFTest(mtf_full_path=None, wait_for_online=True):
                 except:
                     pass
     GoToSysAdmin()
-    time.sleep(2)
+    time.sleep(5)
     UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
-    time.sleep(1)
+    time.sleep(2)
     ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(1)
+    time.sleep(20)
     returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
     if "The file has been uploaded successfully." in returnMessage:
         printFP("INFO - MTF upload message: %s" % returnMessage)
@@ -868,6 +864,7 @@ def VerifyUploadDetails(file_path=None, wait_for_online=False, Status=None, impo
 
     GoToSysAdmin()
     uploadtime = strftime('%m/%d/%Y %I:%M %p')
+    print('Current time: '+uploadtime)
     if importType == 'MTF':
         UploadMTFTest(file_path, wait_for_online)
     elif importType == 'Firmware':
@@ -880,7 +877,7 @@ def VerifyUploadDetails(file_path=None, wait_for_online=False, Status=None, impo
     result = Global.PASS
     for i in range(1,5):
         if importType == 'MTF':
-            time.sleep(1)
+            time.sleep(5)
             firstRow = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_firstrow'])
         else:
             firstRow = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_upload_firmware_firstrow'])

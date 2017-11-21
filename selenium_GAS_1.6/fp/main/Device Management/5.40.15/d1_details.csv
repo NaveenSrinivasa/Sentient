@@ -1,2 +1,7 @@
+<<<<<<< HEAD:selenium_GAS_1.6/fp/main/Device Management/5.40.15/d1_details.csv
 Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Latitude,Longitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
 d1_region,d1_sub,d1_feeder,d1_site,d1_phase,d1_name,d1_type,d1_swversion,d1_platform,d1_lat,d1_long,d1_macaddress,d1_ipaddress,d1_dnpaddr,d1_description,d1_daport,sensor_gw1_name,d1_sei,,d1_networktype,networkgroup1_name,
+=======
+Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Latitude,Longitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
+d1_region,d1_sub,d1_feeder,d1_site,d1_phase,d1_name,d1_type,d1_swversion,d1_platform,d1_lat,d1_long,d1_macaddress,d1_ipaddress,d1_dnpaddr,d1_description,d1_daport,sensor_gw1_name,d1_sei,,d1_networktype,networkgroup1_name,
+>>>>>>> 6ac90ed... Persistence Of filters - Performed Unit testing with available test data for Inactive device tab:selenium_GAS_1.6/fp/main/OTAP/d1_action.csv

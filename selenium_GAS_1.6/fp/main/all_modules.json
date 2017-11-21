@@ -12,8 +12,8 @@
             "test_json": "seleniumDir/inputfilesDir/Disturbance_Testcases.json"
         },
         {
-            "Module": "User Management Tests",
-            "skip": false,
+            "Module": "Add User Tests",
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/UserManagement_Testcases.json"
         },
         {
@@ -23,7 +23,7 @@
         },
         {
             "Module": "System Admin Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "seleniumDir/inputfilesDir/SystemAdmin_Testcases.json"
         },
         {
@@ -33,12 +33,12 @@
         },
         {
             "Module": "Device Upgrade Tests",
-            "skip": false,
-            "test_json": "seleniumDir/inputfilesDir/DeviceUpgrade_Testcases.json"
+            "skip": true,
+            "test_json": "seleniumDir/inputfilesDir/OTAP_Testcases.json"
         },
         {
             "Module": "Device Management Tests",
-            "skip": true,
+            "skip": false,
             "test_json": "seleniumDir/inputfilesDir/DeviceManagement_Testcases.json"
         },
         {

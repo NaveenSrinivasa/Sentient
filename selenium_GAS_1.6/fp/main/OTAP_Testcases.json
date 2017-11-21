@@ -1,0 +1,316 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "username": "username_valid",
+            "password": "password_valid"
+        },
+        {
+            "method_name": "RemoveActionsColumnFromUpgradeTable",
+            "hiptest_name": "Remove actions column from upgrade table",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "ColumnListChanges",
+            "hiptest_name": "Column list changes",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "NoFiltersAtSiteLevelSelectionExistingSiteSelection",
+            "hiptest_name": "No filters at site level selection Existing Site selection",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_reg_name.json"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "NoFiltersAtSiteLevelSelectionSelectASiteWithoutData",
+            "hiptest_name": "No filters at site level selection - Select a site without data",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_reg_name.json"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "NoFiltersAtSiteLevelSelectionSelectASiteWithData",
+            "hiptest_name": "No filters at site level selection - Select a site with data",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_reg_name.json"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "NoFiltersAtSiteLevelSelectionNewNodeCreationViaGroupTree",
+            "hiptest_name": "No filters at site level selection - New node creation via Group tree",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_reg_name.json"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "OrganizationNodeLevelDisplayAndServerSidePagination",
+            "hiptest_name": "Organization node level display and server side pagination",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path1": "seleniumDir/inputfilesDir/OTAP/dvm_reg_sub_feeder_names.json",
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action301.csv"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "b19"
+        },
+        {
+            "method_name": "FirmwareUpgradeList",
+            "hiptest_name": "Firmware Upgrade List",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_reg_names.json",
+            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action (copy).csv",
+            "onlinedev": "device_1",
+            "offlinedev": "dummydevice"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "dummyregion"
+        },
+        {
+            "method_name": "OTAPWrongUpdateSetting",
+            "hiptest_name": "Upgrade Negative Test FW Upgrade Settings Day Restriction",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Upgrade/d1_reg_names.json",
+            "device_name" : ["device_1"],
+            "target_version" : "2.6.0",
+            "actionButton" : false,
+            "time_or_day": "Day"
+        },
+        {
+            "method_name": "FirmwareUpgradeButtonDisabledWithoutDevicesSelected",
+            "hiptest_name": "Firmware Upgrade Button Disabled Without Devices Selected",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "OTAPCheckOfflineDeviceUpgrade",
+            "hiptest_name": "Firmware Upgrade Button Disabled When Offline or Unregistered Devices Selected",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_reg_names.json",
+            "device_name": "device_1",
+            "waitOnline": false,
+            "commserver": "sensor_gw1_name",
+            "networkgroup": "networkgroup1_name"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "SetUpgradeRetries",
+            "hiptest_name": "Set Upgrade Retries",
+            "skip": true,
+            "expect_pass": true
+        },
+        {
+            "method_name": "SearchForSerialNumber",
+            "hiptest_name": "Search For Serial Number",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "DeviceFiltersForUpgradePage",
+            "hiptest_name": "Filters with Apply button",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "page": "Upgrade",
+            "fw_list":["2.6.1"],
+            "fw_status_list": ["(BLANKS)"],
+            "network_group_list": ["seleniumtest_group"],
+            "serial_number": "at-ssn19"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "ConfigureFwUpgradeSettingsStartTimeLaterThanEndTime",
+            "hiptest_name": "Configure Fw Upgrade Settings Start Time Later Than End Time",
+            "skip": true,
+            "expect_pass": true        
+        },
+        {
+            "method_name": "OTAPWrongUpdateSetting",
+            "hiptest_name": "Configure Fw Upgrade Settings Start Time Later Than End Time",
+            "skip": true,
+            "expect_pass": true,
+            "input_file_path": "seleniumDir/inputfilesDir/Device Upgrade/d1_reg_names.json",
+            "device_name" : ["device_1"],
+            "target_version" : "2.6.1",
+            "actionButton" : false,
+            "time_or_day": "Time"
+        },
+        {
+            "method_name": "UpgradeMultipleDeviceswithDifferentSoftwareVersions",
+            "hiptest_name": "Upgrade Multiple Devices with Different Software Versions",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_file_path1": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "mtf_file_path2": "seleniumDir/inputfilesDir/OTAP/d2_action.csv",
+            "wait_for_online1": true,
+            "wait_for_online2": true
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d2_region"
+        },
+        {
+            "method_name": "DeleteDeviceWhileUpgradeInProgress",
+            "hiptest_name": "Delete Device While Upgrade In Progress",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "wait_for_online": true,
+            "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_reg_sub_names.json"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "VerifyNumberOfDevicesSelectedForUpgrade",
+            "hiptest_name": "Verify Number of Devices Selected For Upgrade",
+            "skip": true,
+            "expect_pass": true,
+            "mtf_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "d1_region"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true
+        }
+    ]
+}

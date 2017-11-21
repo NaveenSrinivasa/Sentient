@@ -29,6 +29,8 @@ from Ample_SysAdmin_MTF import *
 from testdebug import *
 from Ample_DevMan_ManageDevices import *
 from Ample_LinMon_LogI import *
+from Ample_OTAP import *
+
 
 
 
@@ -44,7 +46,7 @@ def Sleep(sleep_time):
 
 def ConfigureLogging(parsed_config, browser, platform):
     configured_log_level = parsed_config['log_level'].lower()
-    Global.info = configured_log_level
+    Global.loglevel = configured_log_level
     if configured_log_level == 'debug':
         log_level = logging.DEBUG
     elif configured_log_level == 'info':
@@ -201,8 +203,8 @@ def RunTests(tests, platform, browser, config, url, count, test_runner):
         report.write('Total PASS: %d\n' % Global.totalPass)
         report.write('Total FAIL: %d\n\n' % Global.totalFail)
         report.write('--------------------------------------\n\n')
-    Global.driver.close()
-    Global.driver.quit()
+    #Global.driver.close()
+    #Global.driver.quit()
 
 
 def TestConfig(config, connections, tests):
@@ -219,7 +221,7 @@ def TestConfig(config, connections, tests):
 
     threads = []
     for platform in connections['platforms']:
-        print('\nPlatform: %s' %platform)
+        print('Platform: %s' %platform)
         for browser in connections['browsers']:
             print('Browser: %s' %browser)
             if browser == 'internet explorer' and platform == 'linux':
@@ -291,7 +293,7 @@ if __name__ == '__main__':
             # kick off the test
 
         TestConfig(parsed_config['Config'], parsed_connections['Connections'], parsed_json['Tests'])
-        FindAndReplace(usrdef['seleniumDir'], usrdef['internet_explorer_machine_ip'], 'internet_explorer_machine_ip', "Utilities_Framework.py")
+        #FindAndReplace(usrdef['seleniumDir'], usrdef['internet_explorer_machine_ip'], 'internet_explorer_machine_ip', "Utilities_Framework.py")
         if parsed_config['Email']['enabled']:
             EmailAttachment(parsed_config['Email']['attachments'], parsed_config['Email']['recipients'], parsed_config['Email']['subject_line'])
     else:
