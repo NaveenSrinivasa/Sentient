@@ -1,4 +1,5 @@
 Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
-SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite1,B,aaaa,MM3,2.4.3,corgi,,,00:0c:29:e1:80:aa,192.168.2.227,30001,note1,20000,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,Production
-SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite1,C,aaab,MM3,2.4.3,corgi,,,00:0c:29:e1:80:ab,192.168.2.227,30002,note1,20001,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,Maintenance
-SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite1,A,aaac,MM3,2.4.3,corgi,,,00:0c:29:e1:80:ac,192.168.2.227,30003,note1,20002,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,Non-Production
+SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite2,B,aaaa,MM3,2.4.3,corgi,,,00:0c:29:e1:80:aa,192.168.2.227,30001,note1,20000,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite3,C,aaab,MM3,2.4.3,corgi,,,00:0c:29:e1:80:ab,192.168.2.227,30002,note1,20001,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite4,A,aaac,MM3,2.4.3,corgi,,,00:0c:29:e1:80:ac,192.168.2.227,30003,note1,20002,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
+SelTestReg1,SelTestSub2,SelTestFeeder1,SelTestSite5,B,aaad,MM3,2.4.3,corgi,,,00:0c:29:e1:80:ad,192.168.2.227,30004,note1,20003,host46_sgw1,0-00001-05,,SSN,seleniumtest_group,
