@@ -88,7 +88,7 @@
         },
         {
             "method_name": "NoFiltersAtSiteLevelSelectionNewNodeCreationViaGroupTree",
-            "hiptest_name": "No filters at site level selection New node creation via Group tree",
+            "hiptest_name": "No filters at site level selection - New node creation via Group tree",
             "skip": true,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
@@ -121,10 +121,10 @@
         {
             "method_name": "FirmwareUpgradeList",
             "hiptest_name": "Firmware Upgrade List",
-            "skip": false,
+            "skip": true,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/OTAP/d1_reg_names.json",
-            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
+            "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action (copy).csv",
             "onlinedev": "device_1",
             "offlinedev": "dummydevice"
         },
@@ -217,7 +217,7 @@
             "expect_pass": true,
             "mtf_full_path": "seleniumDir/inputfilesDir/OTAP/d1_action.csv",
             "page": "Upgrade",
-            "fw_list":["2.4.3"],
+            "fw_list":["2.6.1"],
             "fw_status_list": ["(BLANKS)"],
             "network_group_list": ["seleniumtest_group"],
             "serial_number": "at-ssn19"

@@ -2613,4 +2613,3 @@ def PersistenceOfFilters(input_file_path, tabname, selectfilters, navigate_by, g
         testComment = 'TEST PASS - All filters are working fine.'
         printFP(testComment)
         return Global.PASS, testComment
-   

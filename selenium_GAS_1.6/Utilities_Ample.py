@@ -487,6 +487,7 @@ def GoToUserMan():
     GetElement(Global.driver, By.LINK_TEXT, 'User Management').click()
 
 def UploadMTF(fileName):
+    time.sleep(2)
     fileUpload = GetElement(Global.driver, By.ID, 'mFile')
     time.sleep(5)
     fileUpload.send_keys(fileName)

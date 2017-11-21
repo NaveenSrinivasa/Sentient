@@ -1935,7 +1935,7 @@
         {
             "method_name": "PersistenceOfFilters",
             "hiptest_name": "Non-Persistence of Filter selection and Data in the Device Management->Configuration screen when user Logs out and relogs in - Organization",
-            "skip": true,
+           "skip": true,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Management/d1_reg_sub_feeder_names.json",
             "tabname": "Configurations",
@@ -1959,7 +1959,7 @@
         {
             "method_name": "PersistenceOfFilters",
             "hiptest_name": "Non-Persistence of Filter selection and Data in the Device Management->Configuration screen when user Logs out and relogs in - Region",
-            "skip": true,
+           "skip": true,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Management/d1_reg_sub_feeder_names.json",
             "tabname": "Configurations",
@@ -1983,7 +1983,7 @@
         {
             "method_name": "PersistenceOfFilters",
             "hiptest_name": "Non-Persistence of Filter selection and Data in the Device Management->Configuration screen when user Logs out and relogs in - Sub-station",
-            "skip": true,
+           "skip": true,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Management/d1_reg_sub_feeder_names.json",
             "tabname": "Configurations",
@@ -2007,7 +2007,7 @@
         {
             "method_name": "PersistenceOfFilters",
             "hiptest_name": "Non-Persistence of Filter selection and Data in the Device Management->Configuration screen when user Logs out and relogs in - Feeder",
-            "skip": true,
+           "skip": true,
             "expect_pass": true,
             "input_file_path": "seleniumDir/inputfilesDir/Device_Management/d1_reg_sub_feeder_names.json",
             "tabname": "Configurations",
@@ -2046,11 +2046,11 @@
             "profile_status_list":[],
             "device_status_list":[],
             "fw_version_list":["2.6.1"],
-            "fw_status_list":["SUCCESS", "FAILED", "UNREALIABLE CONNECTION"],
+            "fw_status_list":["UPGRADE_COMPLETE"],
             "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":[],
-            "serial_number_list":["device_1"]
+            "serial_number_list":["at-ssn17"]
         },
         {
             "method_name": "PersistenceOfFilters",
@@ -2535,7 +2535,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2559,7 +2559,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2583,7 +2583,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2607,7 +2607,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2727,7 +2727,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2751,7 +2751,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2775,7 +2775,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2799,7 +2799,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2823,7 +2823,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2847,7 +2847,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2871,7 +2871,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -2895,7 +2895,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -3015,7 +3015,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -3039,7 +3039,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -3063,7 +3063,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]
@@ -3087,7 +3087,7 @@
             "device_status_list":["OFFLINE"],
             "fw_version_list":[],
             "fw_status_list":[],
-            "nw_grp_list":["seleniumtest_group"],
+            "nw_grp_list":["networkgroup1_name"],
             "comm_type_list":[],
             "device_state_list":["Production"],
             "serial_number_list":["aaaa"]

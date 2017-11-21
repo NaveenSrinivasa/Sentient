@@ -815,11 +815,11 @@ def UploadMTFTest(mtf_full_path=None, wait_for_online=True):
                 except:
                     pass
     GoToSysAdmin()
-    time.sleep(2)
+    time.sleep(5)
     UploadMTF('/tmp/UploadMTFTest'+mtf_full_path[mtf_full_path.rfind('.'):])
-    time.sleep(1)
+    time.sleep(2)
     ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(1)
+    time.sleep(20)
     returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
     if "The file has been uploaded successfully." in returnMessage:
         printFP("INFO - MTF upload message: %s" % returnMessage)

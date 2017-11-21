@@ -23,7 +23,7 @@ def SpawnBrowser(browser, platform):
         driver = webdriver.Remote(command_executor='http://localhost:4444/wd/hub', desired_capabilities=desired)
         session_id = driver.session_id # To get current Session ID
         print('session_id : %s' %session_id)
-        driver.session_id = '39f272cf-2d6b-4f96-aa30-beb44055ce6b' # To connect with your desirable session
+        #driver.session_id = '54d74fe6-7153-4b37-b8a6-cdf1f741f3f4' # To connect with your desirable session
 
     elif browser == 'firefox':
         desired = DesiredCapabilities.FIREFOX.copy()
@@ -41,9 +41,9 @@ def SpawnBrowser(browser, platform):
         print('desired: %s' % desired)
         if '11' in browser:
             # driver = webdriver.Remote(command_executor='http://10.16.56.154:5555/wd/hub', desired_capabilities=desired)
-            driver = webdriver.Remote(command_executor='http://172.20.3.50:5555/wd/hub', desired_capabilities=desired)
+            driver = webdriver.Remote(command_executor='http://10.16.16.163:5555/wd/hub', desired_capabilities=desired)
         elif '10' in browser:
-            driver = webdriver.Remote(command_executor='http://172.20.3.49:5555/wd/hub', desired_capabilities=desired)
+            driver = webdriver.Remote(command_executor='http://172.20.3.112:5555/wd/hub', desired_capabilities=desired)
     return driver
 
 def CreateSubMTF(mtf_file_path, browsers, platforms):
