@@ -7,6 +7,9 @@ EXCEPTION = 4
 
 # path to the mtf file where device information is held
 mtfPath = ''
+reportPath = ''
+testResourcePath = ''
+deviceFolderPath = ''
 
 # dictionary of serial:deviceInfo
 devices = {}

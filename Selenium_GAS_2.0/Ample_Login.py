@@ -1,5 +1,4 @@
 # TEST_AmpleLogin.py
-import Global
 from Utilities_Ample import *
 
 def Login(username, password):
@@ -15,7 +14,6 @@ def Login(username, password):
 
     # find the username field and enter a username
     SendKeys(inputElement, username)
-    # inputElement.send_keys(usrname)
 
     # fine the password field and enter the password
     inputElement = GetElement(Global.driver, By.ID, 'j_password')
@@ -32,9 +30,17 @@ def Login(username, password):
         return Global.FAIL, 'TEST FAIL - ' + testComment
 
 def Logout():
-    ClickButton(Global.driver, By.XPATH, xpaths['dash_person_dropdown'])
+    if not(ClickButton(Global.driver, By.XPATH, xpaths['dash_person_dropdown'])):
+        testComment = 'Test could not click Dash.'
+        printFP("INFO - " + testComment)
+        return Global.EXCEPTION, testComment
+
     time.sleep(2)
-    ClickButton(Global.driver, By.XPATH, "//a[text()='Log out']")
+    if not(ClickButton(Global.driver, By.XPATH, "//a[text()='Log out']")):
+        testComment = 'Test could not click Log Out Link After Drop Down.'
+        printFP("INFO - " + testComment)
+        return Global.EXCEPTION, testComment
+        
     time.sleep(2)
     try:
         WebDriverWait(Global.driver, 15).until(EC.visibility_of_element_located((By.ID, "j_username")))

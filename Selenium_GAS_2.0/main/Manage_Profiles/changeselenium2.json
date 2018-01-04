@@ -1,0 +1,21 @@
+{
+    "Profile Name": "changeselenium2",
+    "cfciData":
+    {
+        "cFCI DiDt limit": "140",
+        "cFCI LED latch": "true",
+        "cFCI loss of source enabled latch": "true",
+        "cFCI normal minimum duration": "82"
+    },
+    "logiData":
+    {
+        "Log-I alert enable latch": "true",
+        "Log-I logging enable latch": "true",
+        "High RMS current threshold": "750"
+    },
+    "nonCfciData":
+    {
+        "Electric field not present enable latch": "true",
+        "Wan off alert enable latch": "false"
+    }
+}
