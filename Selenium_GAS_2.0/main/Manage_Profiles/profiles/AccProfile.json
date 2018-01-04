@@ -1,0 +1,8 @@
+{
+    "cFCI_Events":
+    {
+        "cFCI percent enabled latch":1,
+        "cFCI threshold minimum duration":25,
+        "cFciInrushDelay":116890
+    }
+}

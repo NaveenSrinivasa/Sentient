@@ -1,0 +1,207 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/at-ssn17.csv",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "VerifyAEDEnableLatch",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "method_name": "FloatingPointInProfiles",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "method_name": "VerifyDefaultManagePage",
+            "hiptest_name": "Default Manage Profile Page",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile": false
+        },
+        {
+
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile - Positive Test Case",
+            "skip": false,
+            "expect_pass": true,
+            "profile_json": "/Manage_Profiles/seleniumtest.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Create New Profile with Duplicate Name",
+            "skip": false,
+            "expect_pass": false,
+            "profile_json": "/Manage_Profiles/seleniumtest.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Profile Name - Maximum Allowed Name Length",
+            "skip": false,
+            "expect_pass": false,
+            "profile_json": "/Manage_Profiles/TooLongName.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Profile Name - Verify that Spaces are allowed in Name",
+            "skip": false,
+            "expect_pass": true,
+            "profile_json": "/Manage_Profiles/NameWithSpaces.json"
+        },
+        {
+            "method_name": "CreateProfile",
+            "hiptest_name": "Profile Name - Does Not Allow Special Characters",
+            "skip": false,
+            "expect_pass": false,
+            "profile_json": "/Manage_Profiles/InvalidCharacters.json"
+        },
+        {
+            "method_name": "configureDevice",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Manage_Profiles/d1_reg_sub_names.json",
+            "device_name": ["at-ssn17"],
+            "config": "Hello It Me",
+            "actionButton": true
+        },
+        {
+            "method_name": "VerifyDefaultManagePage",
+            "hiptest_name": "Default Manage Profile Page",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile": true
+        },
+        {
+            "method_name": "VerifyProfileTabs",
+            "hiptest_name": "Verify Profile Tabs - New Profile",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile_name": ""
+        },
+        {
+            "method_name": "VerifyProfileTabs",
+            "hiptest_name": "Verify Profile Tabs - Existing Profile",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile_name": "seleniumtest"
+        },
+        {
+            "method_name": "VerifyAEDEnableLatch",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "seleniumtest"
+        },
+        {
+            "method_name": "EditProfile",
+            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
+            "skip": false,
+            "expect_pass": false,
+            "existing_profile_name": "seleniumtest",
+            "profile_json": "/Manage_Profiles/nochange.json", 
+            "save_key": "SAVE AS"
+        },
+        {
+            "method_name": "EditProfile",
+            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
+            "skip": false,
+            "expect_pass": false,
+            "existing_profile_name": "seleniumtest",
+            "profile_json": "/Manage_Profiles/nochange.json", 
+            "save_key": "SAVE"
+        },
+        {
+            "method_name": "EditProfile",
+            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save As Button",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile_name": "seleniumtest",
+            "profile_json": "/Manage_Profiles/changeeverything.json", 
+            "save_key": "SAVE AS"
+        },
+        {
+            "method_name": "EditProfile",
+            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save Button",
+            "skip": false,
+            "expect_pass": true,
+            "existing_profile_name": "seleniumtest",
+            "profile_json": "/Manage_Profiles/changeselenium.json", 
+            "save_key": "SAVE"
+        },
+        {
+            "method_name": "FloatingPointInProfiles",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Edit Profile",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "changeselenium"
+        },
+        {
+            "method_name": "ValidateProfileFieldValues",
+            "hiptest_name": "Validate Valid Range For Each Field",
+            "skip": false,
+            "expect_pass": true,
+            "comment": "Validate Boundary Values of each Manage Profile form fields",
+            "input_file_path": "/Manage_Profiles/DNP3_Point_Map v2.12.5.csv"
+        },
+        {   
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile - Select a profile being used by devices",
+            "skip": false,
+            "expect_pass": false,
+            "profile_name": "Hello It Me"
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Manage_Profiles/d1_reg_sub_names.json",
+            "device_name": ["at-ssn17"]
+        },
+        {
+            "method_name": "DeleteProfile",
+            "hiptest_name": "Delete Profile - Select a profile not being used by devices.",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "Hello It Me"
+        },
+        {   
+            "method_name": "DeleteProfile",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "changeeverything"
+        },
+        {   
+            "method_name": "DeleteProfile",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "profile_name": "changeselenium"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

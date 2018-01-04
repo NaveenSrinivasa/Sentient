@@ -7,14 +7,9 @@
             "test_json": "main/Login_Testcases.json"
         },
         {
-            "Module": "Login Tests",
+            "Module": "Manage Profile Tests",
             "skip": false,
-            "test_json": "main/Login_Testcases.json"
-        },
-        {
-            "Module": "Login Tests",
-            "skip": false,
-            "test_json": "main/Login_Testcases.json"
+            "test_json": "main/ManageProfile_Testcases.json"
         }
     ]
 }

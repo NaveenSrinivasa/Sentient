@@ -18,7 +18,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup as soup
-from Utilities_Framework import *
 
 
 def WaitForXTime(min = 5):
@@ -111,8 +110,6 @@ def ClickButton(driver, method, locator):
     button = GetElement(driver, method, locator)
     try:
         button.click()
-        time.sleep(2)
-        return True
     except:
         try:
             ActionChains(driver).move_to_element(button).click().perform()
@@ -120,19 +117,12 @@ def ClickButton(driver, method, locator):
             printFP('INFO - Failed to click button')
             return False
 
-def JustClick(element):
-    """Wrapper function to click it."""
-    try:
-        ActionChains(Global.driver).move_to_element(element).click().perform()
-        return True
-    except:
-        printFP('Failed to click button')
-        return False
+    time.sleep(1)
+    return True
 
 def ClearInput(element):
     try:
-        element.send_keys(Keys.CONTROL + "a")
-        element.send_keys(Keys.DELETE)
+        element.clear()
         return True
     except:
         printFP("INFO - Test could not clear input.")
@@ -146,11 +136,8 @@ def SelectFromMenu(driver, method, locator, target):
     for option in options:
         if option.text == target:
             actions = ActionChains(Global.driver)
-            time.sleep(2)
             actions.move_to_element(option)
-            time.sleep(2)
             actions.click(option)
-            time.sleep(1)
             actions.perform()
             time.sleep(1)
             printFP('Selected: %s' % target)
@@ -417,7 +404,7 @@ def GoToManageProfile():
             time.sleep(2)
             GetElement(Global.driver, By.LINK_TEXT, 'Manage Profiles').click()
             time.sleep(2)
-            if 'system-admin' in Global.driver.current_url:
+            if 'manage-profile' in Global.driver.current_url:
                 printFP("INFO - Successfully Navigated to Manage Profile Page")
                 return True
             else:
@@ -1341,18 +1328,7 @@ def printFP(message):
       4 - error
       5 - critical"""
     print message
-    if Global.loglevel == 'debug':
-        logging.debug(message)
-    elif Global.loglevel == 'info':
-        logging.info(message)
-    elif Global.loglevel == 'warning':
-        logging.warning(message)
-    elif Global.loglevel == 'error':
-        logging.error(message)
-    elif Global.loglevel == 'critical':
-        logging.critical(message)
-    else:
-        pass
+    logging.info(message)
 
 def GetOnlineDevice():
     """Finds an online device on ample and returns the device dictionary"""

@@ -7,20 +7,61 @@ import logging
 import os
 import datetime
 from multiprocessing import Process
+import threading
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from Ample_Login import *
+from Ample_ManageProfile import *
+from Ample_SysAdmin import *
+from Ample_DevMan import *
 
 def GenerateXPATHDictionary(xpath_file_path):
-    # open xpath dictionary
-    with open(xpath_file_path, 'r') as infile:
-        for line in infile:
-            pair = line.strip('\n').split(' ')
-            Global.xpaths[pair[0]] = pair[1]
+    """
+        Checks if the XPATH_FILE_PATH is a directory before going through it. If it isn't, then return false and end the process.
+        Iterates through each file within xpath and loads it into the xpath dictionary within Global.py
+    """
+    if os.path.isdir(xpath_file_path):
+        for filename in os.listdir(xpath_file_path):
+            with open(xpath_file_path + '/' + filename, 'r') as infile:
+                for line in infile:
+                    pair = line.strip('\n').split(' ')
+                    Global.xpaths[pair[0]] = pair[1]
+        return True
+    else:
+        printFP("INFO - The provided xpath folder path is incorrect (%s). Please provide valid file path for the xpath folder." % (xpath_file_path))
+        return False
 
-def ReplaceDeviceSGWandNG(devices_folder):
+def ReplaceDeviceSGWandNG(devices_folder, config):
     #Only limited to CSV files for devices -- will never replace json file anymore
-    pass
+    if os.path.isdir(devices_folder):
+        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('sensor_gw1_name',config['sensor_gw1_name'])
+        os.system(command)
+        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('sensor_gw2_name',config['sensor_gw2_name'])
+        os.system(command)
+        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('networkgroup1_name',config['networkgroup1_name'])
+        os.system(command)
+        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('networkgroup2_name',config['networkgroup2_name'])
+        os.system(command)
+        return True
+    else:
+        printFP("INFO - %s is not a directory. Please provide a proper directory for the device CSV files.")
+        return False
+
+def UndoReplaceSGWandNG(devices_folder, config):
+    #Only limited to CSV files for devices -- will never replace json file anymore
+    if os.path.isdir(devices_folder):
+        command = "find ./devices/*.csv -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['sensor_gw1_name'],'sensor_gw1_name')
+        os.system(command)
+        command = "find ./devices/*.csv -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['sensor_gw2_name'],'sensor_gw2_name')
+        os.system(command)
+        command = "find ./devices/*.csv -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['networkgroup1_name'],'networkgroup1_name')
+        os.system(command)
+        command = "find ./devices/*.csv -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['networkgroup2_name'],'networkgroup2_name')
+        os.system(command)
+        return True
+    else:
+        printFP("INFO - %s is not a directory. Please provide a proper directory for the device CSV files.")
+        return False
 
 def SpawnBrowser(platform, browser, ip):
     if browser == 'chrome':
@@ -31,9 +72,7 @@ def SpawnBrowser(platform, browser, ip):
         desired['platform'] = platform
         desired['nativeEvents'] = True
         desired['enablePersistentHover'] = False
-        desired['pageLoadStrategy'] = "eager"
-        #desired['ie.usePerProcessProxy'] = True
-        desired['requireWindowFocus'] = False
+        desired['requireWindowFocus'] = True
         desired['ie.ensureCleanSession'] = True
 
     #pass it the IP of the machine that the Selenium Browser instance is running on
@@ -41,23 +80,13 @@ def SpawnBrowser(platform, browser, ip):
     
     return driver
 
-def ConfigureLogging(log_location, log_level):
-    configured_log_level = log_level
-    Global.loglevel = configured_log_level
-    if configured_log_level == 'debug':
-        log_level = logging.DEBUG
-    elif configured_log_level == 'info':
-        log_level = logging.INFO
-    elif configured_log_level == 'warning':
-        log_level = logging.WARNING
-    elif configured_log_level == 'error':
-        log_level = logging.ERROR
-    elif configured_log_level == 'critical':
-        log_level = logging.CRITICAL
-    else:
-        log_level = logging.DEBUG
-    log_f = log_location+'/ample_%s.log'%((datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")))
-    logging.basicConfig(filename=log_f, level=log_level, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+def ConfigureLoggingAndTestReport(log_location, report_location, testResourcePath, deviceFolder):
+    log_file = log_location+'/ample_%s.log'%((datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")))
+    logging.basicConfig(filename=log_file, level=logging.INFO, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+
+    Global.reportPath = report_location + '/test_report_%s.csv' %((datetime.datetime.now().strftime("%Y-%m-%d-%H-%M"))) 
+    Global.testResourcePath = testResourcePath
+    Global.deviceFolderPath = deviceFolder
 
 def RunTest(test, report):
     method_name = test['method_name']
@@ -77,16 +106,16 @@ def RunTest(test, report):
     testStartTime = time.time()
     printFP('\n%s - Test case: %s' % (time.strftime('%H:%M:%s'), hiptest_name))
     if expect_pass:
-        printFP('This is a positive test case')
+        printFP('INFO - This is a positive test case')
     else:
-        printFP('This is a negative test case')
+        printFP('INFO - This is a negative test case')
 
     try:
         result, testComment = globals()[method_name](**args)
     except:
         printFP(str(traceback.print_exc()))
         testComment = 'Exception in test. May cause other tests to fail. Continuing . . .'
-        printFP(testComment)
+        printFP('INFO - ' + testComment)
         result = Global.EXCEPTION
 
     testElapsedTime = time.time() - testStartTime
@@ -133,8 +162,7 @@ def RunModules(module, platform, browser, file, selenium_ip):
         for submodule_test in parsed_submodule['Tests']:
             if submodule_test['skip']:
                 continue
-            if submodule_test['hiptest_name']:
-                expect_pass = submodule_test['expect_pass']
+            else:
                 result = RunTest(submodule_test, report)
 
     Global.driver.close()
@@ -142,16 +170,16 @@ def RunModules(module, platform, browser, file, selenium_ip):
 
 def StartTests(config):
     #Open the configuration file and find where the test files are located
-    with open(config['seleniumDir']+config['inputfilesDir']+config['testfile'], 'r') as testfile:
+    with open(config['seleniumDir'] + config['inputfilesDir'] + config['testfile'], 'r') as testfile:
         testfile = json.load(testfile)
 
-    with open('test_report.csv', 'w+') as report:
-        report.write('Test Case, Hip Test Name, Test Case Type, Time in seconds, Result, Test Comment if any\n')
+    with open(Global.reportPath, 'w+') as report:
+        report.write('Hip Test Name, Test Case Type, Time in seconds, Result, Test Comment if any\n')
 
     startTime = time.time()
     for module in testfile['Tests']:
         if not(module['skip']):
-            p = Process(target=RunModules, args=(module, 'MAC', 'chrome', 'test_report.csv', config['selenium_ip']))
+            p = threading.Thread(target=RunModules, args=(module, config['platform_name'], config['browser_name'], Global.reportPath, config['selenium_ip']))
             p.start()
             p.join()
 
@@ -159,7 +187,7 @@ def StartTests(config):
         
     # finalize the test report
     totalTime = time.time() - startTime
-    with open('test_report.csv', 'r') as report:
+    with open(Global.reportPath, 'r') as report:
         count_PASS = 0
         count_FAIL = 0
         count_EXCEPTION = 0
@@ -174,7 +202,7 @@ def StartTests(config):
 
         count_TOTAL = count_PASS+count_FAIL+count_EXCEPTION
 
-    with open('test_report.csv', 'a') as report:
+    with open(Global.reportPath, 'a') as report:
         report.write('\n\nTotal Test Time: %d seconds\n' % totalTime)
         report.write('Total Test Count: %d\n' % (count_TOTAL))
         report.write('Total PASS: %d (%f%%)\n' % (count_PASS, (count_PASS/(count_TOTAL*1.0)*100)))
@@ -182,17 +210,36 @@ def StartTests(config):
         report.write('Total EXCEPTION: %d (%f%%)\n\n' % (count_EXCEPTION, (count_EXCEPTION/(count_TOTAL*1.0)*100)))
         report.write('--------------------------------------\n\n')
 
-
-if __name__ == '__main__':
+def main():
     if len(sys.argv) == 2:
         with open(sys.argv[1], 'r') as user_defined_json:
             parsed_userdefinedtmp = json.load(user_defined_json)
             config = parsed_userdefinedtmp['user_defined']
 
-        ConfigureLogging(config['seleniumDir']+config['log_location'], config['loglevel'])
+        #Configure the logging to write into the location given by seleniumDir+log_folder_location
+        ConfigureLoggingAndTestReport(config['seleniumDir']+config['log_location'], config['seleniumDir']+config['report_location'], config['seleniumDir']+config['inputfilesDir'], config['seleniumDir']+config['devices_folder'])
+
+        #Replace Sensor Gateway and Network Group keywords with actual names inside the CSV files
+        if not(ReplaceDeviceSGWandNG(config['seleniumDir'] + config['devices_folder'], config)):
+            printFP("INFO - Did not successfully replace Sensor Gateway Names and/or Network Group Names in device CSV files.")
+            return 0
+
+        if not(GenerateXPATHDictionary(config['seleniumDir']+'/xpaths')):
+            printFP("INFO - Improper XPATHS Folder path given. XPATHS Path: %s" %(config['seleniumDir']+'/xpaths'))
+            return 0
+
+        #Starts the Tests
         StartTests(config)
+
+        #Replace SGW and Network Group names within the CSV files with Sensor Gateway and Network Group keywords
+        if not(UndoReplaceSGWandNG(config['seleniumDir'] + config['devices_folder'], config)):
+            printFP("INFO - Did not successfully replace Sensor Gateway Names and/or Network Group Names back to keywords in device CSV files.")
+            return 0
     else:
         print 'Missing input file'
         print 'Not enough arguments.'
         print 'python SeleniumMain.py [maininputfile.json]'
+
+if __name__ == '__main__':
+    main()
 
