@@ -32,14 +32,15 @@
     "config_info":
     {
         "browser_name": "chrome",
-        "platform_name": "WINDOWS",
+        "platform_name": "linux",
         "selenium_ip": "localhost:4444",
         "seleniumDir": "/home/naveen/git/qa-selenium/Selenium_GAS_2.0",
         "inputfilesDir": "/main",
         "testfile": "/all_modules.json",
         "defaultdownloadpath": "/home/naveen/Downloads/",
         "loglevel": "info",
-        "log_location": "/logs",
+        "log_location": "/log",
+        "report_location": "/report",
     },
 
     "device_info":
@@ -66,4 +67,4 @@
         "lm_wv_field_name": "Avg Temp Value (F)",
         "lm_wv_field_value" : "91"
     }
-
+}

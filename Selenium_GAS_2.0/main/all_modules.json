@@ -8,7 +8,7 @@
         },
         {
             "Module": "Manage Profile Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "main/ManageProfile_Testcases.json"
         }
     ]

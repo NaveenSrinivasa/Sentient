@@ -210,9 +210,13 @@ def StartTests(config):
         report.write('Total EXCEPTION: %d (%f%%)\n\n' % (count_EXCEPTION, (count_EXCEPTION/(count_TOTAL*1.0)*100)))
         report.write('--------------------------------------\n\n')
 
+def Prerequisite():
+    printFP("INFO - Test can start without log and report folder")
+
 def main():
     if len(sys.argv) == 2:
-        with open(sys.argv[1], 'r') as user_defined_json:
+        Prerequisite()
+        '''with open(sys.argv[1], 'r') as user_defined_json:
             parsed_userdefinedtmp = json.load(user_defined_json)
             config = parsed_userdefinedtmp['user_defined']
 
@@ -234,7 +238,7 @@ def main():
         #Replace SGW and Network Group names within the CSV files with Sensor Gateway and Network Group keywords
         if not(UndoReplaceSGWandNG(config['seleniumDir'] + config['devices_folder'], config)):
             printFP("INFO - Did not successfully replace Sensor Gateway Names and/or Network Group Names back to keywords in device CSV files.")
-            return 0
+            return 0'''
     else:
         print 'Missing input file'
         print 'Not enough arguments.'
