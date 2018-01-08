@@ -211,11 +211,21 @@ def StartTests(config):
         report.write('--------------------------------------\n\n')
 
 def Prerequisite():
-    printFP("INFO - Test can start without log and report folder")
+    current_path = os.getcwd()
+
+    if not os.path.exists(current_path + '/xpaths'):
+        return False
+    if not os.path.exists(current_path + '/logs'):
+        os.makedirs(current_path + '/logs')
+    if not os.path.exists(current_path + '/reports'):
+        os.makedirs(current_path + '/reports')
 
 def main():
     if len(sys.argv) == 2:
-        Prerequisite()
+        return_value = Prerequisite()
+        if return_value == False:
+            sys.exit()
+        print('continue main')
         '''with open(sys.argv[1], 'r') as user_defined_json:
             parsed_userdefinedtmp = json.load(user_defined_json)
             config = parsed_userdefinedtmp['user_defined']

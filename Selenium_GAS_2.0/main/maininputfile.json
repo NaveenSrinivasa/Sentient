@@ -39,8 +39,8 @@
         "testfile": "/all_modules.json",
         "defaultdownloadpath": "/home/naveen/Downloads/",
         "loglevel": "info",
-        "log_location": "/log",
-        "report_location": "/report",
+        "log_location": "/logs",
+        "report_location": "/reports",
     },
 
     "device_info":
