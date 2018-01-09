@@ -210,22 +210,37 @@ def StartTests(config):
         report.write('Total EXCEPTION: %d (%f%%)\n\n' % (count_EXCEPTION, (count_EXCEPTION/(count_TOTAL*1.0)*100)))
         report.write('--------------------------------------\n\n')
 
-def Prerequisite():
-    current_path = os.getcwd()
-
-    if not os.path.exists(current_path + '/xpaths'):
+def Prerequisite(config):
+    if not os.path.exists(config) and os.path.isfile(config):
         return False
-    if not os.path.exists(current_path + '/logs'):
-        os.makedirs(current_path + '/logs')
-    if not os.path.exists(current_path + '/reports'):
-        os.makedirs(current_path + '/reports')
+
+    with open(config, 'r') as userjson:
+        parsed_json = json.load(userjson)
+        xpath = parsed_json['config_info']['seleniumDir']
+        if not (os.path.isdir(xpath + '/xpaths') and os.path.isfile(xpath + '/xpaths' + '/xpaths')):
+            return False
+        """
+        Checks if logs and reports folder exists, if it does not-
+        it will create both the folders. 
+        """
+        if not os.path.exists(parsed_json['config_info']['log_location']):
+            os.makedirs(parsed_json['config_info']['log_location'])
+
+        if not os.path.exists(parsed_json['config_info']['report_location']):
+            os.makedirs(parsed_json['config_info']['report_location'])
 
 def main():
     if len(sys.argv) == 2:
-        return_value = Prerequisite()
+        return_value = Prerequisite(sys.argv[1])
+        """
+        checks for xpath directory and file,
+        if it is does not exist,script wont continue further since it is a mandatory directory
+        """
         if return_value == False:
-            sys.exit()
-        print('continue main')
+            printFP("Xpath directory/file doesn't exist which is mandatory, hence terminated.")
+            #Returns nothing and Exit main function
+            return 0
+            exit()
         '''with open(sys.argv[1], 'r') as user_defined_json:
             parsed_userdefinedtmp = json.load(user_defined_json)
             config = parsed_userdefinedtmp['user_defined']

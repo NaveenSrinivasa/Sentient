@@ -12,7 +12,7 @@
         "hiptest_account_password" : "",
         "hiptest_project_id" : "46692",
         "hiptest_test_run_id" : "91268",
-        "hiptest_result_publish" : "false",
+        "hiptest_result_publish" : false
     },
 
     "ample_info":
@@ -26,7 +26,7 @@
         "networkgroup1_port": "53074",
         "networkgroup2_name" : "seleniumtest_group2",
         "networkgroup2_port": "53076",
-        "devicepollinterval": "600",
+        "devicepollinterval": "600"
     },
 
     "config_info":
@@ -35,12 +35,13 @@
         "platform_name": "linux",
         "selenium_ip": "localhost:4444",
         "seleniumDir": "/home/naveen/git/qa-selenium/Selenium_GAS_2.0",
+        "log_location": "/home/naveen/git/qa-selenium/Selenium_GAS_2.0/logs",
+        "report_location": "/home/naveen/git/qa-selenium/Selenium_GAS_2.0/reports",
         "inputfilesDir": "/main",
         "testfile": "/all_modules.json",
         "defaultdownloadpath": "/home/naveen/Downloads/",
-        "loglevel": "info",
-        "log_location": "/logs",
-        "report_location": "/reports",
+        "loglevel": "info"
+        
     },
 
     "device_info":
@@ -51,7 +52,7 @@
         "device_2": "at-ssn18",
         "d2_vto_port": "21182",
         "cll_d1_ipaddr": "10.48.0.76",
-        "cll_d2_ipaddr": "",
+        "cll_d2_ipaddr": ""
     },
     
     "other_info":
