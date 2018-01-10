@@ -211,7 +211,7 @@ def StartTests(config):
         report.write('--------------------------------------\n\n')
 
 def Prerequisite(config):
-    if not os.path.exists(config) and os.path.isfile(config):
+    if not (os.path.exists(config) and os.path.isfile(config)):
         return False
 
     with open(config, 'r') as userjson:
@@ -224,18 +224,20 @@ def Prerequisite(config):
         it will create both the folders. 
         """
         if not os.path.exists(parsed_json['config_info']['log_location']):
-            os.makedirs(parsed_json['config_info']['log_location'])
-
+            if os.makedirs(parsed_json['config_info']['log_location']):
+                return True
+        
         if not os.path.exists(parsed_json['config_info']['report_location']):
-            os.makedirs(parsed_json['config_info']['report_location'])
-
+            if os.makedirs(parsed_json['config_info']['report_location']):
+                return True
+            
 def main():
     if len(sys.argv) == 2:
-        return_value = Prerequisite(sys.argv[1])
         """
         checks for xpath directory and file,
-        if it is does not exist,script wont continue further since it is a mandatory directory
+        if it is does not exist,script wont continue further since it is a mandatory directory..
         """
+        return_value = Prerequisite(sys.argv[1])
         if return_value == False:
             printFP("Xpath directory/file doesn't exist which is mandatory, hence terminated.")
             #Returns nothing and Exit main function
@@ -271,4 +273,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
