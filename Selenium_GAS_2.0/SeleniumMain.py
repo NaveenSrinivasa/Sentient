@@ -216,21 +216,21 @@ def Prerequisite(config):
 
     with open(config, 'r') as userjson:
         parsed_json = json.load(userjson)
-        xpath = parsed_json['config_info']['seleniumDir']
-        if not (os.path.isdir(xpath + '/xpaths') and os.path.isfile(xpath + '/xpaths' + '/xpaths')):
+        config_path = parsed_json['config_info']
+        if not (os.path.isdir(config_path['seleniumDir'] + '/xpaths') and os.path.isfile(config_path['seleniumDir'] + '/xpaths' + '/xpaths')):
             return False
         """
-        Checks if logs and reports folder exists, if it does not-
+        Below statements Checks if logs and reports folder exists, if it does not-
         it will create both the folders. 
         """
-        if not os.path.exists(parsed_json['config_info']['log_location']):
-            if os.makedirs(parsed_json['config_info']['log_location']):
-                return True
+        if not os.path.exists(config_path['seleniumDir'] + config_path['log_location']):
+            os.makedirs(config_path['seleniumDir'] + config_path['log_location'])
         
-        if not os.path.exists(parsed_json['config_info']['report_location']):
-            if os.makedirs(parsed_json['config_info']['report_location']):
-                return True
-            
+        if not os.path.exists(config_path['seleniumDir'] + config_path['report_location']):
+            os.makedirs(config_path['seleniumDir'] + config_path['report_location'])
+
+        return parsed_json
+
 def main():
     if len(sys.argv) == 2:
         """
@@ -242,7 +242,6 @@ def main():
             printFP("Xpath directory/file doesn't exist which is mandatory, hence terminated.")
             #Returns nothing and Exit main function
             return 0
-            exit()
         '''with open(sys.argv[1], 'r') as user_defined_json:
             parsed_userdefinedtmp = json.load(user_defined_json)
             config = parsed_userdefinedtmp['user_defined']
@@ -265,11 +264,11 @@ def main():
         #Replace SGW and Network Group names within the CSV files with Sensor Gateway and Network Group keywords
         if not(UndoReplaceSGWandNG(config['seleniumDir'] + config['devices_folder'], config)):
             printFP("INFO - Did not successfully replace Sensor Gateway Names and/or Network Group Names back to keywords in device CSV files.")
-            return 0'''
+            return 0
     else:
         print 'Missing input file'
         print 'Not enough arguments.'
-        print 'python SeleniumMain.py [maininputfile.json]'
+        print 'python SeleniumMain.py [maininputfile.json]'''
 
 if __name__ == '__main__':
     main()
