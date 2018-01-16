@@ -1,0 +1,2 @@
+Region,Substation,Feeder,Site,Phase,Serial Number,Product Name,Software Release,Platform,Longitude,Latitude,MAC Address,Sensor IP Address,Sensor DNP Address,Field Notes,DA Port,Comm Server Name,SEI Part Number,Secondary IP Address,Network Type,Network Group Name,Device State
+SelTestReg1,SelTestSub1,SelTestMTF1Feeder,SelTestMTF1Site,B,at-ssn17,MM3,2.3.0,corgi,,,00:13:50:03:00:4D:9E:50,fd02:dead:beef:4:213:5003:4d:9e50,985,note1,20000,sensor_gw1_name,0-00001-05,,SSN,networkgroup1_name2,

@@ -1,11 +1,13 @@
 import sys
 import time
+import csv
 import Global
 import json
 import traceback
 import logging
 import os
 import datetime
+import test_runner
 from multiprocessing import Process
 import threading
 from selenium import webdriver
@@ -14,11 +16,13 @@ from Ample_Login import *
 from Ample_ManageProfile import *
 from Ample_SysAdmin import *
 from Ample_DevMan import *
+from Ample_SysAdmin_MTF import *
+from Ample_UserMan import *
 
 def GenerateXPATHDictionary(xpath_file_path):
     """
         Checks if the XPATH_FILE_PATH is a directory before going through it. If it isn't, then return false and end the process.
-        Iterates through each file within xpath and loads it into the xpath dictionary within Global.py
+        Iterates through each file within xpath folder and loads it into the xpath dictionary within Global.py
     """
     if os.path.isdir(xpath_file_path):
         for filename in os.listdir(xpath_file_path):
@@ -34,13 +38,13 @@ def GenerateXPATHDictionary(xpath_file_path):
 def ReplaceDeviceSGWandNG(devices_folder, config):
     #Only limited to CSV files for devices -- will never replace json file anymore
     if os.path.isdir(devices_folder):
-        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('sensor_gw1_name',config['sensor_gw1_name'])
+        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('sensor_gw1_name',config['Ample Testbed Parameters']['sensor_gw1_name'])
         os.system(command)
-        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('sensor_gw2_name',config['sensor_gw2_name'])
+        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('sensor_gw2_name',config['Ample Testbed Parameters']['sensor_gw2_name'])
         os.system(command)
-        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('networkgroup1_name',config['networkgroup1_name'])
+        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('networkgroup1_name',config['Ample Testbed Parameters']['networkgroup1_name'])
         os.system(command)
-        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('networkgroup2_name',config['networkgroup2_name'])
+        command = "find devices -type f -exec sed -i '' 's/%s/%s/g' {} \;" %('networkgroup2_name',config['Ample Testbed Parameters']['networkgroup2_name'])
         os.system(command)
         return True
     else:
@@ -50,13 +54,13 @@ def ReplaceDeviceSGWandNG(devices_folder, config):
 def UndoReplaceSGWandNG(devices_folder, config):
     #Only limited to CSV files for devices -- will never replace json file anymore
     if os.path.isdir(devices_folder):
-        command = "find ./devices/*.csv -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['sensor_gw1_name'],'sensor_gw1_name')
+        command = "find ./devices/ -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['Ample Testbed Parameters']['sensor_gw1_name'],'sensor_gw1_name')
         os.system(command)
-        command = "find ./devices/*.csv -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['sensor_gw2_name'],'sensor_gw2_name')
+        command = "find ./devices/ -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['Ample Testbed Parameters']['sensor_gw2_name'],'sensor_gw2_name')
         os.system(command)
-        command = "find ./devices/*.csv -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['networkgroup1_name'],'networkgroup1_name')
+        command = "find ./devices/ -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['Ample Testbed Parameters']['networkgroup1_name'],'networkgroup1_name')
         os.system(command)
-        command = "find ./devices/*.csv -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['networkgroup2_name'],'networkgroup2_name')
+        command = "find ./devices/ -type f -exec sed -i '' 's/%s/%s/g' {} \;" %(config['Ample Testbed Parameters']['networkgroup2_name'],'networkgroup2_name')
         os.system(command)
         return True
     else:
@@ -72,7 +76,7 @@ def SpawnBrowser(platform, browser, ip):
         desired['platform'] = platform
         desired['nativeEvents'] = True
         desired['enablePersistentHover'] = False
-        desired['requireWindowFocus'] = True
+        desired['requireWindowFocus'] = False
         desired['ie.ensureCleanSession'] = True
 
     #pass it the IP of the machine that the Selenium Browser instance is running on
@@ -80,7 +84,7 @@ def SpawnBrowser(platform, browser, ip):
     
     return driver
 
-def ConfigureLoggingAndTestReport(log_location, report_location, testResourcePath, deviceFolder):
+def ConfigureLoggingAndTestReport(testResourcePath, deviceFolder, log_location, report_location):
     log_file = log_location+'/ample_%s.log'%((datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")))
     logging.basicConfig(filename=log_file, level=logging.INFO, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
@@ -104,7 +108,7 @@ def RunTest(test, report):
 
     # call each test
     testStartTime = time.time()
-    printFP('\n%s - Test case: %s' % (time.strftime('%H:%M:%s'), hiptest_name))
+    printFP('\n%s - Test case: %s | Method Called: %s' % (time.strftime('%H:%M:%s'), hiptest_name, method_name))
     if expect_pass:
         printFP('INFO - This is a positive test case')
     else:
@@ -126,18 +130,18 @@ def RunTest(test, report):
     if hiptest_name:
         if result == Global.PASS and expect_pass:
             finaltestresult = Global.PASS
-            report.write('%s, expect_pass = %s, %d, PASS, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
+            report.write('%s, expect_pass = %s, %d,PASS, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
         elif result == Global.FAIL and not expect_pass:
             finaltestresult = Global.PASS
-            report.write('%s, expect_pass = %s, %d, PASS, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
+            report.write('%s, expect_pass = %s, %d,PASS, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
         elif result == Global.PASS and not expect_pass:
             finaltestresult = Global.FAIL
-            report.write('%s, expect_pass = %s, %d, FAIL, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
+            report.write('%s, expect_pass = %s, %d,FAIL, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
         elif result == Global.FAIL and expect_pass:
             finaltestresult = Global.FAIL
-            report.write('%s, expect_pass = %s, %d, FAIL, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
+            report.write('%s, expect_pass = %s, %d,FAIL, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
         elif result == Global.EXCEPTION:
-            report.write('%s, expect_pass = %s, %d, EXCEPTION, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
+            report.write('%s, expect_pass = %s, %d,EXCEPTION, %s\n' % (hiptest_name, expect_pass, testElapsedTime, testComment))
     return result
 
 def RunModules(module, platform, browser, file, selenium_ip):
@@ -170,7 +174,7 @@ def RunModules(module, platform, browser, file, selenium_ip):
 
 def StartTests(config):
     #Open the configuration file and find where the test files are located
-    with open(config['seleniumDir'] + config['inputfilesDir'] + config['testfile'], 'r') as testfile:
+    with open(config['Selenium Config Parameters']['seleniumDir'] + config['Selenium Config Parameters']['inputfilesDir'] + config['Selenium Config Parameters']['testfile'], 'r') as testfile:
         testfile = json.load(testfile)
 
     with open(Global.reportPath, 'w+') as report:
@@ -179,7 +183,7 @@ def StartTests(config):
     startTime = time.time()
     for module in testfile['Tests']:
         if not(module['skip']):
-            p = threading.Thread(target=RunModules, args=(module, config['platform_name'], config['browser_name'], Global.reportPath, config['selenium_ip']))
+            p = threading.Thread(target=RunModules, args=(module, config['Selenium Config Parameters']['platform_name'], config['Selenium Config Parameters']['browser_name'], Global.reportPath, config['Selenium Config Parameters']['selenium_ip']))
             p.start()
             p.join()
 
@@ -202,13 +206,35 @@ def StartTests(config):
 
         count_TOTAL = count_PASS+count_FAIL+count_EXCEPTION
 
-    with open(Global.reportPath, 'a') as report:
-        report.write('\n\nTotal Test Time: %d seconds\n' % totalTime)
-        report.write('Total Test Count: %d\n' % (count_TOTAL))
-        report.write('Total PASS: %d (%f%%)\n' % (count_PASS, (count_PASS/(count_TOTAL*1.0)*100)))
-        report.write('Total FAIL: %d (%f%%)\n' % (count_FAIL, (count_FAIL/(count_TOTAL*1.0)*100)))
-        report.write('Total EXCEPTION: %d (%f%%)\n\n' % (count_EXCEPTION, (count_EXCEPTION/(count_TOTAL*1.0)*100)))
-        report.write('--------------------------------------\n\n')
+    if count_TOTAL != 0:
+        with open(Global.reportPath, 'a') as report:
+            report.write('\n\nTotal Test Time: %d seconds\n' % totalTime)
+            report.write('Total Test Count: %d\n' % (count_TOTAL))
+            report.write('Total PASS: %d (%f%%)\n' % (count_PASS, (count_PASS/(count_TOTAL*1.0)*100)))
+            report.write('Total FAIL: %d (%f%%)\n' % (count_FAIL, (count_FAIL/(count_TOTAL*1.0)*100)))
+            report.write('Total EXCEPTION: %d (%f%%)\n\n' % (count_EXCEPTION, (count_EXCEPTION/(count_TOTAL*1.0)*100)))
+            report.write('--------------------------------------\n\n')
+
+def Prerequisite(config):
+    if not (os.path.exists(config) and os.path.isfile(config)):
+        return False
+
+    with open(config, 'r') as userjson:
+        parsed_json = json.load(userjson)
+        config_path = parsed_json['Selenium Config Parameters']
+        if not (os.path.isdir(config_path['seleniumDir'] + '/xpaths') and os.path.isfile(config_path['seleniumDir'] + '/xpaths' + '/xpaths')):
+            return None
+        """
+        Below statements Checks if logs and reports folder exists, if it does not-
+        it will create both the folders. 
+        """
+        if not os.path.exists(config_path['seleniumDir'] + config_path['log_location']):
+            os.makedirs(config_path['seleniumDir'] + config_path['log_location'])
+        
+        if not os.path.exists(config_path['seleniumDir'] + config_path['report_location']):
+            os.makedirs(config_path['seleniumDir'] + config_path['report_location'])
+
+        return parsed_json
 
 def Prerequisite(config):
     if not (os.path.exists(config) and os.path.isfile(config)):
@@ -246,25 +272,59 @@ def main():
             parsed_userdefinedtmp = json.load(user_defined_json)
             config = parsed_userdefinedtmp['user_defined']
 
-        #Configure the logging to write into the location given by seleniumDir+log_folder_location
-        ConfigureLoggingAndTestReport(config['seleniumDir']+config['log_location'], config['seleniumDir']+config['report_location'], config['seleniumDir']+config['inputfilesDir'], config['seleniumDir']+config['devices_folder'])
-
-        #Replace Sensor Gateway and Network Group keywords with actual names inside the CSV files
-        if not(ReplaceDeviceSGWandNG(config['seleniumDir'] + config['devices_folder'], config)):
-            printFP("INFO - Did not successfully replace Sensor Gateway Names and/or Network Group Names in device CSV files.")
+        config = Prerequisite(sys.argv[1])
+        if config == None:
+            print("INFO - Xpath directory/file doesn't exist which is mandatory, hence terminated.")
+            #Returns nothing and Exit main function
             return 0
 
-        if not(GenerateXPATHDictionary(config['seleniumDir']+'/xpaths')):
+        loglocation = config['Selenium Config Parameters']['seleniumDir'] + config['Selenium Config Parameters']['log_location']
+        reportlocation = config['Selenium Config Parameters']['seleniumDir'] + config['Selenium Config Parameters']['report_location']
+        devicedir = config['Selenium Config Parameters']['seleniumDir'] + config['Selenium Config Parameters']['devices_folder']
+        testResourceDir = config['Selenium Config Parameters']['seleniumDir'] + config['Selenium Config Parameters']['inputfilesDir']
+        Global.downloadFolder = config['Selenium Config Parameters']['downloadFolder']
+
+
+        #Configure the logging to write into the location given by seleniumDir+log_folder_location
+        ConfigureLoggingAndTestReport(testResourceDir, devicedir, loglocation, reportlocation)
+
+        if not(GenerateXPATHDictionary(config['Selenium Config Parameters']['seleniumDir']+'/xpaths')):
             printFP("INFO - Improper XPATHS Folder path given. XPATHS Path: %s" %(config['seleniumDir']+'/xpaths'))
+            return 0
+
+        #Replace Sensor Gateway and Network Group keywords with actual names inside the CSV files
+        if not(ReplaceDeviceSGWandNG(devicedir, config)):
+            printFP("INFO - Did not successfully replace Sensor Gateway Names and/or Network Group Names in device CSV files.")
             return 0
 
         #Starts the Tests
         StartTests(config)
 
         #Replace SGW and Network Group names within the CSV files with Sensor Gateway and Network Group keywords
-        if not(UndoReplaceSGWandNG(config['seleniumDir'] + config['devices_folder'], config)):
+        if not(UndoReplaceSGWandNG(devicedir, config)):
             printFP("INFO - Did not successfully replace Sensor Gateway Names and/or Network Group Names back to keywords in device CSV files.")
             return 0
+
+        #If HipTest Publishing is enabled, open the report file and then proceed to parse it and publish the results.
+        if config['HipTest Parameters']['hiptest_result_publish']:
+            hiptestRun = test_runner.TestRunner(config)
+            dictResults = {
+                "PASS": 'passed',
+                "FAILED": 'failed',
+                "EXCEPTION": 'retest'
+            }
+
+            with open(Global.reportPath, 'r') as report:
+                csvFile = csv.reader(report)
+                for line in csvFile:
+                    if len(line) > 4 and line[0] != 'Hip Test Name':
+                        hiptestresults = test_runner.Result(dictResults[line[3]], line[4])
+                        name = line[0].lower()
+                        hiptest_name = '_'.join(name.split()).replace('-','')
+                        hiptestRun.run_publishresult(hiptestresults, hiptest_name)
+
+        if config['Email Parameters']['email_enable']:
+            EmailAttachment(Global.reportPath, parsed_config['Email']['recipients'], parsed_config['Email']['subject_line'])
     else:
         print 'Missing input file'
         print 'Not enough arguments.'
