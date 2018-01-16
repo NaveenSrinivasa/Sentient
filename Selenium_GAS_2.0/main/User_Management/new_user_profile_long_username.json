@@ -1,0 +1,17 @@
+{
+    "General":{
+	    "username": "AccUserAccUserAccUserAccUserAccUserAccUserSelenium",
+	    "firstname": "selenium",
+	    "middlename": "acceptance",
+	    "lastname": "tests",
+	    "email": "u1213asasda3@acceptance.test",
+	    "password": "@mpacity",
+	    "confirmpassword": "@mpacity",
+	    "role": "User"
+    },
+    "Preferences": {
+        "timezone": "(UTC-08:00) Pacific/Pitcairn",
+        "temperatureunit": "Fahrenheit"
+    }
+}
+

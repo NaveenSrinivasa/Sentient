@@ -1,0 +1,16 @@
+{
+    "General":{
+        "username": "AccAdmin",
+        "firstname": "seleniumAdmin",
+        "middlename": "acceptance",
+        "lastname": "tests",
+        "email": "esiu@sentient-energy.com",
+        "password": "@mpacity",
+        "confirmpassword": "@mpacity",
+        "role": "Administrator"
+    },
+    "Preferences": {
+        "timezone": "(UTC-08:00) Pacific/Pitcairn",
+        "temperatureunit": "Celsius"
+    }
+}

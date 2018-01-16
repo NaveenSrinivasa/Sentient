@@ -10,19 +10,19 @@ mtfPath = ''
 reportPath = ''
 testResourcePath = ''
 deviceFolderPath = ''
+downloadFolder = ''
 
 # dictionary of serial:deviceInfo
-devices = {}
+deviceList = []
+deviceInfo = {}
 
 # track which devices are on ample and which are not
 offDevs = []    # not on Ample
 onDevs = []     # on Ample
 
-# log
-logPath = ''
-info = ''
-startLogPath = ''
-
 driver = ''
 xpaths = {}
+
+#SGW and Network Group Dictionary
+sgw = []
 

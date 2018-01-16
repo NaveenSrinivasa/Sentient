@@ -1,0 +1,89 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },        
+        {
+            "method_name":"AddUserTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "user_profile_path": "/User_Management/new_user_profile.json"
+        },
+        {
+            "method_name":"AddUserTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "user_profile_path": "/User_Management/new_admin_profile.json"
+        },
+        {
+            "method_name":"AddUserTest",
+            "hiptest_name": "Create User - Duplicate User",
+            "skip": false,
+            "expect_pass": false,
+            "user_profile_path": "/User_Management/new_user_duplicate_username.json"
+        },
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Create User - Special Characters in Username",
+            "skip": false,
+            "expect_pass": false,
+            "user_profile_path": "/User_Management/new_user_profile_bad_username.json"
+        },        
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Create New User - Bad Email",
+            "skip": false,
+            "expect_pass": false,
+            "user_profile_path": "/User_Management/new_user_profile_bad_email.json"
+        },
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Create User - Duplicate Email",
+            "skip": false,
+            "expect_pass": false,
+            "user_profile_path": "/User_Management/new_user_profile_same_email.json"
+        },
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Create User - Length > 24 Characters",
+            "skip": false,
+            "expect_pass": false,
+            "user_profile_path": "/User_Management/new_user_profile_long_username.json"
+        },
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Create User - Length < 4 Characters",
+            "skip": false,
+            "expect_pass": false,
+            "user_profile_path": "/User_Management/new_user_profile_no_username.json"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "AccUser"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "AccAdmin"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

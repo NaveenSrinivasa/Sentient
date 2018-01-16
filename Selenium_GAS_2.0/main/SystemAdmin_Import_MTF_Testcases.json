@@ -1,0 +1,435 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Positive Test",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/at-ssn17.csv",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/System_Admin/d1_reg_sub_names.json",
+            "device_name": ["at-ssn17"]
+        },
+        {
+            "method_name": "VerifyUploadDetails",
+            "hiptest_name": "Verify Upload Details - Positive",
+            "skip": false,
+            "expect_pass": true,
+            "file_path": "/at-ssn17.csv",
+            "wait_for_online": false,
+            "importType": "MTF",
+            "Status": "SUCCESS"
+        },
+        {
+            "method_name": "VerifyUploadDetails",
+            "hiptest_name": "Verify Upload Details - Negative",
+            "skip": false,
+            "expect_pass": true,
+            "file_path": "/at-ssn17.csv",
+            "wait_for_online": false,
+            "importType": "MTF",
+            "Status": "FAILURE"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "method_name": "ImportMTFNoGPSCoordinates",
+            "hiptest_name": "Import MTF - No GPS Coordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/Import_MTF/d1_no_gps.csv",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/System_Admin/d1_reg_sub_names.json",
+            "device_name": ["at-ssn17"]
+        },
+        {
+            "method_name": "ImportMTFContainsGPSCoordinates",
+            "hiptest_name": "Import MTF - Contains GPS Coordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/Import_MTF/d1_gps.csv",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/System_Admin/d1_reg_sub_names.json",
+            "device_name": ["at-ssn17"]
+        },
+        {
+            "comment": "This test verifies two devices with same sensor address ",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF - Same Sensor DNP address in file",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_d2_same_sensor_dnp_address.csv",
+            "list_of_errors":["Duplicate Sensor (Device) DNP Address"]
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/at-ssn17.csv",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF - Duplicate Devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_with_reg_sub_capitalize_letters.csv",
+            "list_of_errors":["An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available."]
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "method_name": "ImportMTFEmptyDeviceStateColumn",
+            "hiptest_name": "Import MTF - Empty Device State Column",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/at-ssn17.csv",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "deleteDevice",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/System_Admin/d1_reg_sub_names.json",
+            "device_name": ["at-ssn17"]
+        },
+        {
+            "method_name": "ImportMTFValidDeviceStateinDeviceStateColumn",
+            "hiptest_name": "Import MTF - Valid Device State in Device State Column",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/Import_MTF/valid_device_5_states.csv",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "region_name": "r1"
+        },
+        {
+            "method_name": "ImportMTFValidFieldNotes",
+            "hiptest_name": "Import MTF - Valid Field Notes",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_lengthy_field_note.csv"
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Invalid Format",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "/Import_MTF/d1_invalid_format.csv",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Invalid File Type",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "/Import_MTF/d1_invalid_file_type.xls",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF - Invalid Field Notes",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_max_field_note.csv",
+            "list_of_errors":["Notes cannot exceed 255 characters in length."]
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "Import MTF - Invalid Data",
+            "skip": false,
+            "expect_pass": false,
+            "mtf_full_path": "/Import_MTF/d1_invalid_data.csv",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF - MM3 Software Version not imported",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_invalid_software_version.csv",
+            "list_of_errors":["Product Name, Software Release, and Platform : The Product Name, Software Release, and Platform combination is invalid or wrongly entered"]
+        },
+        {
+            "comment": "This test verifies MTF uploaded with different sgw and network group on the ample",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF - Mismatched Sensor Gateway and Network Group",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_mismatch_sgw_and_networkgroup.csv",
+            "list_of_errors":["Network Group Name : Bad value."]
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/Import_MTF/d1_device.csv",
+            "wait_for_online": true
+        },
+        {
+            "comment": "This test verifies single device with valid network group and sgw and different network grp and sgw",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF - Uploading Duplicate Devices",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_same_but_diff_sgw_network.csv",
+            "list_of_errors":["An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available."]
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "comment": "This test verifies that the number of errors listed should be equal to the number of errors we created on the bad MTF file",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Verify Number of Errors on MTF File",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/number_of_error_lines_matched.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "VerifyNumberOfErrorsOnMTFFile"
+            }
+        },
+        {
+            "comment": "This test verifies single device with valid network group and sgw and different network grp and sgw",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Upload MTF with Missing Column Header",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_missing_column_header.csv",
+            "list_of_errors":["Column format mismatch"]
+        },
+        {
+            "comment": "This test verifies that user should be able to Export the error messages retrieved on MTF failure",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Export Error Log for Failed MTF",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/export_error_lines.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "ExportErrorLogForFailedMTF"
+            }
+        },
+        {
+            "comment": "This test verifies that all errors should be shown in UI for a failed MTF upload without any restriction number of errors",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Number of errors supported for a failed MTF upload (GAS 1.6)",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/more_than_50_error_lines.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "NumberOfErrorsSupportedForAFailedMTFUpload"
+            }
+        },
+        {
+            "comment": "This test verifies that MTF errors should display the column heading instead of column number",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "MTF error format to indicate column heading instead of column number (GAS 1.6)",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/column_heading_instead_of_column_number_in_error.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber",
+                "input_file_path": "/Import_MTF/column_heading_instead_of_column_number_in_error.csv"
+            }
+        },
+        {
+            "comment": "This test verifies that ASCII char set to be validated for all column data in the MTF",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "ASCII char set validation for all fields in MTF (GAS 1.6)",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/non_ascii_values.csv",
+            "list_of_errors": "",
+            "validateerror": true,
+            "validateargs": {
+                "validatemethodname": "ASCIICharSetValidationForAllFieldsInMTF"
+            }
+        },
+        {
+            "comment": "This test verifies Devices come online when we update network type as 4G for SSN and vice versa ",
+            "method_name": "UploadMTFWithIncorrectNetworkType",
+            "hiptest_name": "Upload MTF with incorrect Network Type",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_file_path1": "/Import_MTF/d1_ssn_with_cellular_network_type.csv",
+            "wait_for_online1": true,
+            "mtf_file_path2": "/Import_MTF/d2_cellular_with_ssn_network_type.csv",
+            "wait_for_online1": true
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "comment": "This test verifies Devices come online when we update its actual firmware version to different firmware version ",
+            "method_name": "UploadMTFWithDifferentFirmwareVersion",
+            "hiptest_name": "Upload MTF with different firmware version",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/Import_MTF/d1_diff_firmware_version.csv",
+            "wait_for_online": true
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF with same Site but different GPS coordinates - Upload Two devices at a time",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/2_devices_same_site_diff_gps_coordinates.csv",
+            "list_of_errors": ["Invalid Latitude and Longitude Combination : The Latitude and Longitude Combination has to be same for all the Phases in a Feeder Site", "Invalid Latitude and Longitude Entry for a Site : Latitude and Longitude combination should either be empty for all the phases in a site or should have valid values"]
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/Import_MTF/device1_same_site_diff_gps_coordinates.csv",
+            "wait_for_online": false
+        },
+        {
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF with same Site but different GPS coordinates - Upload Two devices One after the other",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/device2_same_site_diff_gps_coordinates.csv",
+            "list_of_errors":["Invalid Latitude and Longitude Combination : The Latitude and Longitude Combination has to be same for all the Phases in a Feeder Site", "Invalid Latitude and Longitude Entry for a Site : Latitude and Longitude combination should either be empty for all the phases in a site or should have valid values"]
+        },
+        {
+            "comment": "Description - Delete a region",
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "method_name": "ImportMTFSameSiteFirstWithGPSSecondWithoutGPS",
+            "hiptest_name": "Import MTF with same Site with two Devices - One with GPS and one without GPS Co-ordinates",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path_1": "/Import_MTF/device1_same_site_no_gps_coordinates.csv",
+            "mtf_full_path_2": "/Import_MTF/device2_same_site_diff_gps_coordinates.csv",
+            "wait_for_online": false
+        },
+        {
+            "comment": "Description - Delete a region",
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "method_name": "UploadMTFTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "mtf_full_path": "/Import_MTF/d1_device.csv",
+            "wait_for_online": true
+        },
+        {
+            "comment": "This test verifies two MTF with same sensor address but unique IP address",
+            "method_name": "UploadMTFNegativeTestValidation",
+            "hiptest_name": "Import MTF with Same Sensor DNP address in Ample",
+            "skip": false,
+            "expect_pass": true,
+            "input_file_path": "/Import_MTF/d1_same_ip_diff_sensor_dnp_address.csv",
+            "list_of_errors":["Duplicate Sensor (Device) DNP Address"]
+        },
+        {
+            "method_name": "DeleteRegion",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "use_global_test_device": false,
+            "region_name": "SelTestReg1"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true
+        }
+    ]
+}

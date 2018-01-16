@@ -2,6 +2,7 @@ import json
 import os
 from time import strftime, strptime
 import datetime
+import Global
 from Utilities_Ample import *
 
 def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
@@ -16,7 +17,7 @@ def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
         return Global.FAIL, 'TEST FAIL - ' + testComment
 
     #Json file contains all edits wish to be made on SGW
-    params = ParseJsonInputFile(editjson)
+    params = ParseJsonInputFile(Global.testResourcePath + editjson)
 
     #Checks if SGW name is valid on this testbed return FAIL if not
     row, testComment = FindNetworkGroupRow(comm_server_name, network_group)
@@ -57,6 +58,7 @@ def EditNetworkGroup(comm_server_name=None, network_group=None, editjson=None):
         except:
             GetElement(Global.driver, By.XPATH, "//button[contains(text(),'Close')]").click()
     else:
+        printFP("INFO - Unable to find Network Group")
         return Global.FAIL, testComment
     printFP('INFO - Test was a success in Editting the Network Group.')
     return Global.PASS, 'TEST PASS - Test was a success in editting the network group.'
@@ -112,7 +114,7 @@ def AddDeviceToDeletedNetworkGroup(input_json=None, comm_server_name=None, mtf_f
 
     time.sleep(1)
 
-    params = ParseJsonInputFile(input_json)
+    params = ParseJsonInputFile(Global.testResourcePath + input_json)
 
     #Adds a network group to a selected SGW, if result is FAIL, end the test
     result, msg = AddNetworkGroup(input_json, comm_server_name)
@@ -145,7 +147,7 @@ def NetworkGroupPages(input_json=None, comm_server_name=None):
         return Global.FAIL, testComment
 
     #json file with 10+ inputfiles
-    params = ParseJsonInputFile(input_json)
+    params = ParseJsonInputFile(Global.testResourcePath + input_json)
     if len(params["listOfJson"])<=10:
         testComment = 'TEST FAIL - List of Input Files for Network Groups is too small. Please add more.'
         printFP(testComment)
@@ -189,7 +191,7 @@ def NetworkGroupPages(input_json=None, comm_server_name=None):
     Global.driver.refresh()
     time.sleep(2)
     for n in range(0, i+1):
-        parsedjson = ParseJsonInputFile(params["listOfJson"][n])
+        parsedjson = ParseJsonInputFile(Global.testResourcePath + params["listOfJson"][n])
         result, msg = DeleteNetworkGroup(comm_server_name, parsedjson['input'][0])
         if result == Global.FAIL:
             printFP("INFO - Failed to delete a network group. Stopping Deletion of Network Groups")
@@ -211,7 +213,7 @@ def CloneThenDelete(comm_server_name=None, network_group=None, clone_info=None):
 
     GoToSysAdmin()
     time.sleep(1)
-    params = ParseJsonInputFile(clone_info)
+    params = ParseJsonInputFile(Global.testResourcePath + clone_info)
 
     #clones a network group
     result, comment = CloneNetworkGroup(comm_server_name, network_group, clone_info)
@@ -307,7 +309,7 @@ def AddNetworkGroup(input_json=None, comm_server_name=None):
         printFP(testComment)
         return Global.FAIL, testComment
 
-    params = ParseJsonInputFile(input_json)
+    params = ParseJsonInputFile(Global.testResourcePath + input_json)
 
     GoToSysAdmin()
 
@@ -316,6 +318,7 @@ def AddNetworkGroup(input_json=None, comm_server_name=None):
     if retval == Global.FAIL:
         return Global.FAIL, comment
 
+    time.sleep(1)
     #fills in SGW information
     body = GetElement(Global.driver, By.CLASS_NAME, 'section-body')
     textbox = GetElement(body, By.TAG_NAME, 'textarea')
@@ -325,7 +328,8 @@ def AddNetworkGroup(input_json=None, comm_server_name=None):
     inElement = GetElement(body, By.XPATH, '//fieldset[4]/span[2]/input')
     inElement.send_keys(params['input'][1])
     result = Global.PASS
-    GetElement(Global.driver, By.XPATH, '//div[3]/button[2]').click()
+    confirm = GetElement(Global.driver, By.XPATH, '//div[3]/button[2]')
+    confirm.click()
 
     #checks if there are any warning messages after clicking OK
     try:
@@ -364,11 +368,13 @@ def DeleteNetworkGroup(comm_server_name=None, network_group_deleted=None, checkU
         if "Delete" in title:
             GetElement(Global.driver, By.XPATH, '//button[text()="Ok"]').click()
             time.sleep(1)
-            body = GetElement(Global.driver, By.CLASS_NAME, 'modal-body')
-            if not 'The network group deleted successfully.' in GetElement(body, By.TAG_NAME, 'p').text:
+            msg = GetElement(Global.driver, By.XPATH, "//div[@class='modal-body ng-scope']/p")
+            if not 'The network group deleted successfully.' in msg.text:
                 result = Global.FAIL
                 printFP("INFO - Network group cannot be removed at this time.")
-            GetElement(Global.driver, By.XPATH, '//button[text()="Close"]').click()
+            closeButton = GetElement(Global.driver, By.XPATH, '//button[text()="Close"]')
+            closeButton.click()
+            time.sleep(1)
         else:
             GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
             result = Global.FAIL
@@ -380,7 +386,7 @@ def DeleteNetworkGroup(comm_server_name=None, network_group_deleted=None, checkU
                 printFP("INFO - Test was to check for unregister button, but was not given an input file to find devices")
                 return Global.FAIL, 'TEST FAIL - Test was not given input file or devices to check for unregister.'
 
-            params = ParseJsonInputFile(input_file_path)
+            params = ParseJsonInputFile(Global.testResourcePath + input_file_path)
             GoToDevMan()
             if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
                 testComment = "Test was unable to get to desired location based on input file"
@@ -455,7 +461,7 @@ def CloneNetworkGroup(comm_server_name=None, network_group=None, clone_info=None
         return Global.FAIL, testComment
 
     result = Global.PASS
-    params = ParseJsonInputFile(clone_info)
+    params = ParseJsonInputFile(Global.testResourcePath + clone_info)
     ClickButton(row, By.XPATH, 'td[4]/div/span[2]')
     title = GetElement(Global.driver, By.CLASS_NAME, 'modal-title').text
     printFP("Title: %s" %title)
@@ -474,13 +480,15 @@ def CloneNetworkGroup(comm_server_name=None, network_group=None, clone_info=None
         footer = GetElement(Global.driver, By.CLASS_NAME, 'modal-footer')
         GetElement(footer, By.XPATH, 'button[2]').click()
         time.sleep(1)
-        body = GetElement(Global.driver, By.CLASS_NAME, 'modal-body')
-        msg = GetElement(body, By.TAG_NAME, 'p').text
-        printFP('INFO - ' + msg)
-        if not 'The network group configure properties is successfully cloned.' in msg:
+        msg = GetElement(Global.driver, By.XPATH, "//div[@class='modal-body ng-scope']/p")
+        printFP('INFO - ' + msg.text)
+        if not 'The network group configure properties is successfully cloned.' in msg.text:
+            printFP("INFO - Network group was not configured successfully. Return message: %s" %msg.text)
+            Global.driver.refresh()
             return Global.FAIL, 'TEST FAIL - ' + msg
-        footer = GetElement(Global.driver, By.CLASS_NAME, 'modal-footer')
-        GetElement(footer, By.TAG_NAME, 'button').click()
+        closeRetMsg = GetElement(Global.driver, By.XPATH, "//div[@class='modal-footer ng-scope']/button[text()='Close']")
+        closeRetMsg.click()
+        time.sleep(1)
     else:
         GetElement(Global.driver, By.CLASS_NAME, 'glyphicon-remove-circle').click()
         return Global.FAIL, 'TEST FAIL - Wrong page was reached.'
@@ -525,7 +533,7 @@ def EditSGWParameterOutsideRange(input_json=None, comm_server_name=None):
         printFP(testComment)
         return Global.FAIL, testComment
 
-    params = ParseJsonInputFile(input_json)
+    params = ParseJsonInputFile(Global.testResourcePath + input_json)
 
     GoToSysAdmin()
 
@@ -561,6 +569,7 @@ def EditSGWParameterOutsideRange(input_json=None, comm_server_name=None):
                 try:
                     saveButton = GetElement(Global.driver, By.XPATH, "//button[text()=' Save']")
                     saveButton.click()
+                    time.sleep(1)
                 except:
                     printFP("INFO - Save Button was not available for click.")
                     result = Global.FAIL
@@ -571,6 +580,7 @@ def EditSGWParameterOutsideRange(input_json=None, comm_server_name=None):
                     if str(tabKeys[j]) in alertElement.text or 'Please correct the errors on the form.' in alertElement.text:
                         printFP("INFO - %s field caused an error." %tabKeys[j])
                     else:
+                        printFP("INFO - %s field did not cause an error with value %s." %(tabKeys[j],str(params['Range'][tabs[i]][tabKeys[j]][k])))
                         result = Global.FAIL
                     ClearInput(inputfield)
                     inputfield.send_keys(defaultvalue)
@@ -592,10 +602,9 @@ def EditSGWSetting(input_json=None, comm_server_name=None):
         printFP(testComment)
         return Global.FAIL, testComment
 
-    params = ParseJsonInputFile(input_json)
+    params = ParseJsonInputFile(Global.testResourcePath + input_json)
 
     GoToSysAdmin()
-    Global.driver.refresh()
 
     retval, comment = OpenEditForSGW(comm_server_name)
     if retval == Global.FAIL:
@@ -942,17 +951,16 @@ def LoadAmpleBundle(path_to_bundle):
     fileUpload = GetElement(Global.driver, By.ID, 'firmFile')
 
     #loads a singular ample bundle
-    fileUpload.send_keys(path_to_bundle)
+    fileUpload.send_keys(Global.testResourcePath + path_to_bundle)
     ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_bundle'])
 
     #checks for successful or failed upload message
     returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_bundle_msg'], visible=True)
     printFP('INFO - ' + returnMessage)
     if returnMessage == 'The file has been uploaded successfully.':
-        printFP('INFO - Loaded the bundle into the system')
+        printFP('INFO - Uploaded bundle %s' % (Global.testResourcePath + path_to_bundle))
     else:
         return Global.FAIL, 'TEST FAIL - ' + returnMessage
-    printFP('INFO - Uploaded bundle %s' % path_to_bundle)
     return Global.PASS, 'TEST PASS - ' + returnMessage
 
 def ConfigureAmple(config_file_path):
@@ -984,75 +992,3 @@ def FillInField(field_label, input_value):
                 SetCheckbox(inputElement, value)
             return True
     return False
-
-def SetPollingInterval(comm_poll_interval, mm3_poll_interval, commservers=None, use_test_device_commserver=False):
-
-    if use_test_device_commserver:
-        device = GetOfflineDevice()
-        commservers = [device['commserver']]
-
-    GoToSysAdmin()
-    time.sleep(1)
-    for page in range(2):
-        commTable = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_comm_table'])
-        commserverRowElements = GetElements(commTable, By.TAG_NAME, 'tr')
-        # iterate through rows of commtable
-        # find the commserver with name matching a commserver in list
-        for row in commserverRowElements:
-            columns = GetElements(row, By.TAG_NAME, 'td')
-            commName = GetText(columns[0], By.TAG_NAME, 'span')
-            if commName in commservers:
-                actionColumn = columns[9]
-                editButton = GetElement(actionColumn, By.CLASS_NAME, 'ion-edit')
-                editButton.click()
-
-                printFP('Filling in poll interval fields')
-                # Configure General Tab
-                ClickButton(Global.driver, By.ID, 'general')
-                FillInField('device.poll.interval.minutes', comm_poll_interval)
-
-                # Configure DNP3 Tab
-                ClickButton(Global.driver, By.ID, 'dnp3')
-                FillInField('mm2.poll.interval.seconds', mm3_poll_interval)
-                time.sleep(1)
-                ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_comm_config_submit'])
-        time.sleep(1)
-        if not ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_comms_next_page']):
-            break
-
-    return Global.PASS, ''
-
-def UploadMTFile(input_file_path):
-    UploadMTF(input_file_path)
-    time.sleep(1)
-    ClickButton(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf'])
-    time.sleep(1)
-    returnMessage = GetText(Global.driver, By.XPATH, xpaths['sys_admin_upload_mtf_msg'], visible=True)
-    if "Failed to upload" in returnMessage:
-        GetElement(Global.driver, By.LINK_TEXT, 'Click here for more details').click()
-        time.sleep(2)
-        popup = GetElement(Global.driver, By.CSS_SELECTOR, 'div.modal-content')
-        lines = GetElements(popup,By.TAG_NAME,'p')
-        #Scrolling the page
-        body = GetElement(popup,By.CLASS_NAME, 'modal-body scrollable-body ng-scope')
-        print body
-        lenOfPage = Global.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
-        print lenOfPage
-        match=False
-        while(match==False):
-            lastCount = lenOfPage
-            print lastCount
-            time.sleep(3)
-            lenOfPage = driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
-            print lenOfPage
-            if lastCount==lenOfPage:
-                match=True
-        line_count=lines.count()
-        if line_count<=50:
-            testcomment = 'Test Fail - Upload MTF which has more then 50 error message lines'
-            result = False
-            PrintFP(testcomment)
-            return result, testcomment
-    else:
-        PrintFP("MTF File Uploaded Successfully")
-        return Global.FAIL, 'TEST FAIL'

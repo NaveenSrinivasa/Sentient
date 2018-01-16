@@ -10,6 +10,21 @@
             "Module": "Manage Profile Tests",
             "skip": false,
             "test_json": "main/ManageProfile_Testcases.json"
+        },
+        {
+            "Module": "System Admin - Import MTF Tests",
+            "skip": false,
+            "test_json": "main/SystemAdmin_Import_MTF_Testcases.json"
+        },
+        {   
+            "Module": "Add User Tests",
+            "skip": false,
+            "test_json": "main/UserManage_Testcases.json"
+        },
+        {   
+            "Module": "System Admin Test Cases",
+            "skip": false,
+            "test_json": "main/SystemAdmin_Testcases.json"
         }
     ]
 }

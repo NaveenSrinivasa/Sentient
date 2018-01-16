@@ -75,35 +75,6 @@ def DeviceFilters(input_file_path=None, page=None):
         swFilterButton.click()
         time.sleep(2)
 
-
-    # Check Comm Type Filter
-    '''swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button")
-    swFilterButton.click()
-
-    GetElement(Global.driver, By.ID, 'deselectAll').click()
-    GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button").click()
-    if not ('Select' in GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button").text):
-        result = Global.FAIL
-        printFP("INFO - Filter SW does not display the text Select if unselect everything.")
-
-    swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='communicationTypeSettings.list']/div/button")
-    swFilterButton.click()
-    time.sleep(1)
-
-    FilterChoices = GetElements(Global.driver, By.XPATH, "//li[@ng-repeat='option in options | filter:getFilter(input.searchFilter)']")
-    for n in range(len(FilterChoices)):
-        FilterChoices[n].click()
-        filterText = GetElement(FilterChoices[n], By.XPATH, 'a/span[2]/span').text
-        displayedSW = GetElements(Global.driver, By.XPATH, '//td[15]/span' if page == 'Upgrade' else '//td[16]/span')
-        for m in range(len(displayedSW)):
-            if displayedSW[m].text != filterText:
-                result = Global.FAIL
-                printFP("INFO - A displayed Communication Type version does not match the filter applied.")
-            time.sleep(5)
-        FilterChoices[n].click()
-
-    swFilterButton.click()'''
-
     # Check Network Group Filter
     swFilterButton = GetElement(Global.driver, By.XPATH, "//span[@options='networkGroupSelection.list']/div/button")
     swFilterButton.click()
@@ -1545,7 +1516,7 @@ def DeleteRegion(use_global_test_device=True, region_name=None):
     rootElement = GetElement(Global.driver, By.XPATH, '//*[@id="node-1"]')
     if rootElement.get_attribute('collapsed') == 'true':
         GetRootNode()
-        time.sleep(5)
+        time.sleep(2)
 
     region = GetRegion(region_name)
     if region == None:
@@ -1559,13 +1530,9 @@ def DeleteRegion(use_global_test_device=True, region_name=None):
 
     #Check if region is deleted
     Global.driver.refresh()
+    time.sleep(2)
     if GetRegion(region_name) == None:
         printFP('Region %s deleted' % region_name)
-        if use_global_test_device:
-            try:
-                MoveDeviceToOffline(device['serial'])
-            except Exception as e:
-                printFP(e.message)
         return Global.PASS, 'TEST PASS - '
     else:
         testComment = 'Failed to delete region %s' % region_name

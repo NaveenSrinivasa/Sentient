@@ -1,42 +1,57 @@
 {
-    "user_defined":
+    "Email Parameters":
     {
-        "email_subject_line": "1.7 Selenium Automation Test - LG DM",
+        "email_subject_line": "GAS 2.0 Selenium Automation Test",
         "email_recipients": ["stanley.chen0@gmail.com"],
-        "email_send_testreport": true,
-        "ample_build_version": "1.7.0.149",
-        "sgw_build_version": "1.7.0.50",
-        "loglevel": "info",
-        "log_location": "/logs",
-        "report_location": "/reports",
-        "ampleIP": "172.20.4.40",
-        "browser_name": "chrome",
-        "platform_name": "MAC",
-        "selenium_ip": "localhost:4444",
-        "seleniumDir": "/Users/schen/Documents/Work Related Shit/qa-selenium/Selenium_GAS_2.0",
-        "inputfilesDir": "/main",
-        "devices_folder": "/devices",
-        "testfile": "/all_modules.json",
-        "defaultdownloadpath": "/home/sqa/Downloads/",
-        "hiptest_result_publish" : "false",
+        "email_enable": false
+    },
+    "HipTest Parameters":
+    {
+        "hiptest_account_email" : "",
+        "hiptest_account_password" : "",
         "hiptest_project_id" : "46692",
         "hiptest_test_run_id" : "91268",
-        "hiptest_account_email" : "bbaskar@sentient-energy.com",
-        "hiptest_account_password" : "chander@123",
+        "hiptest_result_publish" : false
+    },
+    "Ample Testbed Parameters":
+    {
+        "ampleIP": "172.20.4.40",
+        "ample_build_version": "1.7.0.193",
+        "sgw_build_version": "1.7.0.50",
         "sensor_gw1_name": "qa-selenium-rh-test-sgw_sgw_comm",
         "sensor_gw2_name": "qa-selenium-rh-test-sgw_sgw_comm",
         "networkgroup1_name" : "seleniumtest_group",
         "networkgroup1_port": "53074",
-        "devicepollinterval": "600",
         "networkgroup2_name" : "seleniumtest_group2",
         "networkgroup2_port": "53076",
+        "devicepollinterval": "600"
+    },
+    "Selenium Config Parameters":
+    {
+        "browser_name": "internet explorer 10",
+        "platform_name": "WINDOWS",
+        "selenium_ip": "localhost:4444",
+        "seleniumDir": "/Users/schen/Documents/Work Related Shit/qa-selenium/Selenium_GAS_2.0",
+        "inputfilesDir": "/main",
+        "testfile": "/all_modules.json",
+        "downloadFolder": "/Users/schen/Downloads",
+        "loglevel": "info",
+        "log_location": "/logs",
+        "report_location": "/reports",
+        "devices_folder": "/devices"
+    },
+    "Device Info":
+    {
         "devices": ["device_1", "device_2", "lm_devicename"],
         "device_1": "at-ssn17",
         "d1_vto_port": "21161",
         "device_2": "at-ssn18",
         "d2_vto_port": "21182",
         "cll_d1_ipaddr": "10.48.0.76",
-        "cll_d2_ipaddr": "",
+        "cll_d2_ipaddr": ""
+    },
+    "Other Parameters":
+    {
         "otap_day": "Thursday",
         "otap_from_time": "12:00AM",
         "otap_to_time": "11:59PM",

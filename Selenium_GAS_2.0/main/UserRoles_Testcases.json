@@ -1,0 +1,20 @@
+{
+    "Tests":
+    [
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "admin",
+            "password": "adminpw"
+        },
+        {
+            "method_name": "CheckDisableAndForceResetActionButtons",
+            "hiptest_name": "'Disable User' and ' Force Reset' action icon should exist in User Management Screen - Admin",
+            "skip": false,
+            "expect_pass": true,
+        },
+        
+    ]
+}

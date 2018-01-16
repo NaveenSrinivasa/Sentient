@@ -1,0 +1,6 @@
+{
+	"Network Group Name": "cloned_seleniumtest_group",
+	"Description": "Clone Network Group Test",
+	"Sensor Gateway Name": "qa-selenium-rh-test-sgw_sgw_comm",
+	"Master DNP Address": "56050"
+}

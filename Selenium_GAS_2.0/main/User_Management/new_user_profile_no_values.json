@@ -1,0 +1,12 @@
+{
+    "username": "",
+    "firstname": "",
+    "middlename": "",
+    "lastname": "",
+    "email": "",
+    "timezone": "",
+    "temperatureunit": "",
+    "password": "",
+    "confirmpassword": "",
+    "role": "User"
+}

@@ -20,7 +20,7 @@ def Login(username, password):
     SendKeys(inputElement, password)
 
     inputElement.submit()
-
+    time.sleep(3)
     if 'dashboard' in Global.driver.current_url:
         printFP('INFO - Reached dashboard')
         return Global.PASS, 'TEST PASS - Successfully Logged In'

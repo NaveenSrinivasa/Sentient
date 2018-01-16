@@ -19,7 +19,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup as soup
 
-
 def WaitForXTime(min = 5):
     i = 0
     while i < min:
@@ -59,8 +58,10 @@ def GetElement(driver, method, locator):
     driver - either the webdriver or a webelement
     method - By.(XPATH, TAG_NAME, ID, CLASS_NAME, etc)
     locator - a string identifier to find the element using the method."""
-
-    element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((method, locator)))
+    try:
+        element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((method, locator)))
+    except:
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((method, locator)))
     return element
 
 def CheckIfStaleElement(element):
@@ -122,7 +123,9 @@ def ClickButton(driver, method, locator):
 
 def ClearInput(element):
     try:
-        element.clear()
+        element.send_keys(Keys.CONTROL + 'a')
+        time.sleep(1)
+        element.send_keys(Keys.DELETE)
         return True
     except:
         printFP("INFO - Test could not clear input.")
@@ -280,7 +283,8 @@ def GoToDevMan():
         return True
 
     try:
-        GetElement(Global.driver, By.XPATH, "//a[text()='Device Management']").click()
+        devMan = GetElement(Global.driver, By.XPATH, "//a[text()='Device Management']")
+        devMan.click()
         time.sleep(1)
         if 'device-management' in Global.driver.current_url:
             return True
@@ -422,9 +426,13 @@ def GoToSysAdmin():
         return True
     else:
         try:
-            GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear').click()
+            gear = GetElement(Global.driver, By.CLASS_NAME, 'ion-ios-gear')
+            gear.click()
+            printFP("INFO - Clicked gear.")
             time.sleep(2)
-            GetElement(Global.driver, By.LINK_TEXT, 'System Admin').click()
+            sysadminLink = GetElement(Global.driver, By.LINK_TEXT, 'System Admin')
+            sysadminLink.click()
+            printFP("INFO - Clicked System Admin Link")
             time.sleep(2)
             if 'system-admin' in Global.driver.current_url:
                 printFP("INFO - Successfully Navigated to System Admin Page")
@@ -525,8 +533,6 @@ def GetRegion(regionName):
             printFP('Found %s' % region.text)
             actions = ActionChains(Global.driver)
             actions.move_to_element(region).click(region).perform()
-            time.sleep(2)
-            region = GetElement(region, By.XPATH, '../..')
             time.sleep(1)
             return region
     printFP('Region %s not found' % regionName)
@@ -809,10 +815,8 @@ def RightClickElement(element):
     """Right clicks the given element."""
 
     actions = ActionChains(Global.driver)
-    actions.move_to_element_with_offset(element, 1, 5).perform()
+    actions.context_click(element).perform()
     time.sleep(2)
-    #actions.move_to_element(element)
-    actions.context_click().perform()
 
 def RefreshMenuTree(menuID):
     menu = 'node%s' % menuID[4:]
@@ -1365,7 +1369,7 @@ def ParseJsonInputFile(input_json):
         inputfile = json.load(infile)
     return inputfile
 
-def EmailAttachment(attachments, TOADDRS, subjectLine):
+def EmailAttachment(file, TOADDRS, subjectLine):
     """Emails a list of attachments to a list of recipients.
     Uses test.autpomation.server@gmail.com to send emails.
 
@@ -1385,17 +1389,16 @@ def EmailAttachment(attachments, TOADDRS, subjectLine):
     outer.preamble = 'You will not see this in a MIME-aware mail reader.\n'
 
     # Add the attachments to the message
-    for file in attachments:
-        try:
-            with open(file, 'rb') as fp:
-                msg = MIMEBase('application', "octet-stream")
-                msg.set_payload(fp.read())
-            encoders.encode_base64(msg)
-            msg.add_header('Content-Disposition', 'attachment', filename=os.path.basename(file))
-            outer.attach(msg)
-        except:
-            print("Unable to open one of the attachments. Error: ", sys.exc_info()[0])
-            raise
+    try:
+        with open(file, 'rb') as fp:
+            msg = MIMEBase('application', "octet-stream")
+            msg.set_payload(fp.read())
+        encoders.encode_base64(msg)
+        msg.add_header('Content-Disposition', 'attachment', filename=os.path.basename(file))
+        outer.attach(msg)
+    except:
+        print("Unable to open one of the attachments. Error: ", sys.exc_info()[0])
+        raise
 
     composed = outer.as_string()
 
@@ -1513,7 +1516,6 @@ def FilteredDataFromTable(columnname, pagename):
 
                     n = n+1
 
-    printFP(columnnamevalueslist)
     return columnnamevalueslist
 
 
@@ -4209,12 +4211,9 @@ def OpenAddNetworkGroupForSGW(comm_server_name):
 
 def OpenNetworkGroupList(comm_server_name):
     tablebody = GetElement(Global.driver, By.XPATH, xpaths['sys_admin_comm_table'])
-    print tablebody
     commserverrow = None
     rows = GetElements(tablebody, By.TAG_NAME, 'tr')
-    print rows
     for row in rows:
-        print row
         if GetElement(row, By.XPATH, 'td[2]/span').text == comm_server_name:
             commserverrow = row
             if 'group-open' in commserverrow.get_attribute('class'):
@@ -4304,7 +4303,7 @@ def SearchJobLink(device_names):
 
 def GetOverrideGPSStatus(region, substation, feeder, site):
     GoToDevMan()
-    time.sleep(5)
+    time.sleep(1)
     GetSiteFromTop(region, substation, feeder, site)
     siteelement = GetSite(site)
     RightClickElement(siteelement)

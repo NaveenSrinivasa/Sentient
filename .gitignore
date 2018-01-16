@@ -14,8 +14,8 @@ __pycache__/
 *.so
 
 #log folders
-logs/*.log
-reports/*.csv
+Selenium_GAS_2.0/logs/*
+Selenium_GAS_2.0/reports/*
 
 # Distribution / packaging
 .Python
