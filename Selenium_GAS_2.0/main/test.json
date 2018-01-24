@@ -10,13 +10,10 @@
             "password": "yourpass"
         },
         {
-            "method_name": "EditProfile",
-            "hiptest_name": "Edit Profile - Positive Test Case - Edit Using Save Button",
+            "method_name": "FloatingPointInProfiles",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
             "skip": false,
-            "expect_pass": true,
-            "existing_profile_name": "seleniumtest",
-            "profile_json": "/Manage Profiles/changeselenium.json", 
-            "save_key": "SAVE"
+            "expect_pass": true
         }
     ]
 }

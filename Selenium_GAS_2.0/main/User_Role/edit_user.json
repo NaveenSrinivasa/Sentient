@@ -1,0 +1,9 @@
+{
+    "username": "selUser",
+    "General":{
+        "firstname": "editName",
+        "middlename": "editmid",
+        "lastname": "editlast",
+        "email": "user1@sentient-energy.com"
+    }
+}

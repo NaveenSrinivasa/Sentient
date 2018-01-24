@@ -279,7 +279,7 @@ def main():
             hiptestRun = test_runner.TestRunner(config)
             dictResults = {
                 "PASS": 'passed',
-                "FAILED": 'failed',
+                "FAIL": 'failed',
                 "EXCEPTION": 'retest'
             }
 
@@ -293,7 +293,7 @@ def main():
                         hiptestRun.run_publishresult(hiptestresults, hiptest_name)
 
         if config['Email Parameters']['email_enable']:
-            EmailAttachment(Global.reportPath, parsed_config['Email']['recipients'], parsed_config['Email']['subject_line'])
+            EmailAttachment(Global.reportPath, config['Email Parameters']['email_recipients'], config['Email Parameters']['email_subject_line'])
     else:
         print 'Missing input file'
         print 'Not enough arguments.'

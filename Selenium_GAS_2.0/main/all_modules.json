@@ -3,28 +3,38 @@
     [
         {
             "Module": "Login Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "main/Login_Testcases.json"
         },
         {
             "Module": "Manage Profile Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "main/ManageProfile_Testcases.json"
         },
         {
             "Module": "System Admin - Import MTF Tests",
-            "skip": false,
+            "skip": true,
             "test_json": "main/SystemAdmin_Import_MTF_Testcases.json"
         },
         {   
-            "Module": "Add User Tests",
-            "skip": false,
+            "Module": "User Management Tests",
+            "skip": true,
             "test_json": "main/UserManage_Testcases.json"
+        },
+        {
+            "Module": "User Role Tests",
+            "skip": true,
+            "test_json": "main/UserRoles_Testcases.json"
         },
         {   
             "Module": "System Admin Test Cases",
-            "skip": false,
+            "skip": true,
             "test_json": "main/SystemAdmin_Testcases.json"
+        },
+        {   
+            "Module": "Temporary",
+            "skip": false,
+            "test_json": "main/test.json"
         }
     ]
 }

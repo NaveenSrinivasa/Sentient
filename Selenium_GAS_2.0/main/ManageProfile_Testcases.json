@@ -79,8 +79,12 @@
             "expect_pass": true,
             "input_file_path": "/Manage_Profiles/d1_reg_sub_names.json",
             "device_name": ["at-ssn17"],
-            "config": "Hello It Me",
-            "actionButton": true
+            "config": { 
+                "-" : "Hello It Me"
+            },
+            "profileCheck": {
+                "at-ssn17": "Hello It Me"
+            }
         },
         {
             "method_name": "VerifyDefaultManagePage",
@@ -105,7 +109,7 @@
         },
         {
             "method_name": "VerifyAEDEnableLatch",
-            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Create Profile",
+            "hiptest_name": "Verify Numeric Fields Do Not Take Floating Point Numbers - Edit Profile",
             "skip": false,
             "expect_pass": true,
             "profile_name": "seleniumtest"

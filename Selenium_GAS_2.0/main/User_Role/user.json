@@ -1,0 +1,12 @@
+{
+    "General":{
+        "username": "selUser",
+        "firstname": "seleniumUser",
+        "middlename": "acceptance",
+        "lastname": "tests",
+        "email": "user@sentient-energy.com",
+        "password": "@mpacity",
+        "confirmpassword": "@mpacity",
+        "role": "User"
+    }
+}

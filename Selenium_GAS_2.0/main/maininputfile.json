@@ -7,8 +7,8 @@
     },
     "HipTest Parameters":
     {
-        "hiptest_account_email" : "",
-        "hiptest_account_password" : "",
+        "hiptest_account_email" : "esiu@sentient-energy.com",
+        "hiptest_account_password" : "ampacity!",
         "hiptest_project_id" : "46692",
         "hiptest_test_run_id" : "91268",
         "hiptest_result_publish" : false
@@ -28,8 +28,8 @@
     },
     "Selenium Config Parameters":
     {
-        "browser_name": "internet explorer 10",
-        "platform_name": "WINDOWS",
+        "browser_name": "chrome",
+        "platform_name": "MAC",
         "selenium_ip": "localhost:4444",
         "seleniumDir": "/Users/schen/Documents/Work Related Shit/qa-selenium/Selenium_GAS_2.0",
         "inputfilesDir": "/main",

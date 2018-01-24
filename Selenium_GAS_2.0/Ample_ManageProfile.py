@@ -505,8 +505,14 @@ def FloatingPointInProfiles(profile_name=None):
     tabs = ['cfciData', 'nonCfciData', 'logiData', 'anomalyData']
     for x in range(len(tabs)):
         ClickButton(Global.driver, By.ID, tabs[x])
+        time.sleep(1)
+        if tabs[x] == 'anomalyData':
+            aed_enable_val = GetElement(Global.driver, By.XPATH, "//div[@class='tab-pane ng-scope active']//span[text()='AED enable latch']/parent::span/parent::fieldset/span[2]/div/div")
+            if "switch-off" in aed_enable_val.get_attribute('class'):
+                printFP("INFO - AED Enable Switch is disabled. Enabling now.")
+                aed_enable_val.click()
 
-        time.sleep(0.5)
+        time.sleep(1)
         divElement = GetElement(Global.driver, By.XPATH, "//div[@class='tab-pane ng-scope active']/div[not(contains(@class,'ng-hide'))]")
         inputElements = GetElements(divElement, By.TAG_NAME, 'input')
         for i in range(len(inputElements)):
@@ -523,7 +529,7 @@ def FloatingPointInProfiles(profile_name=None):
             else:
                 button = GetElement(Global.driver, By.XPATH, '//button[contains(text(),"Create")]')
             button.click()
-            time.sleep(0.5)
+            time.sleep(1)
             try:
                 GetElement(Global.driver, By.XPATH, '//span[contains(text(),"Please change the float to integer on the form.")]')
             except:
@@ -535,7 +541,8 @@ def FloatingPointInProfiles(profile_name=None):
                 testComment = 'A field generates error message, but does not get highlighted red when creating with bad value.'
                 printFP("INFO - " + testComment)
                 return Global.FAIL, testComment
-            inputElements[i].clear()
+
+            ClearInput(inputElements[i])
             inputElements[i].send_keys(defaultValue)
     
     return Global.PASS, ''

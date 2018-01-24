@@ -4,6 +4,16 @@ from Utilities_Ample import *
 def Login(username, password):
     # Login Test -- takes arguments of string username and password to try to login to
     # Every new test module must begin with a valid Login combination and end with a Logout
+
+    if 'login' in Global.driver.current_url:
+        printFP("INFO - Test is already on Login page.")
+    elif any(substring in Global.driver.current_url for substring in ['disabled','reset-password']):
+        printFP("INFO - Currently on disabled/force reset page. Navigating to Login Page.")
+        Global.driver.get('https://172.20.4.40/amplemanage/login')
+    else:
+        printFP("INFO - Test cannot login because it is not on login page, disabled, or forced reset.")
+        return Global.FAIL, "TEST FAIL - Test cannot login because it is not on login page, disabled, or forced reset."
+
     try:
         # wait for the page to refresh
         inputElement = GetElement(Global.driver, By.ID, 'j_username')

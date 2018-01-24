@@ -715,24 +715,46 @@ def CheckDeviceDetails(input_file_path=None, device_names=None):
 def SelectProfile(config=None):
     """Private function that is to select profile after you get to the screen"""
     try:
-        time.sleep(1)
-        ClickButton(Global.driver, By.XPATH, xpaths['dev_man_configure_dropdown'])
-        time.sleep(1)
-        GetElement(Global.driver, By.XPATH, "//li[@ng-repeat='option in options']/a[span='"+config+"']").click()
-        time.sleep(3)
-        GetElement(Global.driver, By.XPATH, xpaths['dev_man_configure_apply']).click()
-        time.sleep(2)
-        msg = GetText(Global.driver, By.XPATH, xpaths['dev_man_configure_error'])
-        ClickButton(Global.driver, By.XPATH, xpaths['dev_man_configure_close'])
-        if not 'Successfully' in msg:
-            return False
-        else:
-            return True
+        bodyElement = GetElement(Global.driver, By.XPATH, "//form[@name='configureDevice']/div[1]")
+        configRows = GetElements(bodyElement, By.XPATH, "//div[@ng-repeat='device in value']")
+        for i in range(len(configRows)):
+            currentprof = GetElement(configRows[i], By.XPATH, "div[2]").text
+            if currentprof == '':
+                continue
+            elif currentprof in config.keys():
+                try:
+                    rowProfButton = GetElement(configRows[i], By.XPATH, "div[3]/div/span/div/button")
+                    rowProfButton.click()
+                    time.sleep(1)
+                    profile = GetElement(Global.driver, By.XPATH, "//li[contains(@ng-repeat,'option in options')]/a/span[2]/span[text()='"+config[currentprof]+"']")
+                    profile.click()
+                    time.sleep(1)
+                except:
+                    printFP("INFO - Exception while navigating after finding the the current profile was in the dictionary.")
+                    Global.driver.refresh()
+                    return False
+            else:
+                printFP("INFO - Found a profile that was not in the dictionary. Exiting now.")
+                Global.driver.refresh()
+                return False
     except:
         printFP("INFO - Selecting profile encountered an issue.")
         return False
 
-def configureDevice(input_file_path=None, device_name=None, config=None, actionButton=False, waitforconfiguration=False):
+    nextButton = GetElement(Global.driver, By.XPATH, xpaths['dev_man_configure_apply'])
+    nextButton.click()
+    time.sleep(2)
+    confirmButton = GetElement(Global.driver, By.XPATH, xpaths['dev_man_configure_confirm'])
+    confirmButton.click()
+    time.sleep(2)
+    msg = GetText(Global.driver, By.XPATH, xpaths['dev_man_configure_success_msg'])
+    ClickButton(Global.driver, By.XPATH, xpaths['dev_man_configure_close'])
+    if not 'Successfully' in msg:
+        return False
+    else:
+        return True
+
+def configureDevice(input_file_path=None, device_name=None, config=None, profileCheck=None, waitforconfiguration=False):
     #this test simply tests the configuration button to see
     #site_name = site that the device is located on
     #device_name = list of device names that will be configured
@@ -745,55 +767,43 @@ def configureDevice(input_file_path=None, device_name=None, config=None, actionB
 
     params = ParseJsonInputFile(Global.testResourcePath + input_file_path)
     GoToDevMan()
-    GoToDevConfig()
 
     if not GetLocationFromInput(params['Region'], params['Substation'], params['Feeder'], params['Site']):
         testComment = 'Provided input values are not valid.'
-        printFP(testComment)
+        printFP('INFO - ' + testComment)
         return Global.FAIL, testComment
-    time.sleep(1)
 
-    if actionButton:
-        for i in range(len(device_name)):
-            row = GetDevice(device_name[i])
-            button = GetElement(row, By.TAG_NAME, 'input')
-            SetCheckBox(button, "true")
-            time.sleep(2)
-            configAction = GetElement(Global.driver, By.XPATH, xpaths['dev_man_configure'])
-            time.sleep(2)
-            if 'disabled' in configAction.get_attribute('class'):
-                testComment = 'Unable to click configure button for this device %s' %device_name[i]
-                printFP(testComment)
-                return Global.FAIL, testComment
-            configAction.click()
-            if not SelectProfile(config):
-                testComment = 'An error occurred while trying to configure the devices.'
-                printFP(testComment)
-                return Global.FAIL, testComment
-    else:
-        TableBody = GetElement(Global.driver, By.TAG_NAME, "tbody")
-        for x in range(len(device_name)):
-            row = FindRowInTable(TableBody, device_name[x])
-            if row == None:
-                testComment = "Test Could not find device named %s" % device_name[x]
-                printFP('INFO - ' + testComment)
-                return Global.FAIL, 'TEST FAIL ' + testComment
-            button = GetElement(row, By.TAG_NAME, 'input')
-            SetCheckBox(button, "true")
+    TableBody = GetElement(Global.driver, By.TAG_NAME, "tbody")
+    for x in range(len(device_name)):
+        row = FindRowInTable(TableBody, device_name[x])
+        if row == None:
+            testComment = "Test Could not find device named %s" % device_name[x]
+            printFP('INFO - ' + testComment)
+            return Global.FAIL, 'TEST FAIL ' + testComment
+        button = GetElement(row, By.TAG_NAME, 'input')
+        SetCheckBox(button, "true")
 
-        classText = GetElement(Global.driver, By.XPATH, xpaths['dev_man_configure']).get_attribute('class')
-        if 'disabled' in classText:
-            testComment = 'Configure Button is disabled currently'
-            printFP(testComment)
-            return Global.FAIL, testComment
+    classText = GetElement(Global.driver, By.XPATH, xpaths['dev_man_configure']).get_attribute('class')
+    if 'disabled' in classText:
+        testComment = 'Configure Button is disabled currently'
+        printFP('INFO - ' + testComment)
+        return Global.FAIL, 'TEST FAIL - ' + testComment
 
-        if ClickButton(Global.driver, By.XPATH, xpaths['dev_man_configure']):
-            if not SelectProfile(config):
-                testComment = 'An error occured while trying to configure the devices.'
-                printFP(testComment)
-                return Global.FAIL, testComment
+    if ClickButton(Global.driver, By.XPATH, xpaths['dev_man_configure']):
+        time.sleep(2)
+        if not SelectProfile(config):
+            testComment = 'An error occured while trying to configure the devices.'
+            printFP('INFO - ' + testComment)
+            return Global.FAIL, 'TEST FAIL - ' + testComment
 
     result = Global.PASS
+    toggleColumn = GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn dropdown-toggle')]")
+    toggleColumn.click()
+    time.sleep(1)
+    profileName = GetElement(Global.driver, By.XPATH, "//span[@class='column-title ng-binding' and text()='Profile Name']/../input")
+    profileName.click()
+    toggleColumn.click()
+
     for x in range(len(device_name)):
         TableBody = GetElement(Global.driver, By.TAG_NAME, 'tbody')
         row = FindRowInTable(TableBody, device_name[x])
@@ -802,8 +812,8 @@ def configureDevice(input_file_path=None, device_name=None, config=None, actionB
             printFP(testComment)
             return Global.FAIL, testComment
 
-        pName = GetElement(row, By.XPATH, 'td[5]/span').text
-        if config == pName:
+        pName = GetElement(row, By.XPATH, 'td[13]/span').text
+        if profileCheck[device_name[x]] == pName:
             printFP("New profile was applied successfully for device %s." % device_name[x])
         else:
             testComment="Profile was not applied successfully for device %s."% device_name[x]
@@ -1501,13 +1511,7 @@ def DeleteRegion(use_global_test_device=True, region_name=None):
     Args:
       bool useFP - if True, will read the region from fp"""
 
-    if use_global_test_device:
-        try:
-            device = GetOnlineDevice()
-            region_name = device['region']
-        except Exception as e:
-            printFP(e.message)
-    elif region_name == None:
+    if region_name == None:
         testComment = 'No region name specified.'
         printFP(testComment)
         return Global.FAIL, testComment

@@ -11,10 +11,546 @@
         },
         {
             "method_name": "CheckDisableAndForceResetActionButtons",
-            "hiptest_name": "'Disable User' and ' Force Reset' action icon should exist in User Management Screen - Admin",
+            "hiptest_name": "Disable User' and ' Force Reset' action icon should exist in User Management Screen - Global Admin",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "method_name":"AddUserTest",
+            "hiptest_name": "Global Admin - Create User - Global Admin",
+            "skip": true,
+            "expect_pass": true,
+            "user_profile_path": "/User_Role/globaladmin.json"
+        },
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Global Admin - Create User - Admin",
             "skip": false,
             "expect_pass": true,
+            "user_profile_path": "/User_Role/admin.json"
+        },
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Global Admin - Create User - User",
+            "skip": false,
+            "expect_pass": true,
+            "user_profile_path": "/User_Role/user.json"
+        }, 
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Global Admin - Create User - View Only",
+            "skip": false,
+            "expect_pass": true,
+            "user_profile_path": "/User_Role/viewonly.json"
+        },
+        {   
+            "method_name":"EditUserTest",
+            "hiptest_name": "Global Admin - Can Edit Role - Global Admin",
+            "skip": true,
+            "expect_pass": true,
+            "edit_user_path": "/User_Role/edit_globaladmin.json"
+        },
+        {   
+            "method_name":"EditUserTest",
+            "hiptest_name": "Global Admin - Can Edit Role - Admin",
+            "skip": false,
+            "expect_pass": true,
+            "edit_user_path": "/User_Role/edit_admin.json"
+        },
+        {   
+            "method_name":"EditUserTest",
+            "hiptest_name": "Global Admin - Can Edit Role - User",
+            "skip": false,
+            "expect_pass": true,
+            "edit_user_path": "/User_Role/edit_user.json"
+        },
+        {   
+            "method_name":"EditUserTest",
+            "hiptest_name": "Global Admin - Can Edit Role - View Only",
+            "skip": false,
+            "expect_pass": true,
+            "edit_user_path": "/User_Role/edit_view.json"
+        },
+        {
+            "method_name": "VerifyDisable",
+            "hiptest_name": "Global Admin - Disable User - Global Admin",
+            "skip": false,
+            "expect_pass": true,
+            "disabled_user": "selGlobalAdmin",
+            "disabled_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "admin",
+            "password": "adminpw"
+        },
+        {
+            "method_name": "VerifyDisable",
+            "hiptest_name": "Global Admin - Disable User - View Only",
+            "skip": false,
+            "expect_pass": true,
+            "disabled_user": "selViewOnly",
+            "disabled_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "admin",
+            "password": "adminpw"
+        },
+        {
+            "method_name": "VerifyDisable",
+            "hiptest_name": "Global Admin - Disable User - User",
+            "skip": false,
+            "expect_pass": true,
+            "disabled_user": "selUser",
+            "disabled_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "admin",
+            "password": "adminpw"
+        },
+        {
+            "method_name": "VerifyDisable",
+            "hiptest_name": "Global Admin - Disable User - Admin",
+            "skip": false,
+            "expect_pass": true,
+            "disabled_user": "selAdmin",
+            "disabled_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "admin",
+            "password": "adminpw"
+        },
+        {
+            "method_name": "VerifyEnable",
+            "hiptest_name": "Global Admin - Enable User - Global Admin",
+            "skip": false,
+            "expect_pass": true,
+            "enable_user": "selGlobalAdmin",
+            "enable_pw": "@mpacity"
         },
         
+        {
+            "method_name": "VerifyEnable",
+            "hiptest_name": "Global Admin - Enable User - Global Admin",
+            "skip": false,
+            "expect_pass": true,
+            "enable_user": "selViewOnly",
+            "enable_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "admin",
+            "password": "adminpw"
+        },
+        {
+            "method_name": "VerifyEnable",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "enable_user": "selUser",
+            "enable_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyEnable",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "enable_user": "selAdmin",
+            "enable_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyForceReset",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "reset_user": "selViewOnly",
+            "reset_pw": "@mpacity",
+            "new_pw": "@mpacity123"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyForceReset",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "reset_user": "selUser",
+            "reset_pw": "@mpacity",
+            "new_pw": "@mpacity123"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyForceReset",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "reset_user": "selAdmin",
+            "reset_pw": "@mpacity",
+            "new_pw": "@mpacity123"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "",
+            "skip": true,
+            "expect_pass": true,
+            "username": "selGlobalAdmin"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "selAdmin"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "selUser"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "selViewOnly"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "CheckDisableAndForceResetActionButtons",
+            "hiptest_name": "'Disable User' and ' Force Reset' action icon should exist in User Management Screen - Admin",
+            "skip": false,
+            "expect_pass": true
+        },
+        {
+            "method_name":"AddUserTest",
+            "hiptest_name": "Admin - Verify what accounts Admin is able to create - Global Admin",
+            "skip": false,
+            "expect_pass": false,
+            "user_profile_path": "/User_Role/globaladmin.json"
+        },
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Global Admin - Can create any role available - Admin",
+            "skip": false,
+            "expect_pass": true,
+            "user_profile_path": "/User_Role/admin.json"
+        },
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Global Admin - Can create any role available - User",
+            "skip": false,
+            "expect_pass": true,
+            "user_profile_path": "/User_Role/user.json"
+        }, 
+        {   
+            "method_name":"AddUserTest",
+            "hiptest_name": "Global Admin - Can create any role available - View Only",
+            "skip": false,
+            "expect_pass": true,
+            "user_profile_path": "/User_Role/viewonly.json"
+        },
+        {   
+            "method_name":"EditUserTest",
+            "hiptest_name": "Global Admin - Can Edit Role - Global Admin",
+            "skip": true,
+            "expect_pass": true,
+            "edit_user_path": "/User_Role/edit_globaladmin.json"
+        },
+        {   
+            "method_name":"EditUserTest",
+            "hiptest_name": "Global Admin - Can Edit Role - Admin",
+            "skip": false,
+            "expect_pass": true,
+            "edit_user_path": "/User_Role/edit_admin.json"
+        },
+        {   
+            "method_name":"EditUserTest",
+            "hiptest_name": "Global Admin - Can Edit Role - User",
+            "skip": false,
+            "expect_pass": true,
+            "edit_user_path": "/User_Role/edit_user.json"
+        },
+        {   
+            "method_name":"EditUserTest",
+            "hiptest_name": "Global Admin - Can Edit Role - View Only",
+            "skip": false,
+            "expect_pass": true,
+            "edit_user_path": "/User_Role/edit_view.json"
+        },
+        {
+            "method_name": "VerifyDisable",
+            "hiptest_name": "Admin - Disabling Accounts - Global Administrator",
+            "skip": false,
+            "expect_pass": true,
+            "disabled_user": "admin",
+            "disabled_pw": "adminpw"
+        },
+        {
+            "method_name": "VerifyDisable",
+            "hiptest_name": "Admin - Disabling Accounts - View Only",
+            "skip": false,
+            "expect_pass": true,
+            "disabled_user": "selViewOnly",
+            "disabled_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyDisable",
+            "hiptest_name": "Admin - Disabling Accounts - User",
+            "skip": false,
+            "expect_pass": true,
+            "disabled_user": "selUser",
+            "disabled_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyDisable",
+            "hiptest_name": "Admin - Disabling Accounts - Administrator",
+            "skip": false,
+            "expect_pass": true,
+            "disabled_user": "selAdmin",
+            "disabled_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyEnable",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "enable_user": "selViewOnly",
+            "enable_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyEnable",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "enable_user": "selUser",
+            "enable_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyEnable",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "enable_user": "selAdmin",
+            "enable_pw": "@mpacity"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyForceReset",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "reset_user": "selViewOnly",
+            "reset_pw": "@mpacity",
+            "new_pw": "@mpacity123"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyForceReset",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "reset_user": "selUser",
+            "reset_pw": "@mpacity",
+            "new_pw": "@mpacity123"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "VerifyForceReset",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "reset_user": "selAdmin",
+            "reset_pw": "@mpacity",
+            "new_pw": "@mpacity123"
+        },
+        {
+            "method_name": "Login",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true,
+            "username": "ampleadmin",
+            "password": "yourpass"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "Admin - Verify which account types Admin can delete - globaladmin_role",
+            "skip": false,
+            "expect_pass": true,
+            "username": "globaladmin"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "Admin - Verify which account types Admin can delete - admin_role",
+            "skip": false,
+            "expect_pass": true,
+            "username": "selAdmin"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "Admin - Verify which account types Admin can delete - user_role",
+            "skip": false,
+            "expect_pass": true,
+            "username": "selUser"
+        },
+        {
+            "method_name": "DeleteUserTest",
+            "hiptest_name": "Admin - Verify which account types Admin can delete - viewuser_role",
+            "skip": false,
+            "expect_pass": true,
+            "username": "selViewOnly"
+        },
+        {
+            "method_name": "Logout",
+            "hiptest_name": "",
+            "skip": false,
+            "expect_pass": true
+        }
     ]
 }

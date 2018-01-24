@@ -92,7 +92,9 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/d1_d2_same_sensor_dnp_address.csv",
-            "list_of_errors":["Duplicate Sensor (Device) DNP Address"]
+            "list_of_errors":[
+                "Sensor DNP Address : Duplicate Sensor (Device) DNP Address"
+            ]
         },
         {
             "method_name": "UploadMTFTest",
@@ -108,7 +110,24 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/d1_with_reg_sub_capitalize_letters.csv",
-            "list_of_errors":["An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available."]
+            "list_of_errors":[
+                "Region, Sub Station, Feeder, Feeder Site and Phase : An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.", 
+                "Serial Number : The Serial Number is already defined for a different Region, Sub Station, Feeder, Feeder Site and Phase Combination.", 
+                "Sensor DNP Address : Duplicate Sensor (Device) DNP Address",
+                "MAC Address : Duplicate Mac Address",
+                "Sensor IP Address : Duplicate IP Address and DA Port combination",
+                "Serial Number and Comm Server Combination : Serial Number already exists for the Comm Server.", 
+                "Region, Sub Station, Feeder, Feeder Site and Phase : An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.", 
+                "Region, Sub Station, Feeder, Feeder Site with a different case (Case Sensitive) : An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.", 
+                "Region is already available in the system with a different case (Case Sensitive) : An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.", 
+                "Region, Substation Combination is already available in the system with a different case (Case Sensitive) : An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.", 
+                "Region, Substation, and Feeder Combination is already available in the system with a different case (Case Sensitive) : An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.", 
+                "Serial Number : The Serial Number is already defined for a different Region, Sub Station, Feeder, Feeder Site and Phase Combination.", 
+                "Sensor DNP Address : Duplicate Sensor (Device) DNP Address",
+                "MAC Address : Duplicate Mac Address",
+                "Sensor IP Address : Duplicate IP Address and DA Port combination",
+                "Serial Number and Comm Server Combination : Serial Number already exists for the Comm Server."
+            ]
         },
         {
             "method_name": "DeleteRegion",
@@ -150,11 +169,13 @@
             "region_name": "r1"
         },
         {
-            "method_name": "ImportMTFValidFieldNotes",
+            "method_name": "UploadMTFTest",
             "hiptest_name": "Import MTF - Valid Field Notes",
             "skip": false,
             "expect_pass": true,
-            "input_file_path": "/Import_MTF/d1_lengthy_field_note.csv"
+            "mtf_full_path": "/Import_MTF/d1_lengthy_field_note.csv",
+            "wait_for_online": false,
+            "verifyLongFieldNotes": true
         },
         {
             "method_name": "DeleteRegion",
@@ -208,7 +229,7 @@
             "comment": "This test verifies MTF uploaded with different sgw and network group on the ample",
             "method_name": "UploadMTFNegativeTestValidation",
             "hiptest_name": "Import MTF - Mismatched Sensor Gateway and Network Group",
-            "skip": false,
+            "skip": true,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/d1_mismatch_sgw_and_networkgroup.csv",
             "list_of_errors":["Network Group Name : Bad value."]
@@ -228,7 +249,14 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/d1_same_but_diff_sgw_network.csv",
-            "list_of_errors":["An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available."]
+            "list_of_errors":[
+                "An Element with the same Region, Sub Station, Feeder, Feeder Site, and Phase combination is already available.",
+                "The Serial Number is already defined for a different Region, Sub Station, Feeder, Feeder Site and Phase Combination.",
+                "Duplicate Sensor (Device) DNP Address",
+                "Duplicate Mac Address",
+                "Duplicate IP Address and DA Port combination",
+                "Serial Number already exists for the Comm Server"
+            ]
         },
         {
             "method_name": "DeleteRegion",
@@ -245,11 +273,7 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/number_of_error_lines_matched.csv",
-            "list_of_errors": "",
-            "validateerror": true,
-            "validateargs": {
-                "validatemethodname": "VerifyNumberOfErrorsOnMTFFile"
-            }
+            "validateerror": "VALIDATE_CORRECTNUMBEROFERRORS"
         },
         {
             "comment": "This test verifies single device with valid network group and sgw and different network grp and sgw",
@@ -267,11 +291,7 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/export_error_lines.csv",
-            "list_of_errors": "",
-            "validateerror": true,
-            "validateargs": {
-                "validatemethodname": "ExportErrorLogForFailedMTF"
-            }
+            "validateerror": "VALIDATE_DOWNLOAD",
         },
         {
             "comment": "This test verifies that all errors should be shown in UI for a failed MTF upload without any restriction number of errors",
@@ -280,11 +300,7 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/more_than_50_error_lines.csv",
-            "list_of_errors": "",
-            "validateerror": true,
-            "validateargs": {
-                "validatemethodname": "NumberOfErrorsSupportedForAFailedMTFUpload"
-            }
+            "validateerror": "VALIDATE_NUMBEROFERRORS"
         },
         {
             "comment": "This test verifies that MTF errors should display the column heading instead of column number",
@@ -293,18 +309,13 @@
             "skip": false,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/column_heading_instead_of_column_number_in_error.csv",
-            "list_of_errors": "",
-            "validateerror": true,
-            "validateargs": {
-                "validatemethodname": "MTFErrorFormatToIndicateColumnHeadingInsteadOfColumnNumber",
-                "input_file_path": "/Import_MTF/column_heading_instead_of_column_number_in_error.csv"
-            }
+            "validateerror": "VALIDATE_HEADERS"
         },
         {
             "comment": "This test verifies that ASCII char set to be validated for all column data in the MTF",
             "method_name": "UploadMTFNegativeTestValidation",
             "hiptest_name": "ASCII char set validation for all fields in MTF (GAS 1.6)",
-            "skip": false,
+            "skip": true,
             "expect_pass": true,
             "input_file_path": "/Import_MTF/non_ascii_values.csv",
             "list_of_errors": "",

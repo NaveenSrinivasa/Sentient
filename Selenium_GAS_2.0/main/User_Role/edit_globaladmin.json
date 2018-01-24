@@ -1,0 +1,9 @@
+{
+    "username": "selGlobalAdmin",
+    "General":{
+        "firstname": "editNameGlob",
+        "middlename": "editmidGlob",
+        "lastname": "editlast",
+        "email": "viewonly@sentient-energy.com"
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "General":{
+        "username": "selViewOnly",
+        "firstname": "seleniumView",
+        "middlename": "acceptance",
+        "lastname": "tests",
+        "email": "viewonly@sentient-energy.com",
+        "password": "@mpacity",
+        "confirmpassword": "@mpacity",
+        "role": "View Only"
+    }
+}

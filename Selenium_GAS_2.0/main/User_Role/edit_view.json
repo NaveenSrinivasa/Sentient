@@ -1,0 +1,9 @@
+{
+    "username": "selViewOnly",
+    "General":{
+        "firstname": "editName",
+        "middlename": "editmid",
+        "lastname": "editlast",
+        "email": "viewonly@sentient-energy.com"
+    }
+}

@@ -53,6 +53,14 @@ def WaitForTitle(title):
     except:
         return False
 
+def WaitForURLChange(driver, url):
+    try:
+        wait = WebDriverWait(driver, 10)
+        wait.until(EC.url_to_be('amplemanage/login'))
+        return True
+    except:
+        return False
+
 def GetElement(driver, method, locator):
     """Get an element. Searches down the DOM from driver
     driver - either the webdriver or a webelement
@@ -112,6 +120,7 @@ def ClickButton(driver, method, locator):
     try:
         button.click()
     except:
+        time.sleep(1)
         try:
             ActionChains(driver).move_to_element(button).click().perform()
         except:
@@ -123,9 +132,12 @@ def ClickButton(driver, method, locator):
 
 def ClearInput(element):
     try:
-        element.send_keys(Keys.CONTROL + 'a')
-        time.sleep(1)
-        element.send_keys(Keys.DELETE)
+        if Global.driver.desired_capabilities['browserName'] == 'internet explorer':
+            element.send_keys(Keys.CONTROL + 'a')
+            time.sleep(1)
+            element.send_keys(Keys.DELETE)
+        else:
+            element.clear()
         return True
     except:
         printFP("INFO - Test could not clear input.")
@@ -269,19 +281,27 @@ def FindRowInTable(tableBodyElement, nameToSearchFor):
 
 # Site Navigation
 def GoToDashboard():
+    RefreshDriver()
     if 'dashboard' in Global.driver.current_url:
-        printFP("INFO - Already at Dashboard page. Refreshing page.")
-        RefreshDriver()
+        printFP("INFO - Already at Dashboard page.")
         return True
-    else:
-        return ClickButton(Global.driver, By.XPATH, "//a[text()='Dashboard']")
+    try:
+        dashbutton = GetElement(Global.driver, By.XPATH, "//a[text()='Dashboard']")
+        dashbutton.click()
+        time.sleep(1)
+        if 'dashboard' in Global.driver.current_url:
+            return True
+        else:
+            return False
+    except:
+        printFP("INFO - Ran into exception navigating to Dashboard.")
+        return False
 
 def GoToDevMan():
+    RefreshDriver()
     if 'device-management/manage-devices' in Global.driver.current_url:
-        printFP("INFO - Currently on Manage Devices Page, Just refreshing")
-        RefreshDriver()
+        printFP("INFO - Already on device management - manage devices page.")
         return True
-
     try:
         devMan = GetElement(Global.driver, By.XPATH, "//a[text()='Device Management']")
         devMan.click()
@@ -295,7 +315,7 @@ def GoToDevMan():
         return False
         
 def GoToDevConfig():
-    
+    RefreshDriver()
     try:
         ClickButton(Global.driver, By.XPATH, xpaths['dev_man_config'])
     except:
@@ -485,7 +505,7 @@ def GoToUserMan():
     if 'user-management' in Global.driver.current_url:
         printFP("INFO - Global driver is already on User Management. Just performing a refresh.")
         Global.driver.refresh()
-        time.sleep(1)
+        time.sleep(2)
         return True
     else:
         try:
@@ -517,7 +537,6 @@ def GetRootNode():
         node = WebDriverWait(Global.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'ROOTNODE-name')))
         node.click()
     except:
-        #print('node3 %s' %node)
         return None
     return node
 
@@ -550,8 +569,6 @@ def GetSubstation(substationName):
             printFP('Found %s' % sub.text)
             actions = ActionChains(Global.driver)
             actions.move_to_element(sub).click(sub).perform()
-            #sub.click()
-            sub = GetElement(sub, By.XPATH, '../..')
             time.sleep(1)
             return sub
     printFP('Substation %s not found' % substationName)
@@ -566,8 +583,6 @@ def GetFeeder(feederName):
         if feederName == feeder.text:
             printFP('Found %s' % feeder.text)
             ActionChains(Global.driver).move_to_element(feeder).click().perform()
-            feeder = GetElement(feeder, By.XPATH, '../..')
-            time.sleep(1)
             return feeder
     printFP('Feeder %s not found' % feederName)
     return None
@@ -580,69 +595,41 @@ def GetSite(siteName):
         if siteName == site.text:
             printFP('Found %s' % site.text)
             ActionChains(Global.driver).move_to_element(site).click().perform()
-            site = GetElement(site, By.XPATH, '../..')
             time.sleep(1)
             return site
     printFP('Site %s not found' % siteName)
     return None
 
-
-def GetLocationFromInput(regionName, subName, feederName, siteName):
+def GetLocationFromInput(regionName=None, subName=None, feederName=None, siteName=None):
     rootElement = GetElement(Global.driver, By.XPATH, '//*[@id="node-1"]')
     if rootElement.get_attribute('collapsed') == 'true':
         GetRootNode()
-        time.sleep(5)
+        time.sleep(2)
 
-    for i in range(3):
-        region = GetRegion(regionName)
-        if not region:
-            Global.driver.refresh()
-        else:
-            break
-    if not subName and region:
+    region = GetRegion(regionName)
+    if not region:
+        return False
+    if not subName:
         return True
     time.sleep(2)
 
-    if not region == None:
-        for i in range(3):
-            sub = GetSubstation(subName)
-            if not sub:
-                Global.driver.refresh()
-            else:
-                break
-    else:
+    sub = GetSubstation(subName)
+    if not sub:
         return False
-    if not feederName and sub :
+    elif not feederName:
         return True
-    time.sleep(2)
 
-    if not sub == None:
-        for i in range(3):
-            feeder = GetFeeder(feederName)
-            if not feeder:
-                Global.driver.refresh()
-            else:
-                break
-    else:
+    feeder = GetFeeder(feederName)
+    if not feeder:
         return False
-    if not siteName and feeder:
+    elif not siteName:
         return True
-    time.sleep(2)
 
-    if not feeder == None:
-        for i in range(3):
-            site = GetSite(siteName)
-            if not site:
-                Global.driver.refresh()
-            else:
-                break
-        if site == None:
-            return False
-        else:
-            return True
-    else:
+    site = GetSite(siteName)
+    if not site:
         return False
 
+    return True
 
 def GetSiteFromTop(regionName, subName, feederName, siteName):
     """Navigate down the tree until you reach the site node by name and click it."""
@@ -1560,7 +1547,6 @@ def FilteredDataFromTableMapping(columnname1, columnname2, keyword):
                 if columnname1value and columnname2value:
                     valuesmappinglist[columnname1value] = columnname2value
 
-    printFP(valuesmappinglist)
     return valuesmappinglist
 
 
@@ -4878,39 +4864,3 @@ def CheckFiltersInSite():
         testComment = 'TEST PASS - Filters are NOT present when user is in site.'
         printFP(testComment)
         return Global.PASS, testComment
-
-def CheckPageButtonLinkAccessibility(xpathofelement, expectedstatus, xpathtonavigate=None):
-
-    if not xpathtonavigate == None:
-        GetElement(Global.driver, By.XPATH, xpathtonavigate).click()
-
-    if 'disabled' in expectedstatus:
-        try:
-            link = GetElement(Global.driver, By.XPATH, xpathofelement)
-            if 'disabled' in link.get_attribute('class'):
-                pass
-            else:
-                link.click()
-                Global.driver.refresh()
-                time.sleep(1)
-                testComment = 'TEST FAIL - User is able to access location in Ample where only Admins are allowed. Please check log file.'
-                return False, testComment
-        except Exception as e:
-            printFP(e.message)
-            Global.driver.refresh()
-            time.sleep(1)
-            return False, e.message
-
-    elif 'enabled' in expectedstatus:
-        try:
-            link = GetElement(Global.driver, By.XPATH, xpathofelement)
-            if 'disabled' in link.get_attribute('class'):
-                testComment = 'TEST FAIL - User is not able to access location in Ample where all user roles are allowed. Please check log file.'
-                return False, testComment
-        except Exception as e:
-            printFP(e.message)
-            Global.driver.refresh()
-            time.sleep(1)
-            return False, e.message
-
-    return True, ''

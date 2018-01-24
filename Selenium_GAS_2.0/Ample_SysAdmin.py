@@ -803,7 +803,7 @@ def VerifySensorGateWayDetails():
     printFP('INFO - ' + testComment)
     return result, (('TEST PASS - ' + testComment) if result == Global.PASS else ('TEST FAIL - ' + testComment))
 
-def UploadMTFTest(mtf_full_path=None, wait_for_online=True):
+def UploadMTFTest(mtf_full_path=None, wait_for_online=True, verifyLongFieldNotes=False):
     """Navigates to the System admin page and uploads MTF to Ample.
     Also generates a dictionary representing the device to be used during the test. Currently only supports 1 device in the MTF.
     If you do not specify an mtf_path, it will use the Global.MTF"""
@@ -840,18 +840,39 @@ def UploadMTFTest(mtf_full_path=None, wait_for_online=True):
         printFP('INFO - ' + testComment)
         return Global.FAIL, 'TEST FAIL - ' + testComment
 
-    if wait_for_online:
+    if wait_for_online or verifyLongFieldNotes:
         GoToDevMan()
-        time.sleep(3)
-        Global.driver.refresh()
         time.sleep(2)
         GetSiteFromTop(devInfo[0], devInfo[1], devInfo[2], devInfo[3])
-        if IsOnline(devInfo[5]):
-            testComment = 'TEST PASS - %s did come online and successfully uploaded'% devInfo[5]
-            result = Global.PASS
-        else:
-            testComment = 'TEST FAIL - %s did not come online' % devInfo[5]
-            result = Global.FAIL
+        result = Global.PASS
+        testComment = ""
+        if verifyLongFieldNotes:
+            columnControl = GetElement(Global.driver, By.XPATH, "//button[contains(@class,'column-settings-btn')]")
+            columnControl.click()
+            time.sleep(2)
+            fieldnote = GetElement(Global.driver, By.XPATH, "//span[text()='Field Notes']/preceding-sibling::input")
+            if not(fieldnote.is_selected()):
+                printFP('INFO - Field note is not checked...Now checking')
+                fieldnote.click()
+                time.sleep(1)
+            columnControl.click()
+            fieldNote = GetElement(Global.driver, By.XPATH, "//a[text()='"+devInfo[5]+"']/../../../td[20]")
+            fieldNote.click()
+            fieldnote_popup = GetElement(Global.driver, By.XPATH, "//div[@class='modal-body more-details-tooltip ng-scope']/p")
+            if fieldnote_popup.text.strip() == devInfo[14]:
+                printFP("INFO - Long Field Notes Matches.")
+                testComment = testComment + 'Long Field Notes Matched. '
+            else:
+                printFP("INFO - Long Field Notes did not match")
+                testComment = testComment + 'Long Field Notes did not Match. '
+                result = Global.FAIL
+
+        if wait_for_online:
+            if IsOnline(devInfo[5]):
+                testComment = testComment + ('%s did come online and successfully uploaded'% devInfo[5])
+            else:
+                testComment = testComment + ('%s did not come online' % devInfo[5])
+                result = Global.FAIL
     else:
         result = Global.PASS
         testComment = 'TEST PASS - Successfully uploaded MTF file to Ample.'
